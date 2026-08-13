@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tu reserva · Casa Kauri</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="description" content="Comprobante de reserva de Casa Kauri, La Peñita de Jaltemba, Nayarit." />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --primary-color:#1F2F54;
+    --highlight-color:#3B528A;
+    --secondary-color:#DFE8EE;
+    --ink:#2b3444;
+    --muted:#6b7484;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:#eef2f6; color:var(--ink);
+    font:400 16px/1.7 'Source Sans 3', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--highlight-color);}
+
+  .doc{max-width:660px; margin:0 auto; padding:26px 16px 70px;}
+
+  /* ---------- Encabezado ---------- */
+  .head{
+    background:var(--primary-color); color:#fff; border-radius:10px 10px 0 0;
+    padding:32px 30px; text-align:center;
+  }
+  .head img{width:58px; display:block; margin:0 auto 12px;}
+  .head .brand{font:400 26px/1.1 'EB Garamond', serif; letter-spacing:.1em;}
+  .head .place{
+    font:600 11px/1.4 'Source Sans 3'; letter-spacing:.22em; text-transform:uppercase;
+    color:#b9c6da; margin-top:8px;
+  }
+
+  .card{background:#fff; border-radius:0 0 10px 10px; box-shadow:0 10px 34px rgba(31,47,84,.10);}
+  .pad{padding:0 30px;}
+  @media (max-width:520px){ .head{padding:26px 20px;} .pad{padding:0 20px;} }
+
+  .stamp{text-align:center; padding:30px 0 4px;}
+  .stamp span{
+    display:inline-block; background:#EAF5EE; color:#1a7f4b;
+    font:700 12px/1 'Source Sans 3'; letter-spacing:.14em; text-transform:uppercase;
+    padding:11px 20px; border-radius:22px;
+  }
+  .greet{margin:20px 0 6px; font-size:17px;}
+  .greet strong{color:var(--primary-color);}
+
+  h3{
+    font:700 11px/1 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--highlight-color); margin:30px 0 0; padding-bottom:10px;
+    border-bottom:2px solid var(--primary-color);
+  }
+
+  /* ---------- Fechas ---------- */
+  .dates{
+    display:grid; grid-template-columns:1fr 1fr; margin-top:22px;
+    border:1px solid var(--secondary-color); border-radius:8px; overflow:hidden;
+  }
+  .dates > div{padding:18px 20px;}
+  .dates > div:first-child{border-right:1px solid var(--secondary-color);}
+  @media (max-width:440px){
+    .dates{grid-template-columns:1fr;}
+    .dates > div:first-child{border-right:none; border-bottom:1px solid var(--secondary-color);}
+  }
+  .dates .lbl{font:700 11px/1 'Source Sans 3'; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
+  .dates .val{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-top:7px;}
+  .dates .hr{font-size:14px; color:var(--muted);}
+
+  /* ---------- Tabla de importes ---------- */
+  table.detail{width:100%; border-collapse:collapse; margin-top:6px;}
+  table.detail td{padding:11px 0; border-bottom:1px solid #e6ecf2; font-size:15px;}
+  table.detail td:first-child{color:var(--muted);}
+  table.detail td:last-child{text-align:right; color:var(--primary-color); font-variant-numeric:tabular-nums;}
+  table.detail tr.tot td{font-weight:700; font-size:17px; border-bottom:2px solid var(--primary-color);}
+
+  .balance{border:1px solid var(--highlight-color); border-radius:8px; padding:18px 20px; margin-top:24px;}
+  .balance .amt{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-bottom:6px;}
+  .paid{background:#EAF5EE; color:#1a7f4b; border-radius:8px; padding:16px 20px; margin-top:24px; font-weight:700;}
+  .note{background:#F4F7FA; border-left:3px solid var(--highlight-color); padding:15px 18px; margin-top:22px;}
+
+  ul.incl{list-style:none; padding:0; margin:16px 0 0;}
+  ul.incl li{padding:5px 0 5px 26px; position:relative;}
+  ul.incl li::before{content:"✓"; position:absolute; left:0; color:var(--highlight-color); font-weight:700;}
+
+  /* ---------- Acciones ---------- */
+  .cta{display:flex; gap:12px; flex-wrap:wrap; margin:32px 0 6px;}
+  .cta a{
+    flex:1; min-width:190px; text-align:center; text-decoration:none;
+    padding:15px 20px; border-radius:5px;
+    font:600 13px/1 'Source Sans 3'; letter-spacing:.08em; text-transform:uppercase;
+    transition:background .25s ease, color .25s ease;
+  }
+  .cta .wa{background:#25D366; color:#fff;}
+  .cta .wa:hover{background:#1da851;}
+  .cta .gh{background:#fff; color:var(--primary-color); border:1px solid var(--primary-color); cursor:pointer;}
+  .cta .gh:hover{background:var(--secondary-color);}
+
+  footer{text-align:center; padding:30px 20px 34px; color:var(--muted); font-size:14px;}
+  footer .folio{font-size:12px; margin-top:12px; letter-spacing:.06em;}
+
+  /* ---------- Enlace inválido ---------- */
+  .empty{background:#fff; border-radius:10px; padding:50px 30px; text-align:center; box-shadow:0 10px 34px rgba(31,47,84,.10);}
+  .empty h2{font:400 25px/1.3 'EB Garamond', serif; color:var(--primary-color); margin:0 0 12px;}
+
+  /* ---------- Impresión / PDF ---------- */
+  @media print{
+    body{background:#fff;}
+    .cta, footer .noprint{display:none;}
+    .card{box-shadow:none;}
+    .doc{padding:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="doc" id="doc"></div>
+
+<script>
+const WA = '525628544253';
+
+const mx = n => '$' + Number(n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function fechaCorta(iso){
+  if(!iso) return '—';
+  // Mediodía UTC: evita que el huso horario del huésped recorra la fecha un día.
+  const d = new Date(iso + 'T12:00:00');
+  if(isNaN(d)) return '—';
+  return d.toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'});
+}
+
+/* Los datos viajan en el hash (#), no en la query (?), a propósito:
+   el fragmento nunca se manda al servidor, así que los datos del huésped
+   no quedan en los registros de Netlify ni en referrers. */
+function leerDatos(){
+  const raw = location.hash.slice(1);
+  if(!raw) return null;
+  try{
+    const b64 = raw.replace(/-/g,'+').replace(/_/g,'/');
+    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch(e){
+    return null;
+  }
+}
+
+function vacio(){
+  return `
+  <div class="empty">
+    <h2>No pudimos leer esta reserva</h2>
+    <p>Puede que la liga se haya cortado al copiarla o al enviarla por mensaje.
+       Escríbenos y te la mandamos completa en un momento.</p>
+    <div class="cta">
+      <a class="wa" href="https://wa.me/${WA}?text=${encodeURIComponent('Hola, abrí la liga de mi confirmación de reserva y no cargó. ¿Me la pueden reenviar?')}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <a class="gh" href="index.html">Ir al inicio</a>
+    </div>
+  </div>`;
+}
+
+function comprobante(d){
+  const n = d.n || 0;
+  const saldo = d.saldo || 0;
+
+  const filas = [
+    ['Folio', esc(d.folio)],
+    ['Huéspedes', esc(d.huespedes) + ' persona' + (d.huespedes == 1 ? '' : 's')],
+    ['Noches', n]
+  ];
+  if(d.tarifa)        filas.push(['Hospedaje (' + n + ' × ' + mx(d.tarifa) + ')', mx(d.hospedaje)]);
+  if(d.extras)        filas.push(['Limpieza y extras', mx(d.extras)]);
+  if(d.totalMascotas) filas.push(['Mascotas (' + d.mascotas + ' × ' + mx(d.cargoMascota) + ')', mx(d.totalMascotas)]);
+
+  const cuerpo = filas.map(f => `<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`).join('')
+    + (d.total ? `<tr class="tot"><td>Total</td><td>${mx(d.total)}</td></tr>` : '')
+    + (d.anticipo ? `<tr><td>Anticipo recibido</td><td>− ${mx(d.anticipo)}</td></tr>` : '');
+
+  const bloqueSaldo = saldo > 0
+    ? `<div class="balance">
+         <div class="amt">Saldo pendiente: ${mx(saldo)}</div>
+         <div>${d.fechaSaldo ? 'A liquidar a más tardar el <strong>' + fechaCorta(d.fechaSaldo) + '</strong>. ' : ''}${esc(d.datosPago)}</div>
+       </div>`
+    : `<div class="paid">Tu reserva está pagada por completo. No hay nada pendiente.</div>`;
+
+  const bloqueNotas = d.notas
+    ? `<div class="note"><strong>Nota sobre tu reserva:</strong><br />${esc(d.notas).replace(/\n/g,'<br />')}</div>`
+    : '';
+
+  const lineaMascotas = d.mascotas > 0
+    ? 'Tus ' + (d.mascotas == 1 ? 'mascota, ya cubierta' : d.mascotas + ' mascotas, ya cubiertas') + ' en el total de arriba'
+    : 'Mascotas bienvenidas (aplica un cargo adicional)';
+
+  const msgWA = encodeURIComponent(
+    'Hola, soy ' + (d.nombre || '') + '. Reserva ' + (d.folio || '') +
+    ' (' + fechaCorta(d.checkin) + ' al ' + fechaCorta(d.checkout) + '). Ya revisé mi confirmación.'
+  );
+
+  return `
+  <div class="head">
+    <img src="logo-kauri.png" alt="Casa Kauri" />
+    <div class="brand">CASA KAURI</div>
+    <div class="place">La Peñita de Jaltemba · Nayarit</div>
+  </div>
+
+  <div class="card">
+    <div class="stamp"><span>✓ Reserva confirmada</span></div>
+
+    <div class="pad">
+      <p class="greet">Hola <strong>${esc(d.nombre)}</strong>, tu reserva está confirmada.
+         Esta página es tu comprobante: guárdala, aquí tienes todo lo de tu estancia.</p>
+
+      <div class="dates">
+        <div>
+          <div class="lbl">Llegada</div>
+          <div class="val">${fechaCorta(d.checkin)}</div>
+          <div class="hr">a partir de las 3:00 p.m.</div>
+        </div>
+        <div>
+          <div class="lbl">Salida</div>
+          <div class="val">${fechaCorta(d.checkout)}</div>
+          <div class="hr">antes de las 11:00 a.m.</div>
+        </div>
+      </div>
+
+      <h3>Detalle de tu reserva</h3>
+      <table class="detail">${cuerpo}</table>
+      ${bloqueSaldo}
+      ${bloqueNotas}
+
+      <h3>Lo que ya está incluido</h3>
+      <ul class="incl">
+        <li>Casa completa para ti: 4 recámaras, 6 camas, 2.5 baños</li>
+        <li>Alberca privada y jardín cercado en todo su perímetro</li>
+        <li>Cocina equipada, wifi y aire acondicionado</li>
+        <li>Estacionamiento dentro de la propiedad</li>
+        <li>${lineaMascotas}</li>
+      </ul>
+
+      <h3>Tu llegada</h3>
+      <p>El acceso es autónomo, con candado de clave: puedes llegar a tu propio ritmo, sin esperar
+         a nadie. <strong>Un día antes te enviamos por WhatsApp la ubicación exacta, la clave y las
+         indicaciones para llegar.</strong></p>
+      <p>${esc(d.anfitrion) || 'Nuestro anfitrión'} es nuestro anfitrión en La Peñita y está al
+         pendiente durante toda tu estancia por cualquier cosa que necesites.</p>
+
+      <h3>Si algo cambia</h3>
+      <p>${esc(d.politica).replace(/\n/g,'<br />')}</p>
+
+      <div class="cta">
+        <a class="wa" href="https://wa.me/${WA}?text=${msgWA}" target="_blank" rel="noopener">Confirmar por WhatsApp</a>
+        <a class="gh" href="#" onclick="window.print();return false;">Guardar como PDF</a>
+      </div>
+    </div>
+
+    <footer>
+      <div class="noprint">¿Alguna duda? Escríbenos al WhatsApp <strong>${esc(d.telCasa) || '+52 56 2854 4253'}</strong></div>
+      <div class="folio">Folio ${esc(d.folio)} · Casa Kauri, La Peñita de Jaltemba, Nayarit</div>
+    </footer>
+  </div>`;
+}
+
+function pintar(){
+  const d = leerDatos();
+  document.getElementById('doc').innerHTML = d ? comprobante(d) : vacio();
+  if(d && d.folio) document.title = 'Reserva ' + d.folio + ' · Casa Kauri';
+}
+
+window.addEventListener('hashchange', pintar);
+pintar();
+</script>
+</body>
+</html>
