@@ -101,6 +101,14 @@
   .transferir .l{font:600 12px/1.4 'Source Sans 3'; letter-spacing:.12em; text-transform:uppercase; color:#b9c6da;}
   .transferir .v{font:700 21px/1.2 'Source Sans 3'; font-variant-numeric:tabular-nums;}
 
+  table.detail tr.lista td{color:#9aa3b2; font-size:14px;}
+  table.detail tr.lista td:last-child{color:#9aa3b2; text-decoration:line-through;}
+  .especial{background:#EAF5EE; border-radius:8px; padding:16px 20px; margin-top:20px;}
+  .especial .k{font:700 12px/1 'Source Sans 3'; letter-spacing:.14em; text-transform:uppercase; color:#1a7f4b; margin-bottom:8px;}
+  .especial .amt{font:700 19px/1.3 'Source Sans 3'; color:#1a7f4b;}
+  .especial .amt small{font-weight:400; font-size:15px;}
+  .especial .sub{margin-top:6px;}
+
   .apartar{border:1px solid var(--highlight-color); border-radius:8px; padding:18px 20px; margin-top:24px;}
   .apartar .amt{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-bottom:6px;}
   .note{background:#F4F7FA; border-left:3px solid var(--highlight-color); padding:15px 18px; margin-top:22px;}
@@ -225,13 +233,25 @@ function cotizacion(d){
   const esVencida = vencida(d.vigencia);
 
   const items = Array.isArray(d.items) ? d.items : [];
+  /* El precio especial solo se pinta si el generador lo mandó, y solo si de verdad
+     hay ahorro: un ancla igual o menor que el precio cobrado destruye la confianza. */
+  const esp = (d.especial && d.especial.ahorro > 0) ? d.especial : null;
   const cuerpo =
       `<tr><td>Folio</td><td>${esc(d.folio)}</td></tr>`
     + `<tr><td>Huéspedes</td><td>${esc(d.huespedes)} persona${d.huespedes == 1 ? '' : 's'}</td></tr>`
     + (n ? `<tr><td>Noches</td><td>${n}</td></tr>` : '')
+    + (esp ? `<tr class="lista"><td>Tarifa normal (${esp.n} × ${mx(esp.base)})</td><td>${mx(esp.hospedajeBase)}</td></tr>` : '')
     + items.map(it => `<tr><td>${esc(it[0])}</td><td>${mx(it[1])}</td></tr>`).join('')
     + `<tr class="tot"><td>Total de la estancia</td><td>${mx(total)}</td></tr>`
     + (deposito ? `<tr class="dep"><td>Depósito de garantía (reembolsable)</td><td>${mx(deposito)}</td></tr>` : '');
+
+  const bloqueEspecial = esp ? `
+    <div class="especial">
+      <div class="k">Precio especial</div>
+      <div class="amt">Ahorras ${mx(esp.ahorro)} <small>(${esp.pct} % menos)</small></div>
+      <div class="sub">Tu tarifa queda en <strong>${mx(esp.tarifa)}</strong> por noche en lugar de
+           ${mx(esp.base)}${esp.motivo ? ', ' + esc(esp.motivo) : ''}.</div>
+    </div>` : '';
 
   const bloqueTransferir = deposito
     ? `<div class="transferir">
@@ -310,6 +330,7 @@ function cotizacion(d){
 
       <h3>Desglose</h3>
       <table class="detail">${cuerpo}</table>
+      ${bloqueEspecial}
       ${bloqueTransferir}
       ${bloqueApartar}
       ${bloqueNotas}
