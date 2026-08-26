@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Tu reserva · Kauri</title>
+<title>Tu cotización · Kauri</title>
 <meta name="robots" content="noindex, nofollow" />
-<meta name="description" content="Comprobante de reserva de Kauri Nayarit." />
+<meta name="description" content="Cotización de hospedaje en Kauri Nayarit." />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +47,7 @@
 
   .stamp{text-align:center; padding:30px 0 4px;}
   .stamp span{
-    display:inline-block; background:#EAF5EE; color:#1a7f4b;
+    display:inline-block; background:var(--secondary-color); color:var(--primary-color);
     font:700 12px/1 'Source Sans 3'; letter-spacing:.14em; text-transform:uppercase;
     padding:11px 20px; border-radius:22px;
   }
@@ -59,6 +59,15 @@
     color:var(--highlight-color); margin:30px 0 0; padding-bottom:10px;
     border-bottom:2px solid var(--primary-color);
   }
+
+  /* ---------- Vigencia ---------- */
+  .vigencia{
+    border:1px solid var(--highlight-color); border-left-width:4px; border-radius:8px;
+    padding:15px 18px; margin-top:22px; background:#F7FAFC;
+  }
+  .vigencia .t{font-weight:700; color:var(--primary-color);}
+  .vigencia.vencida{border-color:#c2410c; background:#FEF6F1;}
+  .vigencia.vencida .t{color:#9a3412;}
 
   /* ---------- Fechas ---------- */
   .dates{
@@ -79,17 +88,26 @@
   table.detail{width:100%; border-collapse:collapse; margin-top:6px;}
   table.detail td{padding:11px 0; border-bottom:1px solid #e6ecf2; font-size:15px;}
   table.detail td:first-child{color:var(--muted);}
-  table.detail td:last-child{text-align:right; color:var(--primary-color); font-variant-numeric:tabular-nums;}
+  table.detail td:last-child{text-align:right; color:var(--primary-color); font-variant-numeric:tabular-nums; white-space:nowrap;}
   table.detail tr.tot td{font-weight:700; font-size:17px; border-bottom:2px solid var(--primary-color);}
+  table.detail tr.tot td:first-child{color:var(--primary-color);}
+  table.detail tr.dep td{color:var(--muted); font-size:14px;}
 
-  .balance{border:1px solid var(--highlight-color); border-radius:8px; padding:18px 20px; margin-top:24px;}
-  .balance .amt{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-bottom:6px;}
-  .paid{background:#EAF5EE; color:#1a7f4b; border-radius:8px; padding:16px 20px; margin-top:24px; font-weight:700;}
+  .transferir{
+    background:var(--primary-color); color:#fff; border-radius:8px;
+    padding:16px 20px; margin-top:20px; display:flex; justify-content:space-between;
+    align-items:baseline; gap:12px; flex-wrap:wrap;
+  }
+  .transferir .l{font:600 12px/1.4 'Source Sans 3'; letter-spacing:.12em; text-transform:uppercase; color:#b9c6da;}
+  .transferir .v{font:700 21px/1.2 'Source Sans 3'; font-variant-numeric:tabular-nums;}
+
+  .apartar{border:1px solid var(--highlight-color); border-radius:8px; padding:18px 20px; margin-top:24px;}
+  .apartar .amt{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-bottom:6px;}
   .note{background:#F4F7FA; border-left:3px solid var(--highlight-color); padding:15px 18px; margin-top:22px;}
 
   ul.incl{list-style:none; padding:0; margin:16px 0 0;}
   ul.incl li{padding:5px 0 5px 26px; position:relative;}
-  ul.incl li::before{content:"✓"; position:absolute; left:0; color:var(--highlight-color); font-weight:700;}
+  ul.incl li::before{content:"\2713"; position:absolute; left:0; color:var(--highlight-color); font-weight:700;}
 
   /* ---------- Acciones ---------- */
   .cta{display:flex; gap:12px; flex-wrap:wrap; margin:32px 0 6px;}
@@ -106,6 +124,7 @@
 
   footer{text-align:center; padding:30px 20px 34px; color:var(--muted); font-size:14px;}
   footer .folio{font-size:12px; margin-top:12px; letter-spacing:.06em;}
+  .legal{font-size:12px; color:var(--muted); margin-top:18px; line-height:1.6;}
 
   /* ---------- Enlace inválido ---------- */
   .empty{background:#fff; border-radius:10px; padding:50px 30px; text-align:center; box-shadow:0 10px 34px rgba(31,47,84,.10);}
@@ -132,26 +151,15 @@ const PROPS = {
     marca:'CASA KAURI', firma:'Casa Kauri',
     lugar:'La Peñita de Jaltemba · Nayarit',
     tel:'+52 56 2854 4253', wa:'525628544253',
-    horaIn:'3:00 p.m.', horaOut:'11:00 a.m.'
+    horaIn:'3:00 p.m.', horaOut:'11:00 a.m.', inicio:'index.html'
   },
   depto: {
     marca:'DEPARTAMENTO KAURI', firma:'Departamento Kauri',
     lugar:'Rincón de Guayabitos · Nayarit',
     tel:'+52 311 134 9845', wa:'523111349845',
-    horaIn:'3:00 p.m.', horaOut:'12:00 p.m.'
+    horaIn:'3:00 p.m.', horaOut:'12:00 p.m.', inicio:''
   }
 };
-const WA = PROPS.casa.wa;
-
-/* Negritas ligeras (**así**) en los textos que el operador escribe a mano.
-   Se escapa antes de convertir, para que el texto del panel no pueda inyectar HTML. */
-function parrafos(txt){
-  return String(txt || '').split(/\n{2,}/).filter(Boolean).map(t =>
-    esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-          .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
-          .replace(/\n/g, '<br />')
-  );
-}
 
 const mx = n => '$' + Number(n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN';
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -163,10 +171,21 @@ function fechaCorta(iso){
   if(isNaN(d)) return '—';
   return d.toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'});
 }
+/* Vencida = estrictamente después del último día válido. La comparación se hace
+   contra el día local del huésped, no contra la hora exacta: la cotización sigue
+   viva todo el día de su vigencia. */
+function vencida(iso){
+  if(!iso) return false;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const lim = new Date(iso + 'T12:00:00');
+  if(isNaN(lim)) return false;
+  lim.setHours(0,0,0,0);
+  return hoy > lim;
+}
 
 /* Los datos viajan en el hash (#), no en la query (?), a propósito:
-   el fragmento nunca se manda al servidor, así que los datos del huésped
-   no quedan en los registros de Netlify ni en referrers. */
+   el fragmento nunca se manda al servidor, así que los datos del cliente
+   no quedan en los registros del hosting ni en referrers. */
 function leerDatos(){
   const raw = location.hash.slice(1);
   if(!raw) return null;
@@ -180,74 +199,84 @@ function leerDatos(){
 }
 
 function vacio(){
+  const p = PROPS.casa;
   return `
   <div class="empty">
-    <h2>No pudimos leer esta reserva</h2>
+    <h2>No pudimos leer esta cotización</h2>
     <p>Puede que la liga se haya cortado al copiarla o al enviarla por mensaje.
        Escríbenos y te la mandamos completa en un momento.</p>
     <div class="cta">
-      <a class="wa" href="https://wa.me/${WA}?text=${encodeURIComponent('Hola, abrí la liga de mi confirmación de reserva y no cargó. ¿Me la pueden reenviar?')}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <a class="wa" href="https://wa.me/${p.wa}?text=${encodeURIComponent('Hola, abrí la liga de mi cotización y no cargó. ¿Me la pueden reenviar?')}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
       <a class="gh" href="index.html">Ir al inicio</a>
     </div>
   </div>`;
 }
 
-function comprobante(d){
-  // Los enlaces viejos no traen `prop`: se asume Casa Kauri para no romperlos.
+function cotizacion(d){
+  // Los enlaces viejos no traen `prop`; se asume Casa Kauri para no romperlos.
   const p = PROPS[d.prop] || PROPS.casa;
-  const wa = p.wa;
+  const tel = d.tel || p.tel;
+  const wa  = d.wa  || p.wa;
   const n = d.n || 0;
+  const total = d.total || 0;
+  const deposito = d.deposito || 0;
+  const anticipo = d.anticipo || 0;
   const saldo = d.saldo || 0;
+  const esVencida = vencida(d.vigencia);
 
-  const filas = [
-    ['Folio', esc(d.folio)],
-    ['Huéspedes', esc(d.huespedes) + ' persona' + (d.huespedes == 1 ? '' : 's')],
-    ['Noches', n]
-  ];
-  if(d.tarifa)        filas.push(['Hospedaje (' + n + ' × ' + mx(d.tarifa) + ')', mx(d.hospedaje)]);
-  if(d.extras)        filas.push(['Limpieza y extras', mx(d.extras)]);
-  if(d.totalMascotas) filas.push(['Mascotas (' + d.mascotas + ' × ' + mx(d.cargoMascota) + ')', mx(d.totalMascotas)]);
+  const items = Array.isArray(d.items) ? d.items : [];
+  const cuerpo =
+      `<tr><td>Folio</td><td>${esc(d.folio)}</td></tr>`
+    + `<tr><td>Huéspedes</td><td>${esc(d.huespedes)} persona${d.huespedes == 1 ? '' : 's'}</td></tr>`
+    + (n ? `<tr><td>Noches</td><td>${n}</td></tr>` : '')
+    + items.map(it => `<tr><td>${esc(it[0])}</td><td>${mx(it[1])}</td></tr>`).join('')
+    + `<tr class="tot"><td>Total de la estancia</td><td>${mx(total)}</td></tr>`
+    + (deposito ? `<tr class="dep"><td>Depósito de garantía (reembolsable)</td><td>${mx(deposito)}</td></tr>` : '');
 
-  const cuerpo = filas.map(f => `<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`).join('')
-    + (d.total ? `<tr class="tot"><td>Total</td><td>${mx(d.total)}</td></tr>` : '')
-    + (d.anticipo ? `<tr><td>Anticipo recibido</td><td>− ${mx(d.anticipo)}</td></tr>` : '');
-
-  const bloqueSaldo = saldo > 0
-    ? `<div class="balance">
-         <div class="amt">Saldo pendiente: ${mx(saldo)}</div>
-         <div>${d.fechaSaldo ? 'A liquidar a más tardar el <strong>' + fechaCorta(d.fechaSaldo) + '</strong>. ' : ''}${esc(d.datosPago)}</div>
-       </div>`
-    : `<div class="paid">Tu reserva está pagada por completo. No hay nada pendiente.</div>`;
-
-  const bloqueNotas = d.notas
-    ? `<div class="note"><strong>Nota sobre tu reserva:</strong><br />${esc(d.notas).replace(/\n/g,'<br />')}</div>`
+  const bloqueTransferir = deposito
+    ? `<div class="transferir">
+         <span class="l">Total a transferir</span>
+         <span class="v">${mx(total + deposito)}</span>
+       </div>
+       <div class="legal">El depósito de garantía no es parte del precio: se devuelve íntegro
+         dentro de las 72 horas siguientes a tu salida, una vez revisado el alojamiento.</div>`
     : '';
 
-  const lineaMascotas = d.mascotas > 0
-    ? 'Tus ' + (d.mascotas == 1 ? 'mascota, ya cubierta' : d.mascotas + ' mascotas, ya cubiertas') + ' en el total de arriba'
-    : 'Mascotas bienvenidas (aplica un cargo adicional)';
+  const bloqueVigencia = d.vigencia
+    ? (esVencida
+        ? `<div class="vigencia vencida">
+             <div class="t">Esta cotización venció el ${fechaCorta(d.vigencia)}</div>
+             <div>Escríbenos y te la actualizamos con la disponibilidad y las tarifas de hoy.</div>
+           </div>`
+        : `<div class="vigencia">
+             <div class="t">Válida hasta el ${fechaCorta(d.vigencia)}</div>
+             <div>Las fechas no quedan apartadas hasta recibir el anticipo. Mientras tanto
+                  siguen disponibles para cualquier otro huésped.</div>
+           </div>`)
+    : '';
 
-  // Los enlaces viejos traían la lista de la casa fija en esta página; los nuevos
-  // la mandan en el payload, porque el departamento tiene otra.
-  const incluye = (d.incluye || '').split('\n').map(x => x.trim()).filter(Boolean);
-  const listaIncluye = (incluye.length ? incluye : [
-    'Casa completa para ti: 4 recámaras, 6 camas, 2.5 baños',
-    'Alberca privada y jardín cercado en todo su perímetro',
-    'Cocina equipada, wifi y aire acondicionado',
-    'Estacionamiento dentro de la propiedad'
-  ]).concat([lineaMascotas]);
+  const bloqueApartar = anticipo
+    ? `<div class="apartar">
+         <div class="amt">Para apartar: ${mx(anticipo)}</div>
+         <div>${saldo > 0
+              ? 'El saldo de <strong>' + mx(saldo) + '</strong>'
+                + (d.fechaSaldo ? ' se cubre a más tardar el <strong>' + fechaCorta(d.fechaSaldo) + '</strong>. ' : ' se cubre antes de tu llegada. ')
+              : ''}${esc(d.datosPago)}</div>
+       </div>`
+    : (d.datosPago ? `<div class="apartar"><div class="amt">Cómo apartar tu fecha</div><div>${esc(d.datosPago)}</div></div>` : '');
 
-  const llegada = d.llegada
-    ? parrafos(d.llegada)
-    : ['El acceso es autónomo, con candado de clave: puedes llegar a tu propio ritmo, sin esperar '
-       + 'a nadie. <strong>Un día antes te enviamos por WhatsApp la ubicación exacta, la clave y '
-       + 'las indicaciones para llegar.</strong>',
-       (esc(d.anfitrion) || 'Nuestro anfitrión') + ' es nuestro anfitrión en La Peñita y está al '
-       + 'pendiente durante toda tu estancia por cualquier cosa que necesites.'];
+  const bloqueNotas = d.notas
+    ? `<div class="note"><strong>Nota sobre esta cotización:</strong><br />${esc(d.notas).replace(/\n/g,'<br />')}</div>`
+    : '';
+
+  const incluye = (d.incluye || '').split('\n').map(s => s.trim()).filter(Boolean);
+  const bloqueIncluye = incluye.length
+    ? `<h3>Lo que incluye</h3><ul class="incl">${incluye.map(l => '<li>' + esc(l) + '</li>').join('')}</ul>`
+    : '';
 
   const msgWA = encodeURIComponent(
-    'Hola, soy ' + (d.nombre || '') + '. Reserva ' + (d.folio || '') +
-    ' (' + fechaCorta(d.checkin) + ' al ' + fechaCorta(d.checkout) + '). Ya revisé mi confirmación.'
+    'Hola, soy ' + (d.nombre || '') + '. Quiero apartar la cotización ' + (d.folio || '') +
+    ' (' + fechaCorta(d.checkin) + ' al ' + fechaCorta(d.checkout) + ').'
   );
 
   return `
@@ -258,11 +287,13 @@ function comprobante(d){
   </div>
 
   <div class="card">
-    <div class="stamp"><span>✓ Reserva confirmada</span></div>
+    <div class="stamp"><span>Cotización${esVencida ? ' vencida' : ''}</span></div>
 
     <div class="pad">
-      <p class="greet">Hola <strong>${esc(d.nombre)}</strong>, tu reserva está confirmada.
-         Esta página es tu comprobante: guárdala, aquí tienes todo lo de tu estancia.</p>
+      <p class="greet">Hola <strong>${esc(d.nombre)}</strong>, aquí está tu cotización
+         para ${esc(p.firma)}. Cualquier ajuste, dínoslo y la rehacemos.</p>
+
+      ${bloqueVigencia}
 
       <div class="dates">
         <div>
@@ -277,39 +308,36 @@ function comprobante(d){
         </div>
       </div>
 
-      <h3>Detalle de tu reserva</h3>
+      <h3>Desglose</h3>
       <table class="detail">${cuerpo}</table>
-      ${bloqueSaldo}
+      ${bloqueTransferir}
+      ${bloqueApartar}
       ${bloqueNotas}
 
-      <h3>Lo que ya está incluido</h3>
-      <ul class="incl">${listaIncluye.map(l => '<li>' + esc(l) + '</li>').join('')}</ul>
+      ${bloqueIncluye}
 
-      <h3>Tu llegada</h3>
-      ${llegada.map(t => '<p>' + t + '</p>').join('')}
-
-      <h3>Si algo cambia</h3>
-      <p>${esc(d.politica).replace(/\n/g,'<br />')}</p>
+      ${d.politica ? '<h3>Si algo cambia</h3><p>' + esc(d.politica).replace(/\n/g,'<br />') + '</p>' : ''}
 
       <div class="cta">
-        <a class="wa" href="https://wa.me/${wa}?text=${msgWA}" target="_blank" rel="noopener">Confirmar por WhatsApp</a>
+        <a class="wa" href="https://wa.me/${wa}?text=${msgWA}" target="_blank" rel="noopener">${esVencida ? 'Pedir cotización nueva' : 'Quiero apartar mi fecha'}</a>
         <a class="gh" href="#" onclick="window.print();return false;">Guardar como PDF</a>
       </div>
     </div>
 
     <footer>
-      <div class="noprint">¿Alguna duda? Escríbenos al WhatsApp <strong>${esc(d.telCasa) || p.tel}</strong></div>
+      <div class="noprint">¿Alguna duda? Escríbenos al WhatsApp <strong>${esc(tel)}</strong></div>
       <div class="folio">Folio ${esc(d.folio)} · ${esc(p.firma)}, ${esc(p.lugar.replace(' · ', ', '))}</div>
+      <div class="folio">Esta cotización es informativa y no constituye una reserva.</div>
     </footer>
   </div>`;
 }
 
 function pintar(){
   const d = leerDatos();
-  document.getElementById('doc').innerHTML = d ? comprobante(d) : vacio();
+  document.getElementById('doc').innerHTML = d ? cotizacion(d) : vacio();
   if(d && d.folio){
     const p = PROPS[d.prop] || PROPS.casa;
-    document.title = 'Reserva ' + d.folio + ' · ' + p.firma;
+    document.title = 'Cotización ' + d.folio + ' · ' + p.firma;
   }
 }
 
