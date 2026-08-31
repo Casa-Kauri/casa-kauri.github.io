@@ -302,6 +302,17 @@
   .insta-grid a { aspect-ratio: 1; background-size: cover; background-position: center; transition: opacity .3s ease; }
   .insta-grid a:hover { opacity: .82; }
 
+
+  /* Puerta de entrada para el huésped que ya reservó y vuelve a consultar
+     su comprobante. Va en el pie: no es para el visitante nuevo. */
+  .ver-reserva{
+    display:inline-block; margin: 4px 0 18px;
+    border:1px solid rgba(255,255,255,.45); padding:12px 20px;
+    font:600 12.5px/1 'Source Sans 3', sans-serif; letter-spacing:.07em; text-transform:uppercase;
+    color:#fff; transition:background .25s ease, border-color .25s ease;
+  }
+  .ver-reserva:hover{background:rgba(255,255,255,.14); border-color:#fff; text-decoration:none;}
+
   /* ---------- Footer ---------- */
   footer { background: var(--bg-alt-1); color: #fff; padding: 72px 0 30px; }
   footer .cols { display: grid; grid-template-columns: 1.3fr 1fr 1.2fr; gap: 50px; }
@@ -929,7 +940,7 @@
   </div>
 </section>
 <!-- ===== Footer ===== -->
-<footer>
+<footer id="contacto">
   <div class="wrap">
     <div class="cols">
       <div>
@@ -962,6 +973,7 @@
       <div>
         <h5>Reserva</h5>
         <p>Consulta disponibilidad y tarifas directamente en nuestro anuncio de Airbnb.</p>
+        <a class="ver-reserva" href="reserva.html">Ya reservé · Ver mi reserva</a>
         <form class="newsletter" onsubmit="return false;">
           <input type="email" placeholder="Tu correo electrónico" aria-label="Correo electrónico" />
           <button type="submit">Enviar</button>

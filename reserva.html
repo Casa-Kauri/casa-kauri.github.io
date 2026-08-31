@@ -209,8 +209,24 @@
   footer .folio{font-size:12px; margin-top:12px; letter-spacing:.06em;}
 
   /* ---------- Enlace inválido ---------- */
-  .empty{background:#fff; border-radius:10px; padding:50px 30px; text-align:center; box-shadow:0 10px 34px rgba(31,47,84,.10);}
-  .empty h2{font:400 25px/1.3 'EB Garamond', serif; color:var(--primary-color); margin:0 0 12px;}
+  .empty{background:#fff; border-radius:10px; padding:46px 30px 40px; text-align:center; box-shadow:0 10px 34px rgba(31,47,84,.10);}
+  .empty .sello{width:56px; height:56px; margin:0 auto 18px; display:block; border-radius:12px;}
+  .empty h2{font:400 27px/1.3 'EB Garamond', serif; color:var(--primary-color); margin:0 0 12px;}
+  .empty p{max-width:420px; margin:0 auto;}
+  .empty .cta{margin-top:26px;}
+  .empty .cta a{grid-column:1 / -1;}
+  .pegar{display:flex; gap:8px; max-width:430px; margin:22px auto 0;}
+  .pegar input{
+    flex:1; min-width:0; border:1px solid var(--secondary-color); border-radius:6px;
+    padding:14px 15px; font:400 15px 'Source Sans 3', sans-serif; color:var(--ink); background:#fff;
+  }
+  .pegar input:focus{outline:none; border-color:var(--highlight-color);}
+  .pegar button{
+    border:none; border-radius:6px; background:var(--primary-color); color:#fff; cursor:pointer;
+    padding:0 22px; font:600 12.5px/1 'Source Sans 3'; letter-spacing:.09em; text-transform:uppercase;
+  }
+  .pegar button:hover{background:var(--highlight-color);}
+  .err{margin-top:14px; color:#9a3412; font-size:14px;}
 
   /* ---------- Impresión / PDF ---------- */
   @media print{
@@ -306,8 +322,7 @@ function fechaViaje(iso){
 /* Los datos viajan en el hash (#), no en la query (?), a propósito:
    el fragmento nunca se manda al servidor, así que los datos del huésped
    no quedan en los registros de Netlify ni en referrers. */
-function leerDatos(){
-  const raw = location.hash.slice(1);
+function decodificar(raw){
   if(!raw) return null;
   try{
     const b64 = raw.replace(/-/g,'+').replace(/_/g,'/');
@@ -318,14 +333,43 @@ function leerDatos(){
   }
 }
 
+function leerDatos(){ return decodificar(location.hash.slice(1)); }
+
+/* Cuando alguien llega a la página sin su liga (por ejemplo desde el menú del
+   sitio) puede pegarla aquí. Se acepta la liga completa o solo la parte de
+   después del #, que es lo que la gente alcanza a copiar de WhatsApp. */
+function abrirDesdeLiga(){
+  const campo = document.getElementById('liga');
+  const err = document.getElementById('errliga');
+  const texto = (campo && campo.value || '').trim();
+  const corte = texto.indexOf('#');
+  const raw = (corte >= 0 ? texto.slice(corte + 1) : texto).trim();
+  if(raw && decodificar(raw)){
+    location.hash = '#' + raw;
+    pintar();
+    window.scrollTo(0, 0);
+  }else if(err){
+    err.hidden = false;
+  }
+  return false;
+}
+
 function vacio(){
   return `
   <div class="empty">
-    <h2>No pudimos leer esta reserva</h2>
-    <p>Puede que la liga se haya cortado al copiarla o al enviarla por mensaje.
-       Escríbenos y te la mandamos completa en un momento.</p>
+    <img class="sello" src="favicon.png" alt="Kauri" />
+    <h2>Abre tu comprobante</h2>
+    <p>Tu comprobante se abre con el <strong>enlace personal</strong> que te enviamos por WhatsApp
+       al confirmar tu reserva. Si lo tienes a la mano, pégalo aquí:</p>
+    <form class="pegar" onsubmit="return abrirDesdeLiga();">
+      <input id="liga" type="text" inputmode="url" autocomplete="off"
+             placeholder="Pega aquí el enlace de tu reserva" aria-label="Enlace de tu reserva" />
+      <button type="submit">Abrir</button>
+    </form>
+    <p class="err" id="errliga" hidden>Ese enlace se ve incompleto: al copiarlo suele cortarse.
+       Cópialo otra vez completo, o pídenoslo por WhatsApp y te lo reenviamos.</p>
     <div class="cta">
-      <a class="wa" href="https://wa.me/${WA}?text=${encodeURIComponent('Hola, abrí la liga de mi confirmación de reserva y no cargó. ¿Me la pueden reenviar?')}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <a class="wa" href="https://wa.me/${WA}?text=${encodeURIComponent('Hola, quiero ver mi comprobante de reserva y no tengo el enlace. ¿Me lo pueden reenviar?')}" target="_blank" rel="noopener">Pedir mi enlace por WhatsApp</a>
       <a class="gh" href="index.html">Ir al inicio</a>
     </div>
   </div>`;
