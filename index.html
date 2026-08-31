@@ -121,6 +121,22 @@
   }
   .hamburger::before { top: 0; } .hamburger span { top: 7px; } .hamburger::after { bottom: 0; }
 
+
+  /* "Mi reserva" vive arriba, junto a Reservar: es donde lo busca quien ya
+     reservó (es el patrón de cualquier hotel). En celular se va al menú ☰
+     para no pelearse con el botón de Reservar. */
+  .header-right .mi-reserva{
+    font:600 13px/1 'Source Sans 3', sans-serif; letter-spacing:.05em; color:#fff;
+    opacity:.92; padding:7px 2px; border-bottom:1px solid rgba(255,255,255,.5);
+    white-space:nowrap; transition:opacity .2s ease, border-color .2s ease;
+  }
+  .header-right .mi-reserva:hover{opacity:1; border-color:#fff;}
+  nav.main-nav li.solo-movil{display:none;}
+  @media (max-width:620px){
+    .header-right .mi-reserva{display:none;}
+    nav.main-nav li.solo-movil{display:block;}
+  }
+
   /* ---------- Hero ---------- */
   .hero {
     position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;
@@ -463,9 +479,11 @@
         <li><a href="#ubicacion">Ubicación</a></li>
         <li><a href="#opiniones">Opiniones</a></li>
         <li class="switch"><a class="prop-switch" href="departamento.html">Departamento ↗</a></li>
+        <li class="solo-movil"><a href="reserva.html">Mi reserva</a></li>
       </ul>
     </nav>
     <div class="header-right">
+      <a class="mi-reserva" href="reserva.html">Mi reserva</a>
       <div class="hamburger" aria-label="Menú"><span></span></div>
       <a class="reserve-btn" href="https://www.airbnb.mx/rooms/36241619" target="_blank" rel="noopener">Reservar</a>
     </div>

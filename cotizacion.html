@@ -224,6 +224,12 @@ const PROPS = {
   }
 };
 
+/* Misma política en las dos propiedades y casi nunca cambia: si el generador
+   no manda una distinta, se usa esta y no viaja dentro del enlace. */
+const POLITICA = 'Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se '
+  + 'reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra '
+  + 'fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.';
+
 const mx = n => '$' + Number(n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN';
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -345,6 +351,7 @@ function cotizacion(d){
     : '';
 
   const incluye = (d.incluye || '').split('\n').map(s => s.trim()).filter(Boolean);
+  if(!incluye.length) incluye.push.apply(incluye, p.incluye);
   const bloqueIncluye = incluye.length
     ? `<h3>Lo que incluye</h3><ul class="incl">${incluye.map(l => '<li>' + esc(l) + '</li>').join('')}</ul>`
     : '';
@@ -400,7 +407,7 @@ function cotizacion(d){
 
       ${bloqueIncluye}
 
-      ${d.politica ? '<h3>Si algo cambia</h3><p>' + esc(d.politica).replace(/\n/g,'<br />') + '</p>' : ''}
+      <h3>Si algo cambia</h3><p>${esc(d.politica || POLITICA).replace(/\n/g,'<br />')}</p>
 
       <div class="cta">
         <a class="wa" href="https://wa.me/${wa}?text=${msgWA}" target="_blank" rel="noopener">${esVencida ? 'Pedir cotización nueva' : 'Quiero apartar mi fecha'}</a>

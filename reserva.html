@@ -261,7 +261,12 @@ const PROPS = {
              'Alberca privada y jardín cercado en todo su perímetro',
              'Cocina equipada, wifi y aire acondicionado',
              'Estacionamiento dentro de la propiedad',
-             'A 750 m caminando de la playa']
+             'A 750 m caminando de la playa'],
+    llegada:'El acceso es autónomo, con candado de clave: puedes llegar a tu propio ritmo, '
+          + 'sin esperar a nadie. **Un día antes te enviamos por WhatsApp la ubicación exacta, '
+          + 'la clave y las indicaciones para llegar.**\n\n'
+          + 'Ismael es nuestro anfitrión en La Peñita y está al pendiente durante toda tu '
+          + 'estancia por cualquier cosa que necesites.'
   },
   depto: {
     marca:'DEPARTAMENTO KAURI', firma:'Departamento Kauri',
@@ -274,9 +279,22 @@ const PROPS = {
              'Nivel 1: sala con Smart TV, comedor, cocina equipada y balcón',
              'Nivel 2: área de descanso con 4 camas, aire acondicionado y baño completo',
              'Nivel 3: rooftop privado con regadera exterior',
-             'A 100 m de la playa, sobre el andador principal']
+             'A 100 m de la playa, sobre el andador principal'],
+    llegada:'Tu llegada es en **Andador Colorines 4A, Rincón de Guayabitos, Nayarit** '
+          + '(https://maps.app.goo.gl/xwAyVKAvdusuxjtG9). El estacionamiento es público y '
+          + 'gratuito alrededor del alojamiento.\n\n'
+          + '**Un día antes te enviamos la Guía de Bienvenida**, con el croquis de cómo llegar, '
+          + 'la contraseña del wifi y todo lo que necesitas saber del departamento. Si quieres '
+          + 'flores, decoración o alguna sorpresa para una fecha especial, avísanos con al menos '
+          + '72 horas de anticipación y lo preparamos con un costo adicional.'
   }
 };
+
+/* La política de cancelación es la misma en las dos propiedades y no cambia
+   casi nunca: si el generador no manda una distinta, se usa esta. */
+const POLITICA = 'Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se '
+  + 'reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra '
+  + 'fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.';
 const WA = PROPS.casa.wa;
 
 /* Negritas ligeras (**así**) en los textos que el operador escribe a mano.
@@ -477,13 +495,7 @@ function comprobante(d){
   const incluye = (d.incluye || '').split('\n').map(x => x.trim()).filter(Boolean);
   const listaIncluye = (incluye.length ? incluye : p.incluye).concat([lineaMascotas]);
 
-  const llegada = d.llegada
-    ? parrafos(d.llegada)
-    : ['El acceso es autónomo, con candado de clave: puedes llegar a tu propio ritmo, sin esperar '
-       + 'a nadie. <strong>Un día antes te enviamos por WhatsApp la ubicación exacta, la clave y '
-       + 'las indicaciones para llegar.</strong>',
-       (esc(d.anfitrion) || 'Nuestro anfitrión') + ' es nuestro anfitrión en La Peñita y está al '
-       + 'pendiente durante toda tu estancia por cualquier cosa que necesites.'];
+  const llegada = parrafos(d.llegada || p.llegada);
 
   const fIn = fechaViaje(d.checkin), fOut = fechaViaje(d.checkout);
   const emitido = new Date().toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'});
@@ -553,7 +565,7 @@ function comprobante(d){
       ${llegada.map(t => '<p>' + t + '</p>').join('')}
 
       <h3>Si algo cambia</h3>
-      <p>${esc(d.politica).replace(/\n/g,'<br />')}</p>
+      <p>${esc(d.politica || POLITICA).replace(/\n/g,'<br />')}</p>
 
       <div class="cta">
         <a class="wa" href="https://wa.me/${wa}?text=${msgWA}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
