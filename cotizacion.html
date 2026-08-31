@@ -53,8 +53,9 @@
     color:#c3d0e4; margin-top:5px;
   }
   .head .folio-chip{
-    border:1px solid rgba(255,255,255,.4); border-radius:6px; padding:9px 14px; text-align:right;
-    background:rgba(255,255,255,.07);
+    /* Fondo propio: el chip cae sobre la zona clara de la foto y sin esto no se lee */
+    border:1px solid rgba(255,255,255,.28); border-radius:6px; padding:10px 15px; text-align:right;
+    background:rgba(16,26,52,.72); backdrop-filter:blur(3px);
   }
   .head .folio-chip .k{
     font:600 9.5px/1 'Source Sans 3'; letter-spacing:.18em; text-transform:uppercase; color:#c3d0e4;
@@ -80,9 +81,9 @@
   .greet strong{color:var(--primary-color);}
 
   h3{
-    font:700 11px/1 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
-    color:var(--highlight-color); margin:30px 0 0; padding-bottom:10px;
-    border-bottom:2px solid var(--primary-color);
+    font:700 10.5px/1 'Source Sans 3'; letter-spacing:.17em; text-transform:uppercase;
+    color:var(--primary-color); margin:34px 0 0; padding-bottom:11px;
+    border-bottom:1px solid var(--secondary-color);
   }
 
   /* ---------- Vigencia ---------- */
@@ -200,7 +201,7 @@ const PROPS = {
     lugar:'Rincón de Guayabitos · Nayarit',
     tel:'+52 311 134 9845', wa:'523111349845',
     horaIn:'3:00 p.m.', horaOut:'12:00 p.m.',
-    foto:'https://a0.muscache.com/im/pictures/hosting/Hosting-1283495962257484053/original/6ff83c08-948a-45e9-a60b-3030712170d8.jpeg?im_w=1200',
+    foto:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1200',
     incluye:['Loft completo de 3 niveles solo para ti · hasta 6 huéspedes',
              'Nivel 1: sala con Smart TV, comedor, cocina equipada y balcón',
              'Nivel 2: área de descanso con 4 camas, aire acondicionado y baño completo',

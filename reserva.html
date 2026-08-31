@@ -39,10 +39,10 @@
   .head .ph{position:absolute; inset:0; background-size:cover; background-position:center;}
   .head .ph::after{
     content:""; position:absolute; inset:0;
-    background:linear-gradient(105deg, rgba(20,32,64,.94) 0%, rgba(20,32,64,.80) 52%, rgba(20,32,64,.58) 100%);
+    background:linear-gradient(100deg, rgba(20,32,64,.95) 0%, rgba(20,32,64,.84) 38%, rgba(20,32,64,.46) 78%, rgba(20,32,64,.30) 100%);
   }
   .head .inner{
-    position:relative; z-index:2; padding:26px 30px;
+    position:relative; z-index:2; padding:34px 30px;
     display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
   }
   .head .id{display:flex; align-items:center; gap:14px;}
@@ -53,11 +53,12 @@
     color:#c3d0e4; margin-top:5px;
   }
   .head .folio-chip{
-    border:1px solid rgba(255,255,255,.4); border-radius:6px; padding:9px 14px; text-align:right;
-    background:rgba(255,255,255,.07);
+    /* Fondo propio: el chip cae sobre la zona clara de la foto y sin esto no se lee */
+    border:1px solid rgba(255,255,255,.28); border-radius:6px; padding:10px 15px; text-align:right;
+    background:rgba(16,26,52,.72); backdrop-filter:blur(3px);
   }
   .head .folio-chip .k{
-    font:600 9.5px/1 'Source Sans 3'; letter-spacing:.18em; text-transform:uppercase; color:#c3d0e4;
+    font:600 9.5px/1 'Source Sans 3'; letter-spacing:.18em; text-transform:uppercase; color:#aebcd4;
   }
   .head .folio-chip .v{font:700 15px/1.2 'Source Sans 3'; margin-top:5px; letter-spacing:.04em;}
   @media (max-width:520px){
@@ -93,15 +94,15 @@
   .greet strong{color:var(--primary-color);}
 
   h3{
-    font:700 11px/1 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
-    color:var(--highlight-color); margin:30px 0 0; padding-bottom:10px;
-    border-bottom:2px solid var(--primary-color);
+    font:700 10.5px/1 'Source Sans 3'; letter-spacing:.17em; text-transform:uppercase;
+    color:var(--primary-color); margin:34px 0 0; padding-bottom:11px;
+    border-bottom:1px solid var(--secondary-color);
   }
 
   /* ---------- Fechas ---------- */
   .dates{
-    display:grid; grid-template-columns:1fr auto 1fr; margin-top:22px; align-items:stretch;
-    border:1px solid var(--secondary-color); border-radius:8px; overflow:hidden;
+    display:grid; grid-template-columns:1fr auto 1fr; margin-top:24px; align-items:stretch;
+    border:1px solid var(--secondary-color); border-radius:8px 8px 0 0; overflow:hidden;
   }
   .dates > div{padding:18px 20px;}
   .dates .nights{
@@ -113,6 +114,7 @@
     font:600 9.5px/1.3 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
     color:#c3d0e4; margin-top:6px;
   }
+  .dates .sub{font:400 13.5px/1.4 'Source Sans 3'; color:var(--muted); margin-top:2px;}
   .dates .out{text-align:right;}
   @media (max-width:440px){
     .dates{grid-template-columns:1fr;}
@@ -124,6 +126,20 @@
   .dates .val{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-top:7px;}
   .dates .hr{font-size:14px; color:var(--muted);}
 
+  /* Fila de datos del documento: lo que en una factura va en la cabecera */
+  .meta{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:2px;
+    margin-top:2px; border:1px solid var(--secondary-color); border-top:0;
+    border-radius:0 0 8px 8px; overflow:hidden; background:var(--secondary-color);
+  }
+  .meta > div{background:#fff; padding:13px 20px;}
+  .meta .k{
+    display:block; font:700 9.5px/1 'Source Sans 3'; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted);
+  }
+  .meta .v{display:block; font:600 14px/1.4 'Source Sans 3'; color:var(--primary-color); margin-top:5px;}
+  @media (max-width:440px){ .meta{grid-template-columns:1fr;} }
+
   /* ---------- Tabla de importes ---------- */
   table.detail{width:100%; border-collapse:collapse; margin-top:6px;}
   table.detail td{padding:11px 0; border-bottom:1px solid #e6ecf2; font-size:15px;}
@@ -131,8 +147,15 @@
   table.detail td:last-child{text-align:right; color:var(--primary-color); font-variant-numeric:tabular-nums;}
   table.detail tr.tot td{font-weight:700; font-size:17px; border-bottom:2px solid var(--primary-color);}
 
-  .balance{border:1px solid var(--highlight-color); border-radius:8px; padding:18px 20px; margin-top:24px;}
-  .balance .amt{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-bottom:6px;}
+  .balance{
+    border:1px solid var(--highlight-color); border-left:4px solid var(--highlight-color);
+    border-radius:8px; padding:20px 22px; margin-top:24px; background:#FAFCFE;
+  }
+  .balance .k{
+    font:700 10px/1 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--highlight-color); display:block; margin-bottom:9px;
+  }
+  .balance .amt{font:700 27px/1.15 'Source Sans 3'; color:var(--primary-color); margin-bottom:9px; letter-spacing:-.01em;}
   .paid{background:#EAF5EE; color:#1a7f4b; border-radius:8px; padding:16px 20px; margin-top:24px; font-weight:700;}
   .note{background:#F4F7FA; border-left:3px solid var(--highlight-color); padding:15px 18px; margin-top:22px;}
 
@@ -141,13 +164,14 @@
   ul.incl li::before{content:"✓"; position:absolute; left:0; color:var(--highlight-color); font-weight:700;}
 
   /* ---------- Acciones ---------- */
-  .cta{display:flex; gap:12px; flex-wrap:wrap; margin:32px 0 6px;}
+  .cta{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:34px 0 6px;}
   .cta a{
-    flex:1; min-width:190px; text-align:center; text-decoration:none;
-    padding:15px 20px; border-radius:5px;
-    font:600 13px/1 'Source Sans 3'; letter-spacing:.08em; text-transform:uppercase;
-    transition:background .25s ease, color .25s ease;
+    text-align:center; text-decoration:none; padding:16px 18px; border-radius:6px;
+    font:600 12.5px/1 'Source Sans 3'; letter-spacing:.09em; text-transform:uppercase;
+    transition:background .25s ease, color .25s ease, border-color .25s ease;
   }
+  .cta a.wa{grid-column:1 / -1;}
+  @media (max-width:440px){ .cta{grid-template-columns:1fr;} }
   .cta .wa{background:#25D366; color:#fff;}
   .cta .wa:hover{background:#1da851;}
   .cta .gh{background:#fff; color:var(--primary-color); border:1px solid var(--primary-color); cursor:pointer;}
@@ -200,7 +224,7 @@ const PROPS = {
     lugar:'Rincón de Guayabitos · Nayarit',
     tel:'+52 311 134 9845', wa:'523111349845',
     horaIn:'3:00 p.m.', horaOut:'12:00 p.m.',
-    foto:'https://a0.muscache.com/im/pictures/hosting/Hosting-1283495962257484053/original/6ff83c08-948a-45e9-a60b-3030712170d8.jpeg?im_w=1200',
+    foto:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1200',
     incluye:['Loft completo de 3 niveles solo para ti · hasta 6 huéspedes',
              'Nivel 1: sala con Smart TV, comedor, cocina equipada y balcón',
              'Nivel 2: área de descanso con 4 camas, aire acondicionado y baño completo',
@@ -215,7 +239,13 @@ const WA = PROPS.casa.wa;
 function parrafos(txt){
   return String(txt || '').split(/\n{2,}/).filter(Boolean).map(t =>
     esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-          .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+          // El paréntesis o el punto final NO forman parte de la liga: si se los traga,
+          // el enlace se rompe y además se ve como un renglón de código.
+          .replace(/(https?:\/\/[^\s<]*[^\s<.,;:)\]])/g, function(u){
+            const mapa = /maps\.app\.goo\.gl|google\.[a-z.]+\/maps|maps\.google/.test(u);
+            return '<a href="' + u + '" target="_blank" rel="noopener">' +
+                   (mapa ? 'Ver ubicación en Google Maps' : 'Abrir enlace') + '</a>';
+          })
           .replace(/\n/g, '<br />')
   );
 }
@@ -229,6 +259,19 @@ function fechaCorta(iso){
   const d = new Date(iso + 'T12:00:00');
   if(isNaN(d)) return '—';
   return d.toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'});
+}
+
+/* Para la tira de llegada/salida: el día grande y el resto pequeño, con el día
+   de la semana. "Viernes 18" pesa más en la cabeza del huésped que "18/09". */
+function fechaViaje(iso){
+  if(!iso) return {dia:'—', resto:''};
+  const d = new Date(iso + 'T12:00:00');
+  if(isNaN(d)) return {dia:'—', resto:''};
+  const sem = d.toLocaleDateString('es-MX', {weekday:'long'});
+  return {
+    dia: sem.charAt(0).toUpperCase() + sem.slice(1) + ' ' + d.getDate(),
+    resto: d.toLocaleDateString('es-MX', {month:'long', year:'numeric'})
+  };
 }
 
 /* Los datos viajan en el hash (#), no en la query (?), a propósito:
@@ -329,11 +372,9 @@ function comprobante(d){
   const n = d.n || 0;
   const saldo = d.saldo || 0;
 
-  const filas = [
-    ['Folio', esc(d.folio)],
-    ['Huéspedes', esc(d.huespedes) + ' persona' + (d.huespedes == 1 ? '' : 's')],
-    ['Noches', n]
-  ];
+  // Solo importes: el folio va en la cabecera y los huéspedes y las noches en la
+  // tira de arriba. Repetirlos aquí hacía que el documento pareciera un volcado.
+  const filas = [];
   if(d.tarifa)        filas.push(['Hospedaje (' + n + ' × ' + mx(d.tarifa) + ')', mx(d.hospedaje)]);
   if(d.extras)        filas.push(['Limpieza y extras', mx(d.extras)]);
   if(d.totalMascotas) filas.push(['Mascotas (' + d.mascotas + ' × ' + mx(d.cargoMascota) + ')', mx(d.totalMascotas)]);
@@ -344,7 +385,8 @@ function comprobante(d){
 
   const bloqueSaldo = saldo > 0
     ? `<div class="balance">
-         <div class="amt">Saldo pendiente: ${mx(saldo)}</div>
+         <span class="k">Saldo pendiente</span>
+         <div class="amt">${mx(saldo)}</div>
          <div>${d.fechaSaldo ? 'A liquidar a más tardar el <strong>' + fechaCorta(d.fechaSaldo) + '</strong>. ' : ''}${esc(d.datosPago)}</div>
        </div>`
     : `<div class="paid">Tu reserva está pagada por completo. No hay nada pendiente.</div>`;
@@ -354,7 +396,7 @@ function comprobante(d){
     : '';
 
   const lineaMascotas = d.mascotas > 0
-    ? 'Tus ' + (d.mascotas == 1 ? 'mascota, ya cubierta' : d.mascotas + ' mascotas, ya cubiertas') + ' en el total de arriba'
+    ? (d.mascotas == 1 ? 'Tu mascota, ya cubierta' : 'Tus ' + d.mascotas + ' mascotas, ya cubiertas') + ' en el total de arriba'
     : 'Mascotas bienvenidas (aplica un cargo adicional)';
 
   // Los enlaces viejos traían la lista de la casa fija en esta página; los nuevos
@@ -370,6 +412,8 @@ function comprobante(d){
        (esc(d.anfitrion) || 'Nuestro anfitrión') + ' es nuestro anfitrión en La Peñita y está al '
        + 'pendiente durante toda tu estancia por cualquier cosa que necesites.'];
 
+  const fIn = fechaViaje(d.checkin), fOut = fechaViaje(d.checkout);
+  const emitido = new Date().toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'});
   const est = estadoEstancia(d, p);
 
   const msgWA = encodeURIComponent(
@@ -405,15 +449,23 @@ function comprobante(d){
       <div class="dates">
         <div>
           <div class="lbl">Llegada</div>
-          <div class="val">${fechaCorta(d.checkin)}</div>
+          <div class="val">${fIn.dia}</div>
+          <div class="sub">${fIn.resto}</div>
           <div class="hr">a partir de las ${esc(d.horaIn || p.horaIn)}</div>
         </div>
         <div class="nights"><b>${n}</b><span>${n == 1 ? 'noche' : 'noches'}</span></div>
         <div class="out">
           <div class="lbl">Salida</div>
-          <div class="val">${fechaCorta(d.checkout)}</div>
+          <div class="val">${fOut.dia}</div>
+          <div class="sub">${fOut.resto}</div>
           <div class="hr">antes de las ${esc(d.horaOut || p.horaOut)}</div>
         </div>
+      </div>
+
+      <div class="meta">
+        <div><span class="k">Huéspedes</span><span class="v">${esc(d.huespedes)} ${d.huespedes == 1 ? 'persona' : 'personas'}</span></div>
+        <div><span class="k">Alojamiento</span><span class="v">${esc(p.firma)}</span></div>
+        <div><span class="k">Emitido</span><span class="v">${emitido}</span></div>
       </div>
 
       <h3>Detalle de tu reserva</h3>
@@ -440,6 +492,7 @@ function comprobante(d){
     <footer>
       <div class="noprint">¿Alguna duda? Escríbenos al WhatsApp <strong>${esc(d.telCasa) || p.tel}</strong></div>
       <div class="folio">Folio ${esc(d.folio)} · ${esc(p.firma)}, ${esc(p.lugar.replace(' · ', ', '))}</div>
+      <div class="folio noprint"><a href="index.html">casa-kauri.github.io</a></div>
     </footer>
   </div>`;
 }
