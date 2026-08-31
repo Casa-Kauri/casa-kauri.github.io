@@ -29,17 +29,55 @@
 
   .doc{max-width:660px; margin:0 auto; padding:26px 16px 70px;}
 
-  /* ---------- Encabezado ---------- */
+  /* ---------- Encabezado con foto del alojamiento ----------
+     La foto sale de PROPS: cada alojamiento trae la suya. El degradado sobre
+     ella es lo que mantiene el texto legible sea cual sea la imagen. */
   .head{
-    background:var(--primary-color); color:#fff; border-radius:10px 10px 0 0;
-    padding:32px 30px; text-align:center;
+    position:relative; overflow:hidden; color:#fff;
+    border-radius:10px 10px 0 0; background:var(--primary-color);
   }
-  .head img{width:58px; display:block; margin:0 auto 12px;}
-  .head .brand{font:400 26px/1.1 'EB Garamond', serif; letter-spacing:.1em;}
+  .head .ph{position:absolute; inset:0; background-size:cover; background-position:center;}
+  .head .ph::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(105deg, rgba(20,32,64,.94) 0%, rgba(20,32,64,.80) 52%, rgba(20,32,64,.58) 100%);
+  }
+  .head .inner{
+    position:relative; z-index:2; padding:26px 30px;
+    display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+  }
+  .head .id{display:flex; align-items:center; gap:14px;}
+  .head img{width:50px; height:auto; display:block; filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));}
+  .head .brand{font:400 25px/1.15 'EB Garamond', serif; letter-spacing:.1em;}
   .head .place{
-    font:600 11px/1.4 'Source Sans 3'; letter-spacing:.22em; text-transform:uppercase;
-    color:#b9c6da; margin-top:8px;
+    font:600 10.5px/1.4 'Source Sans 3'; letter-spacing:.2em; text-transform:uppercase;
+    color:#c3d0e4; margin-top:5px;
   }
+  .head .folio-chip{
+    border:1px solid rgba(255,255,255,.4); border-radius:6px; padding:9px 14px; text-align:right;
+    background:rgba(255,255,255,.07);
+  }
+  .head .folio-chip .k{
+    font:600 9.5px/1 'Source Sans 3'; letter-spacing:.18em; text-transform:uppercase; color:#c3d0e4;
+  }
+  .head .folio-chip .v{font:700 15px/1.2 'Source Sans 3'; margin-top:5px; letter-spacing:.04em;}
+  @media (max-width:520px){
+    .head .inner{padding:22px 20px;}
+    .head .brand{font-size:21px;}
+    .head .folio-chip{text-align:left;}
+  }
+
+  /* ---------- Franja de estado ---------- */
+  .status{
+    display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+    padding:18px 24px; background:#F4F8FB; border-bottom:1px solid var(--secondary-color);
+  }
+  .status .badge{
+    background:#EAF5EE; color:#1a7f4b;
+    font:700 11.5px/1 'Source Sans 3'; letter-spacing:.14em; text-transform:uppercase;
+    padding:10px 18px; border-radius:22px; white-space:nowrap;
+  }
+  .status .count{font:600 14px/1.4 'Source Sans 3'; color:var(--primary-color);}
+  .status .count small{display:block; font-weight:400; font-size:12.5px; color:var(--muted); letter-spacing:0;}
 
   .card{background:#fff; border-radius:0 0 10px 10px; box-shadow:0 10px 34px rgba(31,47,84,.10);}
   .pad{padding:0 30px;}
@@ -62,14 +100,25 @@
 
   /* ---------- Fechas ---------- */
   .dates{
-    display:grid; grid-template-columns:1fr 1fr; margin-top:22px;
+    display:grid; grid-template-columns:1fr auto 1fr; margin-top:22px; align-items:stretch;
     border:1px solid var(--secondary-color); border-radius:8px; overflow:hidden;
   }
   .dates > div{padding:18px 20px;}
-  .dates > div:first-child{border-right:1px solid var(--secondary-color);}
+  .dates .nights{
+    background:var(--primary-color); color:#fff; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; padding:18px 22px; text-align:center;
+  }
+  .dates .nights b{font:700 22px/1 'Source Sans 3';}
+  .dates .nights span{
+    font:600 9.5px/1.3 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
+    color:#c3d0e4; margin-top:6px;
+  }
+  .dates .out{text-align:right;}
   @media (max-width:440px){
     .dates{grid-template-columns:1fr;}
-    .dates > div:first-child{border-right:none; border-bottom:1px solid var(--secondary-color);}
+    .dates .out{text-align:left;}
+    .dates .nights{flex-direction:row; gap:10px; padding:12px;}
+    .dates .nights span{margin-top:0;}
   }
   .dates .lbl{font:700 11px/1 'Source Sans 3'; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
   .dates .val{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-top:7px;}
@@ -113,10 +162,15 @@
 
   /* ---------- Impresión / PDF ---------- */
   @media print{
+    /* Sin esto Safari y Chrome imprimen la cabecera en blanco */
+    *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
     body{background:#fff;}
     .cta, footer .noprint{display:none;}
     .card{box-shadow:none;}
-    .doc{padding:0;}
+    .doc{padding:0; max-width:none;}
+    .head, .card{border-radius:0;}
+    h3{page-break-after:avoid;}
+    .dates, .balance, .paid, .note{page-break-inside:avoid;}
   }
 </style>
 </head>
@@ -132,13 +186,26 @@ const PROPS = {
     marca:'CASA KAURI', firma:'Casa Kauri',
     lugar:'La Peñita de Jaltemba · Nayarit',
     tel:'+52 56 2854 4253', wa:'525628544253',
-    horaIn:'3:00 p.m.', horaOut:'11:00 a.m.'
+    horaIn:'3:00 p.m.', horaOut:'11:00 a.m.',
+    foto:'alberca.jpg',
+    /* Respaldo por si la liga es vieja y no trae la lista en el payload. */
+    incluye:['Casa completa para ti: 4 recámaras, 6 camas, 2.5 baños',
+             'Alberca privada y jardín cercado en todo su perímetro',
+             'Cocina equipada, wifi y aire acondicionado',
+             'Estacionamiento dentro de la propiedad',
+             'A 750 m caminando de la playa']
   },
   depto: {
     marca:'DEPARTAMENTO KAURI', firma:'Departamento Kauri',
     lugar:'Rincón de Guayabitos · Nayarit',
     tel:'+52 311 134 9845', wa:'523111349845',
-    horaIn:'3:00 p.m.', horaOut:'12:00 p.m.'
+    horaIn:'3:00 p.m.', horaOut:'12:00 p.m.',
+    foto:'https://a0.muscache.com/im/pictures/hosting/Hosting-1283495962257484053/original/6ff83c08-948a-45e9-a60b-3030712170d8.jpeg?im_w=1200',
+    incluye:['Loft completo de 3 niveles solo para ti · hasta 6 huéspedes',
+             'Nivel 1: sala con Smart TV, comedor, cocina equipada y balcón',
+             'Nivel 2: área de descanso con 4 camas, aire acondicionado y baño completo',
+             'Nivel 3: rooftop privado con regadera exterior',
+             'A 100 m de la playa, sobre el andador principal']
   }
 };
 const WA = PROPS.casa.wa;
@@ -192,6 +259,69 @@ function vacio(){
   </div>`;
 }
 
+/* Dónde está el huésped en el tiempo respecto a su estancia. Se calcula al
+   abrir la página, así que el mismo enlace dice cosas distintas antes, durante
+   y después del viaje. Las fechas se leen a medianoche local para que la cuenta
+   de días no se recorra por el huso horario. */
+function estadoEstancia(d, p){
+  if(!d.checkin) return null;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const ini = new Date(d.checkin + 'T00:00:00');
+  if(isNaN(ini)) return null;
+  const fin = d.checkout ? new Date(d.checkout + 'T00:00:00') : null;
+  const dias = Math.round((ini - hoy) / 86400000);
+  const horaIn = esc(d.horaIn || p.horaIn);
+
+  if(dias > 1)   return {t:'Faltan ' + dias + ' días para tu llegada', s:'Te esperamos el ' + fechaCorta(d.checkin)};
+  if(dias === 1) return {t:'Tu llegada es mañana', s:'A partir de las ' + horaIn};
+  if(dias === 0) return {t:'¡Hoy es el día!', s:'Te esperamos a partir de las ' + horaIn};
+  if(fin && !isNaN(fin) && hoy < fin) return {t:'Estás en casa', s:'Tu salida es el ' + fechaCorta(d.checkout)};
+  return {t:'Gracias por tu visita', s:'Esperamos recibirte de nuevo muy pronto'};
+}
+
+/* Archivo .ics para que el huésped guarde la estancia en su calendario.
+   Evento de día completo: DTEND es exclusivo, así que la fecha de salida
+   es justo la que va (no hay que restarle un día). En TEXT hay que escapar
+   comas, puntos y coma y saltos de línea, o el archivo no se abre. */
+function escIcs(t){
+  return String(t == null ? '' : t).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
+}
+function textoIcs(d, p){
+  const soloFecha = iso => String(iso || '').replace(/-/g,'');
+  const sello = new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Kauri Nayarit//Reserva//ES',
+    'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    'UID:' + escIcs('kauri-' + (d.folio || sello)) + '@casa-kauri.github.io',
+    'DTSTAMP:' + sello,
+    'DTSTART;VALUE=DATE:' + soloFecha(d.checkin),
+    'DTEND;VALUE=DATE:' + soloFecha(d.checkout),
+    'SUMMARY:' + escIcs('Estancia en ' + p.firma),
+    'LOCATION:' + escIcs(p.lugar.replace(' · ', ', ')),
+    'DESCRIPTION:' + escIcs('Folio ' + (d.folio || '') + ' · Llegada a partir de las ' +
+      (d.horaIn || p.horaIn) + ' · Salida antes de las ' + (d.horaOut || p.horaOut)),
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+}
+function guardarEnCalendario(){
+  const d = leerDatos();
+  if(!d || !d.checkin) return;
+  const p = PROPS[d.prop] || PROPS.casa;
+  const blob = new Blob([textoIcs(d, p)], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'reserva-' + (d.folio || 'kauri') + '.ics';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
 function comprobante(d){
   // Los enlaces viejos no traen `prop`: se asume Casa Kauri para no romperlos.
   const p = PROPS[d.prop] || PROPS.casa;
@@ -230,12 +360,7 @@ function comprobante(d){
   // Los enlaces viejos traían la lista de la casa fija en esta página; los nuevos
   // la mandan en el payload, porque el departamento tiene otra.
   const incluye = (d.incluye || '').split('\n').map(x => x.trim()).filter(Boolean);
-  const listaIncluye = (incluye.length ? incluye : [
-    'Casa completa para ti: 4 recámaras, 6 camas, 2.5 baños',
-    'Alberca privada y jardín cercado en todo su perímetro',
-    'Cocina equipada, wifi y aire acondicionado',
-    'Estacionamiento dentro de la propiedad'
-  ]).concat([lineaMascotas]);
+  const listaIncluye = (incluye.length ? incluye : p.incluye).concat([lineaMascotas]);
 
   const llegada = d.llegada
     ? parrafos(d.llegada)
@@ -245,6 +370,8 @@ function comprobante(d){
        (esc(d.anfitrion) || 'Nuestro anfitrión') + ' es nuestro anfitrión en La Peñita y está al '
        + 'pendiente durante toda tu estancia por cualquier cosa que necesites.'];
 
+  const est = estadoEstancia(d, p);
+
   const msgWA = encodeURIComponent(
     'Hola, soy ' + (d.nombre || '') + '. Reserva ' + (d.folio || '') +
     ' (' + fechaCorta(d.checkin) + ' al ' + fechaCorta(d.checkout) + '). Ya revisé mi confirmación.'
@@ -252,13 +379,24 @@ function comprobante(d){
 
   return `
   <div class="head">
-    <img src="logo-kauri.png" alt="${esc(p.firma)}" />
-    <div class="brand">${esc(p.marca)}</div>
-    <div class="place">${esc(p.lugar)}</div>
+    <div class="ph" style="background-image:url('${esc(p.foto)}')"></div>
+    <div class="inner">
+      <div class="id">
+        <img src="logo-kauri.png" alt="${esc(p.firma)}" />
+        <div>
+          <div class="brand">${esc(p.marca)}</div>
+          <div class="place">${esc(p.lugar)}</div>
+        </div>
+      </div>
+      ${d.folio ? '<div class="folio-chip"><div class="k">Folio de reserva</div><div class="v">' + esc(d.folio) + '</div></div>' : ''}
+    </div>
   </div>
 
   <div class="card">
-    <div class="stamp"><span>✓ Reserva confirmada</span></div>
+    <div class="status">
+      <span class="badge">✓ Reserva confirmada</span>
+      ${est ? '<span class="count">' + est.t + '<small>' + est.s + '</small></span>' : ''}
+    </div>
 
     <div class="pad">
       <p class="greet">Hola <strong>${esc(d.nombre)}</strong>, tu reserva está confirmada.
@@ -270,7 +408,8 @@ function comprobante(d){
           <div class="val">${fechaCorta(d.checkin)}</div>
           <div class="hr">a partir de las ${esc(d.horaIn || p.horaIn)}</div>
         </div>
-        <div>
+        <div class="nights"><b>${n}</b><span>${n == 1 ? 'noche' : 'noches'}</span></div>
+        <div class="out">
           <div class="lbl">Salida</div>
           <div class="val">${fechaCorta(d.checkout)}</div>
           <div class="hr">antes de las ${esc(d.horaOut || p.horaOut)}</div>
@@ -292,8 +431,9 @@ function comprobante(d){
       <p>${esc(d.politica).replace(/\n/g,'<br />')}</p>
 
       <div class="cta">
-        <a class="wa" href="https://wa.me/${wa}?text=${msgWA}" target="_blank" rel="noopener">Confirmar por WhatsApp</a>
-        <a class="gh" href="#" onclick="window.print();return false;">Guardar como PDF</a>
+        <a class="wa" href="https://wa.me/${wa}?text=${msgWA}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+        ${d.checkin ? '<a class="gh" href="#" onclick="guardarEnCalendario();return false;">Guardar en mi calendario</a>' : ''}
+        <a class="gh" href="#" onclick="window.print();return false;">Descargar en PDF</a>
       </div>
     </div>
 
