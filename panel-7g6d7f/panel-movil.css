@@ -1,0 +1,92 @@
+/* ===========================================================================
+   Panel de venta directa — candado + ajustes de celular.
+   Se carga DESPUÉS del <style> propio de cada generador, así que puede
+   corregir lo que aquellos definen sin pelearse por especificidad.
+   =========================================================================== */
+
+/* ---------------- Candado ---------------- */
+#k-candado{
+  position:fixed; inset:0; z-index:99999;
+  background:#1F2F54;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  font-family:'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#k-candado .k-caja{ width:100%; max-width:300px; text-align:center; }
+#k-candado .k-logo{
+  font-family:'EB Garamond', Georgia, serif;
+  font-size:30px; color:#fff; letter-spacing:.02em;
+}
+#k-candado .k-sub{
+  color:rgba(255,255,255,.62); font-size:13px;
+  margin:6px 0 26px; letter-spacing:.04em; text-transform:uppercase;
+}
+#k-candado input{
+  width:100%; box-sizing:border-box;
+  padding:16px; border:0; border-radius:12px;
+  font-size:28px; text-align:center; letter-spacing:.5em; text-indent:.5em;
+  background:rgba(255,255,255,.10); color:#fff;
+  outline:2px solid rgba(255,255,255,.18);
+}
+#k-candado input:focus{ outline:2px solid #C9A24B; }
+#k-candado input::placeholder{ color:rgba(255,255,255,.30); letter-spacing:.5em; }
+#k-candado button{
+  width:100%; margin-top:14px; padding:15px;
+  border:0; border-radius:12px; cursor:pointer;
+  background:#C9A24B; color:#1F2F54;
+  font-size:16px; font-weight:700; font-family:inherit;
+}
+#k-candado .k-err{ min-height:20px; margin-top:12px; color:#F0A9A0; font-size:14px; }
+
+/* ---------------- Ajustes de celular ----------------
+   Los generadores ya pasan a una columna abajo de 960px. Lo que faltaba es
+   que se puedan usar con el pulgar y que no ofrezcan cosas que en un
+   teléfono no sirven. */
+@media (max-width:960px){
+
+  /* Área táctil. Abajo de 44px el dedo falla. */
+  .actions button, .liga-btns button{
+    min-height:50px; font-size:16px; width:100%;
+  }
+  .actions{ display:flex; flex-direction:column; gap:10px; }
+  .liga-btns{ display:flex; flex-direction:column; gap:10px; }
+
+  /* iOS hace zoom solo en cualquier campo con letra menor a 16px, y ya no
+     regresa. Esto es lo que hacía incómodo llenar el formulario en el celular. */
+  input, textarea, select{ font-size:16px !important; }
+
+  /* Descargar un .html en un teléfono no lleva a ningún lado: el archivo cae
+     en Descargas y no hay de dónde abrirlo bien. Se esconde. */
+  .solo-escritorio{ display:none !important; }
+
+  /* La vista previa del correo es útil pero larguísima en celular; se deja
+     plegada y se abre a propósito. */
+  .preview{ border-top:1px solid #E5E7EB; }
+}
+
+/* ---------------- Botón de WhatsApp (en las dos pantallas) ---------------- */
+.btn-whats{
+  background:#25D366 !important; color:#0B3D1F !important;
+  border:0 !important; font-weight:700 !important;
+}
+.btn-whats:hover{ background:#1FBB59 !important; }
+
+/* ---------------- Barra de vuelta al índice del panel ---------------- */
+.k-volver{
+  display:inline-flex; align-items:center; gap:6px;
+  color:rgba(255,255,255,.85); text-decoration:none;
+  font-size:14px; padding:4px 10px; border-radius:8px;
+  background:rgba(255,255,255,.12);
+}
+.k-volver:hover{ background:rgba(255,255,255,.22); }
+
+/* En el celular el envío por WhatsApp es lo primero que se busca, así que
+   sube al principio de la columna de botones. En escritorio manda el correo. */
+@media (max-width:960px){
+  .actions .btn-whats{ order:-1; }
+
+  /* La barra de arriba se parte en dos renglones en pantalla chica en vez de
+     empujar el botón de volver fuera de la pantalla. */
+  .topbar{ flex-wrap:wrap; row-gap:6px; }
+  .topbar .sub{ margin-left:0 !important; flex-basis:100%; font-size:12px; }
+}

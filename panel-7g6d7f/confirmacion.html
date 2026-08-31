@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#1F2F54" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Kauri" />
+<link rel="apple-touch-icon" href="../favicon.png" />
+<link rel="icon" href="../favicon.png" />
+<title>Kauri · Generador de confirmación de reserva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#1F2F54;
+    --blue:#3B528A;
+    --soft:#DFE8EE;
+    --ink:#2b3444;
+    --muted:#6b7484;
+    --line:#d9e0e8;
+    --bg:#eef2f6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:400 15px/1.5 'Source Sans 3', system-ui, sans-serif;
+  }
+  .topbar{
+    background:var(--navy); color:#fff; padding:16px 26px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .topbar h1{
+    margin:0; font:500 20px/1 'EB Garamond', serif; letter-spacing:.04em;
+  }
+  .topbar .sub{font-size:13px; opacity:.7; margin-left:auto;}
+
+  .layout{display:grid; grid-template-columns:390px 1fr; gap:0; min-height:calc(100vh - 56px);}
+  @media (max-width:960px){ .layout{grid-template-columns:1fr;} }
+
+  /* ---------- Panel de captura ---------- */
+  .panel{background:#fff; border-right:1px solid var(--line); padding:22px 24px 60px; overflow-y:auto;}
+  .panel h2{
+    font:600 11px/1 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--blue); margin:26px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--soft);
+  }
+  .panel h2:first-child{margin-top:0;}
+  label{display:block; margin-bottom:12px; font-size:13px; color:var(--muted);}
+  label span{display:block; margin-bottom:4px; font-weight:600; color:var(--ink);}
+  input, textarea, select{
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:4px;
+    font:400 14px 'Source Sans 3', sans-serif; color:var(--ink); background:#fff;
+  }
+  input:focus, textarea:focus, select:focus{outline:2px solid var(--blue); outline-offset:-1px;}
+  textarea{resize:vertical; min-height:64px;}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .hint{font-size:12px; color:var(--muted); margin:-6px 0 14px;}
+  .calc{
+    background:var(--soft); border-radius:6px; padding:12px 14px; margin-bottom:16px;
+    font-size:13px; line-height:1.9;
+  }
+  .calc b{float:right; font-variant-numeric:tabular-nums;}
+  .propsel{
+    border:2px solid var(--navy); border-radius:6px; padding:12px 14px;
+    background:#F7FAFC; margin-bottom:18px;
+  }
+  .propsel label{margin:0;}
+  .alerta{
+    background:#FEF6F1; border-left:4px solid #c2410c; color:#7c2d12;
+    padding:12px 16px; border-radius:6px; margin-bottom:16px; font-size:14px;
+    max-width:640px; display:none;
+  }
+  .alerta.on{display:block;}
+
+  /* ---------- Acciones ---------- */
+  .actions{
+    position:sticky; bottom:0; background:#fff; padding:16px 0 0;
+    border-top:1px solid var(--line); margin-top:26px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  button{
+    width:100%; padding:12px 16px; border:none; border-radius:4px; cursor:pointer;
+    font:600 13px/1 'Source Sans 3', sans-serif; letter-spacing:.06em; text-transform:uppercase;
+    transition:background .2s ease, opacity .2s ease;
+  }
+  .btn-main{background:var(--blue); color:#fff;}
+  .btn-main:hover{background:var(--navy);}
+  .btn-alt{background:#fff; color:var(--navy); border:1px solid var(--navy);}
+  .btn-alt:hover{background:var(--soft);}
+  .ok{color:#1a7f4b; font-size:13px; font-weight:600; text-align:center; min-height:18px;}
+
+  /* Caja del enlace: antes solo había un botón de "copiar" a ciegas. Ver el
+     enlace y su largo importa porque WhatsApp parte los enlaces largos, y un
+     enlace partido es un huésped que no puede abrir su comprobante. */
+  .liga-box{border:1px solid var(--soft); border-radius:8px; padding:16px 16px 14px; margin-top:18px; background:#fff;}
+  .liga-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; gap:12px;}
+  .liga-k{font:700 10.5px/1 'Source Sans 3', sans-serif; letter-spacing:.15em; text-transform:uppercase; color:var(--navy);}
+  .liga-len{font:600 12px/1 'Source Sans 3', sans-serif;}
+  .liga-len.bien{color:#1a7f4b;}
+  .liga-len.largo{color:#9a3412;}
+  .liga-url{
+    width:100%; border:1px solid var(--soft); border-radius:6px; padding:10px 12px;
+    font:400 12px/1.4 ui-monospace, Menlo, monospace; color:#5a6472; background:#F7F9FC;
+    text-overflow:ellipsis;
+  }
+  .liga-btns{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;}
+  .liga-btns .btn-alt{flex:1; min-width:150px;}
+  /* .hint trae margen superior negativo para pegarse a su campo; aquí estorba. */
+  .liga-box .hint{margin:12px 0 0;}
+
+  /* ---------- Vista previa ---------- */
+  .preview{padding:28px; overflow-y:auto;}
+  .preview-head{
+    display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap;
+  }
+  .preview-head strong{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
+  .asunto{
+    background:#fff; border:1px solid var(--line); border-radius:6px; padding:11px 14px;
+    margin-bottom:18px; font-size:14px;
+  }
+  .asunto em{font-style:normal; color:var(--muted); font-size:12px; display:block; margin-bottom:3px; letter-spacing:.1em; text-transform:uppercase;}
+  .mail-frame{
+    background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden;
+    box-shadow:0 8px 26px rgba(31,47,84,.08); max-width:640px;
+  }
+</style>
+<link rel="stylesheet" href="panel-movil.css" />
+<script src="panel-movil.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Kauri · Confirmación de reserva</h1>
+  <a class="k-volver" href="./">‹ Panel</a>
+  <span class="sub">Llena los datos → copia el correo → pégalo en Gmail</span>
+</div>
+
+<div class="layout">
+
+  <!-- ============ CAPTURA ============ -->
+  <div class="panel">
+
+    <div class="propsel">
+      <label><span>¿Qué alojamiento se confirma?</span>
+        <select id="propiedad">
+          <option value="casa">Casa Kauri — La Peñita de Jaltemba</option>
+          <option value="depto">Departamento Kauri — Rincón de Guayabitos</option>
+        </select>
+      </label>
+    </div>
+
+    <h2>Huésped</h2>
+    <label><span>Nombre completo</span><input id="nombre" value="" placeholder="Ej. María Fernanda Ruiz" /></label>
+    <label><span>Correo electrónico</span><input id="correo" type="email" placeholder="cliente@correo.com" /></label>
+    <label><span>Teléfono / WhatsApp</span><input id="telHuesped" placeholder="Ej. 33 1234 5678" /></label>
+
+    <h2>Estancia</h2>
+    <div class="row">
+      <label><span>Llegada</span><input id="checkin" type="date" /></label>
+      <label><span>Salida</span><input id="checkout" type="date" /></label>
+    </div>
+    <label><span>Número de huéspedes</span><input id="huespedes" type="number" min="1" max="12" value="8" /></label>
+    <label><span>Folio de reserva</span><input id="folio" /></label>
+    <div class="hint">Se genera solo. Sirve para que el cliente lo cite en cualquier aclaración.</div>
+
+    <h2>Importes (MXN)</h2>
+    <div class="row">
+      <label><span>Tarifa por noche</span><input id="tarifa" type="number" min="0" step="50" value="0" /></label>
+      <label><span>Limpieza / extras</span><input id="extras" type="number" min="0" step="50" value="0" /></label>
+    </div>
+    <div class="row">
+      <label><span>Mascotas</span><input id="mascotas" type="number" min="0" max="6" value="0" /></label>
+      <label><span>Cargo por mascota</span><input id="cargoMascota" type="number" min="0" step="50" value="0" /></label>
+    </div>
+    <div class="hint">Si es cargo único (no por mascota), pon 1 mascota y ahí el monto total.</div>
+    <label><span>Anticipo ya pagado</span><input id="anticipo" type="number" min="0" step="50" value="0" /></label>
+    <label><span>Fecha límite para el saldo</span><input id="fechaSaldo" type="date" /></label>
+    <div class="calc" id="calc"></div>
+
+    <h2>Pago y contacto</h2>
+    <label><span>Cómo se liquida el saldo</span><textarea id="datosPago">Transferencia o depósito. Al recibirlo te confirmamos por WhatsApp y te enviamos la clave de acceso.</textarea></label>
+    <label><span>WhatsApp de contacto</span><input id="telCasa" /></label>
+
+    <h2>Contenido</h2>
+    <label><span>Lo que ya está incluido (una línea por renglón)</span><textarea id="incluye" style="min-height:130px;"></textarea></label>
+    <div class="hint" id="hintIncluye"></div>
+    <label><span>Tu llegada</span><textarea id="llegada" style="min-height:120px;"></textarea></label>
+    <div class="hint">Deja un renglón en blanco para separar párrafos. Aquí va el nombre del anfitrión.</div>
+
+    <h2>Política y notas</h2>
+    <label><span>Política de cancelación</span><textarea id="politica">Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.</textarea></label>
+    <div class="hint">⚠️ Revisa que este texto sea el que realmente manejas. Es lo único del correo que te puede meter en un problema.</div>
+    <label><span>Notas para este huésped (opcional)</span><textarea id="notas" placeholder="Ej. Vienen con dos perros medianos. Llegada tarde, alrededor de las 9 p.m."></textarea></label>
+
+    <div class="actions">
+      <button class="btn-main" onclick="copiarCorreo()">Copiar correo con formato</button>
+      <button class="btn-alt" onclick="abrirGmail()">Abrir borrador en Gmail</button>
+      <button class="btn-alt btn-whats" onclick="abrirWhats()">Enviar por WhatsApp</button>
+      <button class="btn-alt" onclick="copiarWhats()">Copiar versión corta para WhatsApp</button>
+      <button class="btn-alt solo-escritorio" onclick="descargar()">Descargar como archivo .html</button>
+      <div class="ok" id="ok"></div>
+    </div>
+
+    <div class="liga-box">
+      <div class="liga-top">
+        <span class="liga-k">Enlace del comprobante</span>
+        <span class="liga-len" id="ligaLen">—</span>
+      </div>
+      <input class="liga-url" id="ligaUrl" readonly onclick="this.select()" />
+      <div class="liga-btns">
+        <button class="btn-alt" onclick="copiarLiga()">Copiar el enlace</button>
+        <button class="btn-alt" onclick="verLiga()">Verlo como el cliente</button>
+      </div>
+      <div class="hint" id="ligaAviso"></div>
+    </div>
+  </div>
+
+  <!-- ============ VISTA PREVIA ============ -->
+  <div class="preview">
+    <div class="preview-head"><strong>Así lo va a recibir el cliente</strong></div>
+    <div class="alerta" id="alerta"></div>
+    <div class="asunto"><em>Asunto</em><span id="asuntoTxt"></span></div>
+    <div class="mail-frame"><div id="mail"></div></div>
+  </div>
+
+</div>
+
+<script>
+// El logo se sirve desde el sitio publicado: los clientes de correo no pueden
+// leer archivos locales, tiene que ser una URL pública.
+// Al cambiar de hosting (o al conectar el dominio propio) basta con tocar estas
+// tres líneas: el correo, la liga del comprobante y el pie se reacomodan solos.
+const SITIO = 'https://casa-kauri.github.io';
+const SITIO_TXT = 'casa-kauri.github.io';
+const LOGO = SITIO + '/logo-kauri.png';
+const PAGINA_RESERVA = SITIO + '/reserva.html';
+const IG = 'https://www.instagram.com/kaurinayarit/';
+
+/* Son DOS alojamientos distintos, en dos pueblos distintos y con dos teléfonos
+   distintos. Nunca firmar el departamento como "Casa Kauri". */
+const PROPS = {
+  casa: {
+    marca:'CASA KAURI', firma:'Casa Kauri',
+    lugar:'La Peñita de Jaltemba · Nayarit',
+    tel:'+52 56 2854 4253',
+    horaIn:'3:00 p.m.', horaOut:'11:00 a.m.',
+    folio:'KAURI',
+    incluye:'Casa completa para ti: 4 recámaras, 6 camas, 2.5 baños\n'
+          + 'Alberca privada y jardín cercado en todo su perímetro\n'
+          + 'Cocina equipada, wifi y aire acondicionado\n'
+          + 'Estacionamiento dentro de la propiedad\n'
+          + 'A 750 m caminando de la playa',
+    llegada:'El acceso es autónomo, con candado de clave: puedes llegar a tu propio ritmo, '
+          + 'sin esperar a nadie. **Un día antes te enviamos por WhatsApp la ubicación exacta, '
+          + 'la clave y las indicaciones para llegar.**\n\n'
+          + 'Ismael es nuestro anfitrión en La Peñita y está al pendiente durante toda tu '
+          + 'estancia por cualquier cosa que necesites.',
+    nota:'Datos verificados de Casa Kauri. Ajusta solo si esta reserva cambia algo.'
+  },
+  depto: {
+    marca:'DEPARTAMENTO KAURI', firma:'Departamento Kauri',
+    lugar:'Rincón de Guayabitos · Nayarit',
+    tel:'+52 311 134 9845',
+    horaIn:'3:00 p.m.', horaOut:'12:00 p.m.',
+    folio:'DEPTO',
+    /* Datos verificados el 31 ago 2026 contra el anuncio de Airbnb
+       (rooms/1283495962257484053): 6 huéspedes máx., 4 camas, 2 baños completos
+       y un medio baño, 100 m a la playa. OJO: la descripción del anuncio dice
+       "5 camas" y la ficha estructurada dice 4 — confírmalo antes de mandar. */
+    incluye:'Loft completo de 3 niveles solo para ti · hasta 6 huéspedes\n'
+          + 'Nivel 1: sala con Smart TV, comedor, cocina equipada, balcón y medio baño\n'
+          + 'Nivel 2: área de descanso con 4 camas, aire acondicionado y baño completo\n'
+          + 'Nivel 3: rooftop privado con medio baño, regadera exterior y fregadero\n'
+          + 'A 100 m de la playa, sobre el andador principal · wifi\n'
+          + 'Estacionamiento público y gratuito alrededor del alojamiento',
+    llegada:'Tu llegada es en **Andador Colorines 4A, Rincón de Guayabitos, Nayarit** '
+          + '(https://maps.app.goo.gl/xwAyVKAvdusuxjtG9). El estacionamiento es público y '
+          + 'gratuito alrededor del alojamiento.\n\n'
+          + '**Un día antes te enviamos la Guía de Bienvenida**, con el croquis de cómo llegar, '
+          + 'la contraseña del wifi y todo lo que necesitas saber del departamento. Si quieres '
+          + 'flores, decoración o alguna sorpresa para una fecha especial, avísanos con al menos '
+          + '72 horas de anticipación y lo preparamos con un costo adicional.',
+    nota:'Datos tomados del anuncio de Airbnb (31 ago 2026). Ajusta solo si esta reserva cambia algo.'
+  }
+};
+
+/* Liga al comprobante en línea (sitio-casa-kauri/reserva.html).
+   Los datos van codificados en el HASH, no en la query: el fragmento nunca
+   se manda al servidor, así que los datos del huésped no quedan en registros
+   ni en referrers. base64url para que no se rompa al pegarla en WhatsApp. */
+/* La política tal como viene de fábrica en el formulario. Se guarda al cargar
+   para poder saber si el operador la cambió en esta reserva o no. */
+const POLITICA_DEFAULT = (document.getElementById('politica') || {}).value || '';
+
+function ligaReserva(d){
+  const p = PROPS[d.prop] || PROPS.casa;
+  const payload = {
+    prop:d.prop, incluye:d.incluye, llegada:d.llegada, horaIn:d.horaIn, horaOut:d.horaOut,
+    nombre:d.nombre, folio:d.folio, checkin:d.checkin, checkout:d.checkout,
+    huespedes:d.huespedes, n:d.n, tarifa:d.tarifa, hospedaje:d.hospedaje,
+    extras:d.extras, mascotas:d.mascotas, cargoMascota:d.cargoMascota,
+    totalMascotas:d.totalMascotas, total:d.total, anticipo:d.anticipo,
+    saldo:d.saldo, fechaSaldo:d.fechaSaldo, datosPago:d.datosPago,
+    telCasa:d.telCasa, politica:d.politica, notas:d.notas
+  };
+
+  /* La liga se rompe cuando WhatsApp la parte, y se parte por larga. Todo lo
+     que la página del comprobante ya sabe de memoria NO viaja dentro: los
+     textos fijos del alojamiento y la política son los que más pesaban.
+     Solo se mandan si el operador los cambió para esta reserva. */
+  if(payload.incluye  === p.incluye)        delete payload.incluye;
+  if(payload.llegada  === p.llegada)        delete payload.llegada;
+  if(payload.politica === POLITICA_DEFAULT) delete payload.politica;
+  if(payload.horaIn   === p.horaIn)         delete payload.horaIn;
+  if(payload.horaOut  === p.horaOut)        delete payload.horaOut;
+  if(payload.telCasa  === p.tel)            delete payload.telCasa;
+  // Y fuera lo vacío: el comprobante ya trata undefined como "no aplica".
+  Object.keys(payload).forEach(k => {
+    const v = payload[k];
+    if(v === '' || v === null || v === undefined || v === 0) delete payload[k];
+  });
+
+  const bytes = new TextEncoder().encode(JSON.stringify(payload));
+  const b64 = btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_');
+  return PAGINA_RESERVA + '#' + b64;
+}
+
+const $ = id => document.getElementById(id);
+const campos = ['propiedad','nombre','correo','telHuesped','checkin','checkout','huespedes','folio',
+                'tarifa','extras','mascotas','cargoMascota','anticipo','fechaSaldo',
+                'datosPago','telCasa','incluye','llegada','politica','notas'];
+
+const mx = n => '$' + Number(n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN';
+
+function fechaLarga(iso){
+  if(!iso) return '—';
+  // Se fuerza mediodía UTC para que el cambio de zona horaria no recorra el día.
+  const d = new Date(iso + 'T12:00:00');
+  const t = d.toLocaleDateString('es-MX', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+function fechaCorta(iso){
+  if(!iso) return '—';
+  const d = new Date(iso + 'T12:00:00');
+  return d.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'});
+}
+function noches(){
+  const a = $('checkin').value, b = $('checkout').value;
+  if(!a || !b) return 0;
+  const n = Math.round((new Date(b) - new Date(a)) / 86400000);
+  return n > 0 ? n : 0;
+}
+
+function prop(){ return PROPS[$('propiedad').value] || PROPS.casa; }
+
+/* Negritas ligeras para los textos editables: **así** se marca lo importante
+   sin pedirle al usuario que escriba HTML. */
+function parrafos(txt){
+  return String(txt || '').split(/\n{2,}/).filter(Boolean).map(p =>
+    p.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+     .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#3B528A;">$1</a>')
+     .replace(/\n/g, '<br />')
+  );
+}
+
+function generarFolio(){
+  const base = $('checkin').value ? $('checkin').value.replaceAll('-','').slice(2) : 'XXXXXX';
+  const ap = ($('nombre').value.trim().split(/\s+/).pop() || 'HK').slice(0,2).toUpperCase();
+  return prop().folio + '-' + base + '-' + ap;
+}
+
+function datos(){
+  const p = prop();
+  const n = noches();
+  const tarifa = +$('tarifa').value || 0;
+  const extras = +$('extras').value || 0;
+  const anticipo = +$('anticipo').value || 0;
+  const mascotas = +$('mascotas').value || 0;
+  const cargoMascota = +$('cargoMascota').value || 0;
+  const totalMascotas = mascotas * cargoMascota;
+  const hospedaje = tarifa * n;
+  const total = hospedaje + extras + totalMascotas;
+  return {
+    nombre: $('nombre').value.trim() || 'Estimado huésped',
+    correo: $('correo').value.trim(),
+    telHuesped: $('telHuesped').value.trim(),
+    checkin: $('checkin').value, checkout: $('checkout').value,
+    huespedes: $('huespedes').value || '—',
+    folio: $('folio').value.trim() || generarFolio(),
+    n, tarifa, extras, anticipo, hospedaje, total, saldo: total - anticipo,
+    mascotas, cargoMascota, totalMascotas,
+    fechaSaldo: $('fechaSaldo').value,
+    datosPago: $('datosPago').value.trim(),
+    prop: $('propiedad').value,
+    marca: p.marca, firma: p.firma, lugar: p.lugar,
+    horaIn: p.horaIn, horaOut: p.horaOut,
+    incluye: $('incluye').value.trim(),
+    llegada: $('llegada').value.trim(),
+    telCasa: $('telCasa').value.trim() || p.tel,
+    politica: $('politica').value.trim(),
+    notas: $('notas').value.trim()
+  };
+}
+
+/* La línea de mascotas nunca se escribe a mano: se calcula. El cargo por mascota
+   se avisa en la confirmación, cuando el huésped todavía puede decidir. */
+function lineasIncluye(d){
+  const base = d.incluye.split('\n').map(s => s.trim()).filter(Boolean);
+  base.push(d.mascotas > 0
+    ? 'Tus ' + (d.mascotas == 1 ? 'mascota' : d.mascotas + ' mascotas') + ', ya cubierta' + (d.mascotas == 1 ? '' : 's') + ' en el total de arriba'
+    : 'Mascotas bienvenidas (aplica un cargo adicional)');
+  return base;
+}
+
+/* ---------- El correo, en tablas con estilos en línea ----------
+   Gmail, Outlook y Apple Mail ignoran el CSS externo y buena parte del moderno.
+   Tablas + inline styles es lo único que se ve igual en los tres.            */
+function armarCorreo(d){
+  const fila = (etq, val, fuerte) => `
+    <tr>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:400 14px/1.4 Arial,Helvetica,sans-serif;color:#6b7484;">${etq}</td>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:${fuerte?'700':'400'} 14px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;text-align:right;">${val}</td>
+    </tr>`;
+
+  const bloqueNotas = d.notas ? `
+    <tr><td style="padding:0 32px 22px;">
+      <div style="background:#F4F7FA;border-left:3px solid #3B528A;padding:14px 16px;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;">
+        <strong style="color:#1F2F54;">Nota sobre tu reserva:</strong><br />${d.notas.replace(/\n/g,'<br />')}
+      </div>
+    </td></tr>` : '';
+
+  const bloqueSaldo = d.saldo > 0 ? `
+    <tr><td style="padding:0 32px 26px;">
+      <div style="border:1px solid #3B528A;border-radius:6px;padding:16px 18px;">
+        <div style="font:700 15px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;margin-bottom:6px;">
+          Saldo pendiente: ${mx(d.saldo)}
+        </div>
+        <div style="font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;">
+          ${d.fechaSaldo ? 'A liquidar a más tardar el <strong>' + fechaLarga(d.fechaSaldo) + '</strong>. ' : ''}${d.datosPago}
+        </div>
+      </div>
+    </td></tr>` : `
+    <tr><td style="padding:0 32px 26px;">
+      <div style="background:#EAF5EE;border-radius:6px;padding:14px 18px;font:700 15px/1.4 Arial,Helvetica,sans-serif;color:#1a7f4b;">
+        Tu reserva está pagada por completo. No hay nada pendiente.
+      </div>
+    </td></tr>`;
+
+  return `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef2f6;padding:24px 12px;">
+<tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
+
+  <!-- Encabezado -->
+  <tr><td style="background:#1F2F54;padding:26px 32px;text-align:center;">
+    <img src="${LOGO}" width="52" alt="${d.firma}" style="display:block;margin:0 auto 10px;border:0;" />
+    <div style="font:400 22px/1.2 Georgia,'Times New Roman',serif;color:#ffffff;letter-spacing:.08em;">${d.marca}</div>
+    <div style="font:400 11px/1.4 Arial,Helvetica,sans-serif;color:#b9c6da;letter-spacing:.22em;text-transform:uppercase;margin-top:6px;">${d.lugar}</div>
+  </td></tr>
+
+  <!-- Confirmado -->
+  <tr><td style="padding:30px 32px 6px;text-align:center;">
+    <div style="display:inline-block;background:#EAF5EE;color:#1a7f4b;font:700 12px/1 Arial,Helvetica,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:9px 16px;border-radius:20px;">✓ Reserva confirmada</div>
+  </td></tr>
+
+  <tr><td style="padding:20px 32px 6px;">
+    <p style="margin:0 0 14px;font:400 16px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">Hola <strong>${d.nombre}</strong>,</p>
+    <p style="margin:0 0 20px;font:400 16px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">
+      Tu reserva en ${d.firma} quedó confirmada. Este correo es tu comprobante: guárdalo,
+      aquí viene todo lo que necesitas saber. Ya estamos preparando todo para recibirte.
+    </p>
+  </td></tr>
+
+  <!-- Fechas -->
+  <tr><td style="padding:0 32px 22px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #DFE8EE;border-radius:6px;">
+      <tr>
+        <td width="50%" style="padding:16px 18px;border-right:1px solid #DFE8EE;">
+          <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#6b7484;letter-spacing:.14em;text-transform:uppercase;">Llegada</div>
+          <div style="font:700 16px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;margin-top:6px;">${fechaCorta(d.checkin)}</div>
+          <div style="font:400 13px/1.4 Arial,Helvetica,sans-serif;color:#6b7484;">a partir de las ${d.horaIn}</div>
+        </td>
+        <td width="50%" style="padding:16px 18px;">
+          <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#6b7484;letter-spacing:.14em;text-transform:uppercase;">Salida</div>
+          <div style="font:700 16px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;margin-top:6px;">${fechaCorta(d.checkout)}</div>
+          <div style="font:400 13px/1.4 Arial,Helvetica,sans-serif;color:#6b7484;">antes de las ${d.horaOut}</div>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <!-- Detalle -->
+  <tr><td style="padding:0 32px 8px;">
+    <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#3B528A;letter-spacing:.16em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid #1F2F54;">Detalle de tu reserva</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      ${fila('Folio', d.folio)}
+      ${fila('Huéspedes', d.huespedes + ' persona' + (d.huespedes==1?'':'s'))}
+      ${fila('Noches', d.n)}
+      ${d.tarifa ? fila('Hospedaje (' + d.n + ' × ' + mx(d.tarifa) + ')', mx(d.hospedaje)) : ''}
+      ${d.extras ? fila('Limpieza y extras', mx(d.extras)) : ''}
+      ${d.totalMascotas ? fila('Mascotas (' + d.mascotas + ' × ' + mx(d.cargoMascota) + ')', mx(d.totalMascotas)) : ''}
+      ${d.total ? fila('Total', mx(d.total), true) : ''}
+      ${d.anticipo ? fila('Anticipo recibido', '− ' + mx(d.anticipo)) : ''}
+    </table>
+  </td></tr>
+
+  <tr><td style="height:22px;"></td></tr>
+  ${bloqueSaldo}
+  ${bloqueNotas}
+
+  <!-- La casa -->
+  <tr><td style="padding:0 32px 22px;">
+    <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#3B528A;letter-spacing:.16em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid #1F2F54;margin-bottom:14px;">Lo que ya está incluido</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font:400 15px/1.9 Arial,Helvetica,sans-serif;color:#2b3444;">
+      ${lineasIncluye(d).map(l => '<tr><td>' + l + '</td></tr>').join('')}
+    </table>
+  </td></tr>
+
+  <!-- Llegada -->
+  <tr><td style="padding:0 32px 22px;">
+    <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#3B528A;letter-spacing:.16em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid #1F2F54;margin-bottom:14px;">Tu llegada</div>
+    ${parrafos(d.llegada).map(t => '<p style="margin:0 0 12px;font:400 15px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">' + t + '</p>').join('')}
+  </td></tr>
+
+  <!-- Política -->
+  <tr><td style="padding:0 32px 26px;">
+    <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#3B528A;letter-spacing:.16em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid #1F2F54;margin-bottom:14px;">Si algo cambia</div>
+    <p style="margin:0;font:400 14px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">${d.politica.replace(/\n/g,'<br />')}</p>
+  </td></tr>
+
+  <!-- Comprobante en línea -->
+  <tr><td style="padding:0 32px 28px;text-align:center;">
+    <a href="${ligaReserva(d)}" style="display:inline-block;background:#3B528A;color:#ffffff;text-decoration:none;padding:15px 30px;border-radius:5px;font:700 13px/1 Arial,Helvetica,sans-serif;letter-spacing:.08em;text-transform:uppercase;">Ver mi reserva en línea</a>
+    <div style="font:400 13px/1.6 Arial,Helvetica,sans-serif;color:#6b7484;margin-top:10px;">Ábrelo desde tu celular cuando quieras: ahí tienes tu comprobante siempre a la mano.</div>
+  </td></tr>
+
+  <!-- Cierre -->
+  <tr><td style="padding:0 32px 28px;">
+    <p style="margin:0;font:400 16px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">
+      Cualquier duda, respóndenos este correo o escríbenos al WhatsApp
+      <strong style="color:#1F2F54;">${d.telCasa}</strong>. Nos da mucho gusto que hayas
+      elegido ${d.firma}.
+    </p>
+  </td></tr>
+
+  <!-- Pie -->
+  <tr><td style="background:#1F2F54;padding:24px 32px;text-align:center;">
+    <div style="font:400 15px/1.5 Georgia,'Times New Roman',serif;color:#ffffff;letter-spacing:.06em;">${d.firma}</div>
+    <div style="font:400 13px/1.7 Arial,Helvetica,sans-serif;color:#b9c6da;margin-top:8px;">
+      ${d.lugar.replace(' · ', ', ')} · WhatsApp ${d.telCasa}<br />
+      <a href="${SITIO}" style="color:#ffffff;text-decoration:underline;">${SITIO_TXT}</a>
+      &nbsp;·&nbsp;
+      <a href="${IG}" style="color:#ffffff;text-decoration:underline;">@kaurinayarit</a>
+    </div>
+    <div style="font:400 11px/1.6 Arial,Helvetica,sans-serif;color:#7f8ca6;margin-top:14px;">
+      Folio ${d.folio} · Este correo confirma tu reserva y sirve como comprobante.
+    </div>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>`;
+}
+
+function versionWhats(d){
+  return `*${d.marca} — Reserva confirmada* ✅
+Folio: ${d.folio}
+
+Hola ${d.nombre}, tu reserva quedó confirmada.
+
+📅 Llegada: ${fechaCorta(d.checkin)} (desde ${d.horaIn})
+📅 Salida: ${fechaCorta(d.checkout)} (antes de ${d.horaOut})
+🌙 ${d.n} noche${d.n==1?'':'s'} · 👥 ${d.huespedes} huéspedes
+${d.total ? '\n💵 Total: ' + mx(d.total) + (d.anticipo ? '\n✔️ Anticipo recibido: ' + mx(d.anticipo) : '') + (d.saldo>0 ? '\n⏳ Saldo: ' + mx(d.saldo) + (d.fechaSaldo ? ' (a más tardar el ' + fechaCorta(d.fechaSaldo) + ')' : '') : '\n✔️ Pagado por completo') : ''}
+
+Te acabamos de enviar también la confirmación formal por correo${d.correo ? ' a ' + d.correo : ''}.
+
+Un día antes de tu llegada te mando toda la información para llegar. Cualquier cosa, aquí estoy.
+
+Aquí está tu comprobante en línea, guárdalo. *Ábrelo tocando el enlace* (si lo copias a mano se corta):
+${ligaReserva(d)}`;
+}
+
+function asunto(d){
+  return `Confirmación de tu reserva en ${d.firma} · ${fechaCorta(d.checkin)} al ${fechaCorta(d.checkout)} · Folio ${d.folio}`;
+}
+
+function render(){
+  const d = datos();
+  $('mail').innerHTML = armarCorreo(d);
+  $('asuntoTxt').textContent = asunto(d);
+  $('calc').innerHTML =
+    `Noches <b>${d.n}</b>` +
+    `<br />Hospedaje <b>${mx(d.hospedaje)}</b>` +
+    `<br />Extras <b>${mx(d.extras)}</b>` +
+    (d.totalMascotas ? `<br />Mascotas (${d.mascotas}) <b>${mx(d.totalMascotas)}</b>` : '') +
+    `<br />Total <b>${mx(d.total)}</b>` +
+    `<br />Anticipo <b>− ${mx(d.anticipo)}</b>` +
+    `<br /><span style="color:#1F2F54;font-weight:700;">Saldo <b>${mx(d.saldo)}</b></span>`;
+
+  // Nada de esto sale hacia el huésped: son avisos para el operador.
+  const alertas = [];
+  if(d.incluye.includes('COMPLETAR'))
+    alertas.push('La lista de "Lo que ya está incluido" trae un renglón sin llenar. Escríbelo antes de mandar la confirmación.');
+  if(d.mascotas > 0 && !d.cargoMascota)
+    alertas.push('Hay mascotas con cargo en cero. Las mascotas siempre se cobran: cóbralo aquí, no en el check-in.');
+  $('alerta').innerHTML = alertas.map(a => '⚠️ ' + a).join('<br />');
+  $('alerta').className = alertas.length ? 'alerta on' : 'alerta';
+
+  pintarLiga(d);
+}
+
+/* WhatsApp parte los enlaces largos, y un enlace partido es un huésped que no
+   puede abrir su comprobante. Por eso el largo se ve aquí: hasta ~700 va bien;
+   arriba de 900 conviene revisar qué texto se está mandando de más. */
+function pintarLiga(d){
+  const liga = ligaReserva(d);
+  const n = liga.length;
+  $('ligaUrl').value = liga;
+  $('ligaLen').textContent = n + ' caracteres';
+  $('ligaLen').className = 'liga-len ' + (n <= 900 ? 'bien' : 'largo');
+  $('ligaAviso').textContent = n <= 900
+    ? 'Va corto: se manda por WhatsApp sin riesgo de que se corte.'
+    : 'Está largo. Suele ser porque cambiaste a mano la política, la lista de lo incluido o el texto de llegada: solo eso viaja dentro del enlace.';
+}
+
+/* Al cambiar de alojamiento se reescriben los datos fijos. Es el punto donde se
+   evita el error viejo de mandarle al departamento el texto de la casa. */
+function cargarPropiedad(){
+  const p = prop();
+  $('telCasa').value = p.tel;
+  $('incluye').value = p.incluye;
+  $('llegada').value = p.llegada;
+  $('hintIncluye').innerHTML = p.nota;
+  $('folio').value = generarFolio();
+  render();
+}
+
+function aviso(txt){
+  $('ok').textContent = txt;
+  setTimeout(() => { $('ok').textContent = ''; }, 3200);
+}
+
+/* Copiar con formato: hay que poner text/html Y text/plain en el portapapeles,
+   si no Gmail pega el código fuente en lugar del diseño. */
+async function copiarCorreo(){
+  const html = $('mail').innerHTML;
+  const texto = $('mail').innerText;
+  try{
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        'text/html': new Blob([html], {type:'text/html'}),
+        'text/plain': new Blob([texto], {type:'text/plain'})
+      })
+    ]);
+    aviso('✓ Copiado. Pégalo en Gmail con Ctrl/Cmd + V');
+  }catch(e){
+    // Fallback para navegadores sin ClipboardItem (Firefox viejo, file:// restringido)
+    const r = document.createRange();
+    r.selectNode($('mail'));
+    const s = window.getSelection();
+    s.removeAllRanges(); s.addRange(r);
+    document.execCommand('copy');
+    s.removeAllRanges();
+    aviso('✓ Copiado. Pégalo en Gmail con Ctrl/Cmd + V');
+  }
+}
+
+/* El flujo del celular: abre WhatsApp con el mensaje y la liga ya escritos.
+   Sin teléfono capturado abre el selector de contactos, que es lo que se
+   quiere cuando la conversación ya está abierta. */
+function abrirWhats(){
+  const d = datos();
+  kWhats(versionWhats(d), d.telHuesped);
+  aviso('WhatsApp abierto con el mensaje listo');
+}
+
+async function copiarWhats(){
+  const d = datos();
+  await navigator.clipboard.writeText(versionWhats(d));
+  aviso('✓ Texto de WhatsApp copiado');
+}
+
+async function copiarLiga(){
+  await navigator.clipboard.writeText(ligaReserva(datos()));
+  aviso('✓ Liga copiada');
+}
+
+/* Vista previa contra el archivo LOCAL: sirve para revisar el comprobante
+   aunque el sitio todavía no esté publicado en Netlify. */
+function verLiga(){
+  /* Desde la Mac (file://) la página pública está en la carpeta hermana;
+     desde el panel publicado está un nivel arriba, en el sitio real. */
+  const destino = location.protocol === 'file:'
+    ? '../sitio-casa-kauri/reserva.html'
+    : '../reserva.html';
+  const liga = ligaReserva(datos()).replace(PAGINA_RESERVA, destino);
+  window.open(liga, '_blank');
+}
+
+function abrirGmail(){
+  const d = datos();
+  const url = 'https://mail.google.com/mail/?view=cm&fs=1'
+    + '&to=' + encodeURIComponent(d.correo)
+    + '&su=' + encodeURIComponent(asunto(d));
+  window.open(url, '_blank');
+  aviso('Gmail abierto — ahora copia el correo y pégalo');
+}
+
+function descargar(){
+  const d = datos();
+  const doc = '<!DOCTYPE html><html lang="es-MX"><head><meta charset="utf-8" /><title>'
+    + asunto(d) + '</title></head><body style="margin:0">' + $('mail').innerHTML + '</body></html>';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([doc], {type:'text/html'}));
+  a.download = 'confirmacion-' + d.folio + '.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  aviso('✓ Archivo descargado');
+}
+
+// ---------- Arranque ----------
+campos.forEach(c => {
+  $(c).addEventListener('input', () => {
+    if(c === 'nombre' || c === 'checkin') $('folio').value = generarFolio();
+    render();
+  });
+});
+
+const hoy = new Date();
+const mas7 = new Date(hoy.getTime() + 7*86400000);
+const mas10 = new Date(hoy.getTime() + 10*86400000);
+const iso = d => d.toISOString().slice(0,10);
+$('checkin').value = iso(mas7);
+$('checkout').value = iso(mas10);
+$('fechaSaldo').value = iso(new Date(hoy.getTime() + 4*86400000));
+$('propiedad').addEventListener('change', cargarPropiedad);
+cargarPropiedad();
+</script>
+</body>
+</html>

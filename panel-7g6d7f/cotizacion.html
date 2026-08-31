@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#1F2F54" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Kauri" />
+<link rel="apple-touch-icon" href="../favicon.png" />
+<link rel="icon" href="../favicon.png" />
+<title>Kauri · Generador de cotización</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#1F2F54;
+    --blue:#3B528A;
+    --soft:#DFE8EE;
+    --ink:#2b3444;
+    --muted:#6b7484;
+    --line:#d9e0e8;
+    --bg:#eef2f6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:400 15px/1.5 'Source Sans 3', system-ui, sans-serif;
+  }
+  .topbar{
+    background:var(--navy); color:#fff; padding:16px 26px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .topbar h1{
+    margin:0; font:500 20px/1 'EB Garamond', serif; letter-spacing:.04em;
+  }
+  .topbar .sub{font-size:13px; opacity:.7; margin-left:auto;}
+
+  .layout{display:grid; grid-template-columns:390px 1fr; gap:0; min-height:calc(100vh - 56px);}
+  @media (max-width:960px){ .layout{grid-template-columns:1fr;} }
+
+  /* ---------- Panel de captura ---------- */
+  .panel{background:#fff; border-right:1px solid var(--line); padding:22px 24px 60px; overflow-y:auto;}
+  .panel h2{
+    font:600 11px/1 'Source Sans 3'; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--blue); margin:26px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--soft);
+  }
+  .panel h2:first-child{margin-top:0;}
+  label{display:block; margin-bottom:12px; font-size:13px; color:var(--muted);}
+  label span{display:block; margin-bottom:4px; font-weight:600; color:var(--ink);}
+  input, textarea, select{
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:4px;
+    font:400 14px 'Source Sans 3', sans-serif; color:var(--ink); background:#fff;
+  }
+  input:focus, textarea:focus, select:focus{outline:2px solid var(--blue); outline-offset:-1px;}
+  textarea{resize:vertical; min-height:64px;}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .row3{display:grid; grid-template-columns:1.4fr 1fr; gap:12px;}
+  .hint{font-size:12px; color:var(--muted); margin:-6px 0 14px;}
+  /* El estado del precio especial vive PEGADO al campo, no en la columna de la
+     derecha: un aviso a media pantalla de distancia no lo lee nadie. */
+  .estado{font-size:13px; line-height:1.5; border-radius:5px; padding:9px 12px; margin:-4px 0 14px;}
+  .estado.ok{background:#EAF5EE; color:#15653c;}
+  .estado.mal{background:#FEF6F1; color:#9a3412; font-weight:600;}
+  .estado.neutro{background:var(--soft); color:var(--muted);}
+  .calc{
+    background:var(--soft); border-radius:6px; padding:12px 14px; margin-bottom:16px;
+    font-size:13px; line-height:1.9;
+  }
+  .calc b{float:right; font-variant-numeric:tabular-nums;}
+  .propsel{
+    border:2px solid var(--navy); border-radius:6px; padding:12px 14px;
+    background:#F7FAFC; margin-bottom:18px;
+  }
+  .propsel label{margin:0;}
+
+  /* ---------- Acciones ---------- */
+  .actions{
+    position:sticky; bottom:0; background:#fff; padding:16px 0 0;
+    border-top:1px solid var(--line); margin-top:26px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  button{
+    width:100%; padding:12px 16px; border:none; border-radius:4px; cursor:pointer;
+    font:600 13px/1 'Source Sans 3', sans-serif; letter-spacing:.06em; text-transform:uppercase;
+    transition:background .2s ease, opacity .2s ease;
+  }
+  .btn-main{background:var(--blue); color:#fff;}
+  .btn-main:hover{background:var(--navy);}
+  .btn-alt{background:#fff; color:var(--navy); border:1px solid var(--navy);}
+  .btn-alt:hover{background:var(--soft);}
+  .ok{color:#1a7f4b; font-size:13px; font-weight:600; text-align:center; min-height:18px;}
+
+  /* Caja del enlace: ver el enlace y su largo importa porque WhatsApp parte los
+     enlaces largos, y un enlace partido es un cliente que no ve su cotización. */
+  .liga-box{border:1px solid var(--soft); border-radius:8px; padding:16px 16px 14px; margin-top:18px; background:#fff;}
+  .liga-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; gap:12px;}
+  .liga-k{font:700 10.5px/1 'Source Sans 3', sans-serif; letter-spacing:.15em; text-transform:uppercase; color:var(--navy);}
+  .liga-len{font:600 12px/1 'Source Sans 3', sans-serif;}
+  .liga-len.bien{color:#1a7f4b;}
+  .liga-len.largo{color:#9a3412;}
+  .liga-url{
+    width:100%; border:1px solid var(--soft); border-radius:6px; padding:10px 12px;
+    font:400 12px/1.4 ui-monospace, Menlo, monospace; color:#5a6472; background:#F7F9FC;
+    text-overflow:ellipsis;
+  }
+  .liga-btns{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;}
+  .liga-btns .btn-alt{flex:1; min-width:150px;}
+  /* .hint trae margen superior negativo para pegarse a su campo; aquí estorba. */
+  .liga-box .hint{margin:12px 0 0;}
+
+  /* ---------- Vista previa ---------- */
+  .preview{padding:28px; overflow-y:auto;}
+  .preview-head{
+    display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap;
+  }
+  .preview-head strong{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
+  .asunto{
+    background:#fff; border:1px solid var(--line); border-radius:6px; padding:11px 14px;
+    margin-bottom:18px; font-size:14px;
+  }
+  .asunto em{font-style:normal; color:var(--muted); font-size:12px; display:block; margin-bottom:3px; letter-spacing:.1em; text-transform:uppercase;}
+  .mail-frame{
+    background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden;
+    box-shadow:0 8px 26px rgba(31,47,84,.08); max-width:640px;
+  }
+  .alerta{
+    background:#FEF6F1; border-left:4px solid #c2410c; color:#7c2d12;
+    padding:12px 16px; border-radius:6px; margin-bottom:16px; font-size:14px;
+    max-width:640px; display:none;
+  }
+  .alerta.on{display:block;}
+</style>
+<link rel="stylesheet" href="panel-movil.css" />
+<script src="panel-movil.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Kauri · Cotización</h1>
+  <a class="k-volver" href="./">‹ Panel</a>
+  <span class="sub">Llena los datos → copia el correo → pégalo en Gmail o WhatsApp</span>
+</div>
+
+<div class="layout">
+
+  <!-- ============ CAPTURA ============ -->
+  <div class="panel">
+
+    <div class="propsel">
+      <label><span>¿Qué alojamiento se cotiza?</span>
+        <select id="propiedad">
+          <option value="casa">Casa Kauri — La Peñita de Jaltemba</option>
+          <option value="depto">Departamento Kauri — Rincón de Guayabitos</option>
+        </select>
+      </label>
+    </div>
+
+    <h2>Cliente</h2>
+    <label><span>Nombre completo</span><input id="nombre" value="" placeholder="Ej. María Fernanda Ruiz" /></label>
+    <label><span>Correo electrónico</span><input id="correo" type="email" placeholder="cliente@correo.com" /></label>
+    <label><span>Teléfono / WhatsApp</span><input id="telHuesped" placeholder="Ej. 33 1234 5678" /></label>
+    <div class="hint" id="avisoLada"></div>
+
+    <h2>Estancia</h2>
+    <div class="row">
+      <label><span>Llegada</span><input id="checkin" type="date" /></label>
+      <label><span>Salida</span><input id="checkout" type="date" /></label>
+    </div>
+    <div class="row">
+      <label><span>Número de huéspedes</span><input id="huespedes" type="number" min="1" max="30" value="8" /></label>
+      <label><span>Vigencia de la cotización</span><input id="vigencia" type="date" /></label>
+    </div>
+    <label><span>Folio de cotización</span><input id="folio" /></label>
+    <div class="hint">Se genera solo. Sirve para que el cliente lo cite cuando decida apartar.</div>
+
+    <h2>Conceptos (MXN)</h2>
+    <div class="row">
+      <label><span>Tarifa por noche (la que cobras)</span><input id="tarifa" type="number" min="0" step="50" value="0" /></label>
+      <label><span>Huéspedes extra</span><input id="numExtra" type="number" min="0" max="20" value="0" /></label>
+    </div>
+    <label><span>Cargo por huésped extra</span><input id="cargoExtra" type="number" min="0" step="50" value="0" /></label>
+    <div class="hint">La tarifa por noche ya cubre la base de huéspedes; aquí van solo los que la exceden.</div>
+    <div class="row">
+      <label><span>Limpieza</span><input id="limpieza" type="number" min="0" step="50" value="0" /></label>
+      <label><span>Mascotas</span><input id="mascotas" type="number" min="0" max="6" value="0" /></label>
+    </div>
+    <label><span>Cargo por mascota</span><input id="cargoMascota" type="number" min="0" step="50" value="0" /></label>
+    <div class="hint">Las mascotas son bienvenidas pero <b>siempre se cobran</b>. Si el cargo es por estancia y no por mascota, pon 1 y ahí el total.</div>
+    <div class="row3">
+      <label><span>Concepto extra 1</span><input id="etq1" placeholder="Ej. Uso de día / evento hasta 25 personas" /></label>
+      <label><span>Importe</span><input id="mon1" type="number" min="0" step="50" value="0" /></label>
+    </div>
+    <div class="row3">
+      <label><span>Concepto extra 2</span><input id="etq2" placeholder="Ej. Decoración de aniversario" /></label>
+      <label><span>Importe</span><input id="mon2" type="number" min="0" step="50" value="0" /></label>
+    </div>
+    <label><span>Depósito de garantía (reembolsable)</span><input id="deposito" type="number" min="0" step="500" value="0" /></label>
+    <div class="hint">No es parte del precio: se muestra aparte y se suma solo al "total a transferir". Nunca lo bajes para cerrar una venta.</div>
+
+    <h2>Precio especial (opcional)</h2>
+    <div class="hint" style="margin-top:-4px;">Aquí NO va el precio especial: ese es la <b>Tarifa por noche</b> de arriba. Aquí va el precio <b>normal</b>, el más alto, para que se vea contra qué está comparando el cliente.</div>
+    <label><span>Precio normal por noche (antes del descuento)</span><input id="tarifaBase" type="number" min="0" step="50" value="0" /></label>
+    <div class="estado" id="estadoEspecial"></div>
+    <label><span>Por qué tiene precio especial</span><input id="motivoEspecial" value="por reservar directo con nosotros" /></label>
+    <div class="hint">Un descuento sin motivo se lee como que el precio de lista era inventado. Dale una razón: reservar directo, temporada baja, estancia larga, huésped que regresa.</div>
+    <div class="calc" id="calc"></div>
+
+    <h2>Cómo se aparta</h2>
+    <label><span>Anticipo para apartar</span><input id="anticipo" type="number" min="0" step="50" value="0" /></label>
+    <div class="hint"><a href="#" onclick="mitad();return false;">Poner el 50 % del total</a></div>
+    <label><span>Fecha límite para el saldo</span><input id="fechaSaldo" type="date" /></label>
+    <label><span>Instrucciones de pago</span><textarea id="datosPago">Se aparta por transferencia o depósito. En cuanto entre el anticipo bloqueamos las fechas y te mandamos tu confirmación con el folio.</textarea></label>
+
+    <h2>Contenido</h2>
+    <label><span>Lo que incluye (una línea por renglón)</span><textarea id="incluye" style="min-height:130px;"></textarea></label>
+    <div class="hint" id="hintIncluye"></div>
+    <label><span>Política de cancelación</span><textarea id="politica">Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.</textarea></label>
+    <div class="hint">⚠️ Revisa que este texto sea el que realmente manejas. Es lo único de la cotización que te puede meter en un problema.</div>
+    <label><span>Notas para este cliente (opcional)</span><textarea id="notas" placeholder="Ej. Las visitas se retiran a las 22:00 h; después solo se quedan las 10 personas registradas."></textarea></label>
+
+    <h2>Contacto</h2>
+    <label><span>WhatsApp de contacto</span><input id="telCasa" /></label>
+
+    <div class="actions">
+      <button class="btn-main" onclick="copiarCorreo()">Copiar correo con formato</button>
+      <button class="btn-alt" onclick="abrirGmail()">Abrir borrador en Gmail</button>
+      <button class="btn-alt btn-whats" onclick="abrirWhats()">Enviar por WhatsApp</button>
+      <button class="btn-alt" onclick="copiarWhats()">Copiar versión corta para WhatsApp</button>
+
+      <button class="btn-alt solo-escritorio" onclick="descargar()">Descargar como archivo .html</button>
+      <div class="ok" id="ok"></div>
+    </div>
+
+    <div class="liga-box">
+      <div class="liga-top">
+        <span class="liga-k">Enlace de la cotización</span>
+        <span class="liga-len" id="ligaLen">—</span>
+      </div>
+      <input class="liga-url" id="ligaUrl" readonly onclick="this.select()" />
+      <div class="liga-btns">
+        <button class="btn-alt" onclick="copiarLiga()">Copiar el enlace</button>
+        <button class="btn-alt" onclick="verLiga()">Verlo como el cliente</button>
+      </div>
+      <div class="hint" id="ligaAviso"></div>
+    </div>
+  </div>
+
+  <!-- ============ VISTA PREVIA ============ -->
+  <div class="preview">
+    <div class="preview-head"><strong>Así lo va a recibir el cliente</strong></div>
+    <div class="alerta" id="alerta"></div>
+    <div class="asunto"><em>Asunto</em><span id="asuntoTxt"></span></div>
+    <div class="mail-frame"><div id="mail"></div></div>
+  </div>
+
+</div>
+
+<script>
+// El logo se sirve desde el sitio publicado: los clientes de correo no pueden
+// leer archivos locales, tiene que ser una URL pública.
+const SITIO = 'https://casa-kauri.github.io';
+const SITIO_TXT = 'casa-kauri.github.io';
+const LOGO = SITIO + '/logo-kauri.png';
+const PAGINA_COT = SITIO + '/cotizacion.html';
+const IG = 'https://www.instagram.com/kaurinayarit/';
+
+/* Son DOS alojamientos distintos, en dos pueblos distintos y con dos teléfonos
+   distintos. Nunca firmar el departamento como "Casa Kauri". */
+const PROPS = {
+  casa: {
+    marca:'CASA KAURI', firma:'Casa Kauri',
+    lugar:'La Peñita de Jaltemba · Nayarit',
+    tel:'+52 56 2854 4253',
+    horaIn:'3:00 p.m.', horaOut:'11:00 a.m.',
+    folio:'COT-CK',
+    incluye:'Casa completa para ti: 4 recámaras, 6 camas, 2.5 baños\n'
+          + 'Alberca privada y jardín cercado en todo su perímetro\n'
+          + 'Cocina equipada, wifi y aire acondicionado\n'
+          + 'Estacionamiento dentro de la propiedad\n'
+          + 'A 750 m caminando de la playa',
+    nota:'Datos verificados de Casa Kauri. Ajusta solo si esta cotización cambia algo.'
+  },
+  depto: {
+    marca:'DEPARTAMENTO KAURI', firma:'Departamento Kauri',
+    lugar:'Rincón de Guayabitos · Nayarit',
+    tel:'+52 311 134 9845',
+    horaIn:'3:00 p.m.', horaOut:'12:00 p.m.',
+    folio:'COT-DK',
+    /* Datos verificados el 31 ago 2026 contra el anuncio de Airbnb
+       (rooms/1283495962257484053): 6 huéspedes máx., 4 camas, 2 baños completos
+       y un medio baño, 100 m a la playa. OJO: la descripción del anuncio dice
+       "5 camas" y la ficha estructurada dice 4 — confírmalo antes de mandar. */
+    incluye:'Loft completo de 3 niveles solo para ti · hasta 6 huéspedes\n'
+          + 'Nivel 1: sala con Smart TV, comedor, cocina equipada, balcón y medio baño\n'
+          + 'Nivel 2: área de descanso con 4 camas, aire acondicionado y baño completo\n'
+          + 'Nivel 3: rooftop privado con medio baño, regadera exterior y fregadero\n'
+          + 'A 100 m de la playa, sobre el andador principal · wifi\n'
+          + 'Estacionamiento público y gratuito alrededor del alojamiento',
+    nota:'Datos tomados del anuncio de Airbnb (31 ago 2026). Ajusta solo si esta reserva cambia algo.'
+  }
+};
+
+/* Liga a la cotización en línea (sitio-casa-kauri/cotizacion.html).
+   Los datos van en el HASH, no en la query: el fragmento nunca se manda al
+   servidor, así que no quedan en registros ni en referrers. base64url para
+   que la liga no se rompa al pegarla en WhatsApp. */
+/* La política tal como viene de fábrica en el formulario, para saber después
+   si el operador la cambió en esta cotización. */
+const POLITICA_DEFAULT = (document.getElementById('politica') || {}).value || '';
+
+function ligaCot(d){
+  const p = PROPS[d.prop] || PROPS.casa;
+  const payload = {
+    prop:d.prop, nombre:d.nombre, folio:d.folio, checkin:d.checkin, checkout:d.checkout,
+    huespedes:d.huespedes, n:d.n, items:d.items, total:d.total, deposito:d.deposito,
+    anticipo:d.anticipo, saldo:d.saldo, fechaSaldo:d.fechaSaldo, vigencia:d.vigencia,
+    datosPago:d.datosPago, incluye:d.incluye, politica:d.politica, notas:d.notas, especial:d.especial,
+    tel:d.tel, horaIn:d.horaIn, horaOut:d.horaOut
+  };
+  /* La liga se rompe cuando WhatsApp la parte, y se parte por larga. Lo que la
+     página de la cotización ya sabe de memoria NO viaja dentro: solo se manda
+     si el operador lo cambió para esta cotización. */
+  if(payload.incluye  === p.incluye)        delete payload.incluye;
+  if(payload.politica === POLITICA_DEFAULT) delete payload.politica;
+  if(payload.horaIn   === p.horaIn)         delete payload.horaIn;
+  if(payload.horaOut  === p.horaOut)        delete payload.horaOut;
+  if(payload.tel      === p.tel)            delete payload.tel;
+  Object.keys(payload).forEach(k => {
+    const v = payload[k];
+    if(v === '' || v === null || v === undefined || v === 0) delete payload[k];
+  });
+
+  const bytes = new TextEncoder().encode(JSON.stringify(payload));
+  const b64 = btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_');
+  return PAGINA_COT + '#' + b64;
+}
+
+const $ = id => document.getElementById(id);
+const campos = ['propiedad','nombre','correo','telHuesped','checkin','checkout','huespedes','vigencia',
+                'folio','tarifa','numExtra','cargoExtra','limpieza','mascotas','cargoMascota',
+                'etq1','mon1','etq2','mon2','deposito','tarifaBase','motivoEspecial',
+                'anticipo','fechaSaldo','datosPago',
+                'incluye','politica','notas','telCasa'];
+
+const mx = n => '$' + Number(n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN';
+
+function fechaLarga(iso){
+  if(!iso) return '—';
+  // Mediodía UTC para que el cambio de zona horaria no recorra el día.
+  const d = new Date(iso + 'T12:00:00');
+  const t = d.toLocaleDateString('es-MX', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+function fechaCorta(iso){
+  if(!iso) return '—';
+  const d = new Date(iso + 'T12:00:00');
+  return d.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'});
+}
+function noches(){
+  const a = $('checkin').value, b = $('checkout').value;
+  if(!a || !b) return 0;
+  const n = Math.round((new Date(b) - new Date(a)) / 86400000);
+  return n > 0 ? n : 0;
+}
+
+function prop(){ return PROPS[$('propiedad').value] || PROPS.casa; }
+
+function generarFolio(){
+  const base = $('checkin').value ? $('checkin').value.replaceAll('-','').slice(2) : 'XXXXXX';
+  const ap = ($('nombre').value.trim().split(/\s+/).pop() || 'HK').slice(0,2).toUpperCase();
+  return prop().folio + '-' + base + '-' + ap;
+}
+
+function datos(){
+  const p = prop();
+  const n = noches();
+  const tarifa = +$('tarifa').value || 0;
+  const numExtra = +$('numExtra').value || 0;
+  const cargoExtra = +$('cargoExtra').value || 0;
+  const limpieza = +$('limpieza').value || 0;
+  const mascotas = +$('mascotas').value || 0;
+  const cargoMascota = +$('cargoMascota').value || 0;
+  const mon1 = +$('mon1').value || 0;
+  const mon2 = +$('mon2').value || 0;
+
+  const hospedaje = tarifa * n;
+  const totalExtra = numExtra * cargoExtra;
+  const totalMascotas = mascotas * cargoMascota;
+
+  /* Precio especial: solo existe si el precio de lista es MAYOR que lo que se cobra.
+     Un "descuento" de cero o negativo no se enseña — delata que el ancla es falsa. */
+  const tarifaBase = +$('tarifaBase').value || 0;
+  const hayEspecial = tarifaBase > tarifa && tarifa > 0 && n > 0;
+  const especial = hayEspecial ? {
+    base: tarifaBase,
+    tarifa: tarifa,
+    n: n,
+    hospedajeBase: tarifaBase * n,
+    ahorro: (tarifaBase - tarifa) * n,
+    pct: Math.round((tarifaBase - tarifa) / tarifaBase * 100),
+    motivo: $('motivoEspecial').value.trim()
+  } : null;
+
+  // El desglose es una lista de renglones: así una cotización de evento y una
+  // de fin de semana normal usan exactamente la misma plantilla.
+  const items = [];
+  if(hospedaje)      items.push([(especial ? 'Hospedaje con tu precio especial (' : 'Hospedaje (')
+                                  + n + ' noche' + (n==1?'':'s') + ' × ' + mx(tarifa) + ')', hospedaje]);
+  if(totalExtra)     items.push([numExtra + ' huésped' + (numExtra==1?'':'es') + ' extra × ' + mx(cargoExtra), totalExtra]);
+  if(mon1)           items.push([$('etq1').value.trim() || 'Concepto adicional', mon1]);
+  if(totalMascotas)  items.push(['Mascotas (' + mascotas + ' × ' + mx(cargoMascota) + ')', totalMascotas]);
+  if(limpieza)       items.push(['Limpieza', limpieza]);
+  if(mon2)           items.push([$('etq2').value.trim() || 'Concepto adicional', mon2]);
+
+  const total = items.reduce((s, it) => s + it[1], 0);
+  const deposito = +$('deposito').value || 0;
+  const anticipo = +$('anticipo').value || 0;
+
+  return {
+    prop: $('propiedad').value,
+    marca: p.marca, firma: p.firma, lugar: p.lugar,
+    nombre: $('nombre').value.trim() || 'Estimado huésped',
+    correo: $('correo').value.trim(),
+    telHuesped: $('telHuesped').value.trim(),
+    checkin: $('checkin').value, checkout: $('checkout').value,
+    huespedes: $('huespedes').value || '—',
+    vigencia: $('vigencia').value,
+    folio: $('folio').value.trim() || generarFolio(),
+    n, items, especial, total, deposito, anticipo, saldo: total - anticipo,
+    totalTransferir: total + deposito,
+    fechaSaldo: $('fechaSaldo').value,
+    datosPago: $('datosPago').value.trim(),
+    incluye: $('incluye').value.trim(),
+    politica: $('politica').value.trim(),
+    notas: $('notas').value.trim(),
+    tel: $('telCasa').value.trim() || p.tel,
+    horaIn: p.horaIn, horaOut: p.horaOut
+  };
+}
+
+/* ---------- El correo, en tablas con estilos en línea ----------
+   Gmail, Outlook y Apple Mail ignoran el CSS externo y buena parte del moderno.
+   Tablas + inline styles es lo único que se ve igual en los tres.            */
+function armarCorreo(d){
+  const fila = (etq, val, fuerte) => `
+    <tr>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:400 14px/1.4 Arial,Helvetica,sans-serif;color:#6b7484;">${etq}</td>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:${fuerte?'700':'400'} 14px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;text-align:right;">${val}</td>
+    </tr>`;
+
+  const bloqueVigencia = d.vigencia ? `
+    <tr><td style="padding:0 32px 22px;">
+      <div style="border:1px solid #3B528A;border-left:4px solid #3B528A;border-radius:6px;padding:15px 18px;background:#F7FAFC;">
+        <div style="font:700 15px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;margin-bottom:5px;">Válida hasta el ${fechaLarga(d.vigencia)}</div>
+        <div style="font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;">
+          Las fechas no quedan apartadas hasta recibir el anticipo. Mientras tanto siguen
+          disponibles para cualquier otro huésped.
+        </div>
+      </div>
+    </td></tr>` : '';
+
+  /* El ancla va DENTRO de la tabla, pegada al renglón de hospedaje: comparar dos
+     números separados por media pantalla no compara nada. */
+  const filaLista = d.especial ? `
+    <tr>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:400 14px/1.4 Arial,Helvetica,sans-serif;color:#9aa3b2;">Tarifa normal (${d.especial.n} × ${mx(d.especial.base)})</td>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:400 14px/1.4 Arial,Helvetica,sans-serif;color:#9aa3b2;text-align:right;"><span style="text-decoration:line-through;">${mx(d.especial.hospedajeBase)}</span></td>
+    </tr>` : '';
+
+  const bloqueEspecial = d.especial ? `
+    <tr><td style="padding:14px 32px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EAF5EE;border-radius:6px;">
+        <tr><td style="padding:16px 20px;">
+          <div style="font:700 12px/1 Arial,Helvetica,sans-serif;color:#1a7f4b;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;">Precio especial</div>
+          <div style="font:700 18px/1.4 Arial,Helvetica,sans-serif;color:#1a7f4b;">Ahorras ${mx(d.especial.ahorro)} <span style="font-weight:400;font-size:15px;">(${d.especial.pct} % menos)</span></div>
+          <div style="font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;margin-top:6px;">
+            Tu tarifa queda en <strong>${mx(d.especial.tarifa)}</strong> por noche en lugar de ${mx(d.especial.base)}${d.especial.motivo ? ', ' + d.especial.motivo : ''}.
+          </div>
+        </td></tr>
+      </table>
+    </td></tr>` : '';
+
+  const bloqueTransferir = d.deposito ? `
+    <tr><td style="padding:0 32px 8px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#1F2F54;border-radius:6px;">
+        <tr>
+          <td style="padding:16px 20px;font:700 12px/1.4 Arial,Helvetica,sans-serif;color:#b9c6da;letter-spacing:.12em;text-transform:uppercase;">Total a transferir</td>
+          <td style="padding:16px 20px;font:700 20px/1.2 Arial,Helvetica,sans-serif;color:#ffffff;text-align:right;">${mx(d.totalTransferir)}</td>
+        </tr>
+      </table>
+      <div style="font:400 13px/1.6 Arial,Helvetica,sans-serif;color:#6b7484;margin-top:8px;">
+        El depósito de garantía no es parte del precio: se devuelve íntegro dentro de las
+        72 horas siguientes a tu salida, una vez revisado el alojamiento.
+      </div>
+    </td></tr>` : '';
+
+  const bloqueApartar = d.anticipo ? `
+    <tr><td style="padding:22px 32px 26px;">
+      <div style="border:1px solid #3B528A;border-radius:6px;padding:16px 18px;">
+        <div style="font:700 15px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;margin-bottom:6px;">Para apartar: ${mx(d.anticipo)}</div>
+        <div style="font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;">
+          ${d.saldo > 0 ? 'El saldo de <strong>' + mx(d.saldo) + '</strong>' + (d.fechaSaldo ? ' se cubre a más tardar el <strong>' + fechaLarga(d.fechaSaldo) + '</strong>. ' : ' se cubre antes de tu llegada. ') : ''}${d.datosPago}
+        </div>
+      </div>
+    </td></tr>` : (d.datosPago ? `
+    <tr><td style="padding:22px 32px 26px;">
+      <div style="border:1px solid #3B528A;border-radius:6px;padding:16px 18px;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;">${d.datosPago}</div>
+    </td></tr>` : '');
+
+  const bloqueNotas = d.notas ? `
+    <tr><td style="padding:0 32px 22px;">
+      <div style="background:#F4F7FA;border-left:3px solid #3B528A;padding:14px 16px;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;">
+        <strong style="color:#1F2F54;">Nota sobre esta cotización:</strong><br />${d.notas.replace(/\n/g,'<br />')}
+      </div>
+    </td></tr>` : '';
+
+  const lineas = d.incluye.split('\n').map(s => s.trim()).filter(Boolean);
+  const bloqueIncluye = lineas.length ? `
+    <tr><td style="padding:0 32px 22px;">
+      <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#3B528A;letter-spacing:.16em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid #1F2F54;margin-bottom:14px;">Lo que incluye</div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font:400 15px/1.9 Arial,Helvetica,sans-serif;color:#2b3444;">
+        ${lineas.map(l => '<tr><td>' + l + '</td></tr>').join('')}
+      </table>
+    </td></tr>` : '';
+
+  return `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef2f6;padding:24px 12px;">
+<tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
+
+  <!-- Encabezado -->
+  <tr><td style="background:#1F2F54;padding:26px 32px;text-align:center;">
+    <img src="${LOGO}" width="52" alt="${d.firma}" style="display:block;margin:0 auto 10px;border:0;" />
+    <div style="font:400 22px/1.2 Georgia,'Times New Roman',serif;color:#ffffff;letter-spacing:.08em;">${d.marca}</div>
+    <div style="font:400 11px/1.4 Arial,Helvetica,sans-serif;color:#b9c6da;letter-spacing:.22em;text-transform:uppercase;margin-top:6px;">${d.lugar}</div>
+  </td></tr>
+
+  <!-- Sello -->
+  <tr><td style="padding:30px 32px 6px;text-align:center;">
+    <div style="display:inline-block;background:#DFE8EE;color:#1F2F54;font:700 12px/1 Arial,Helvetica,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:9px 16px;border-radius:20px;">Cotización</div>
+  </td></tr>
+
+  <tr><td style="padding:20px 32px 6px;">
+    <p style="margin:0 0 14px;font:400 16px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">Hola <strong>${d.nombre}</strong>,</p>
+    <p style="margin:0 0 20px;font:400 16px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">
+      Gracias por escribirnos. Aquí está tu cotización para ${d.firma}, con todo desglosado
+      para que no haya sorpresas. Si algo no te cuadra, dínoslo y la rehacemos.
+    </p>
+  </td></tr>
+
+  ${bloqueVigencia}
+
+  <!-- Fechas -->
+  <tr><td style="padding:0 32px 22px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #DFE8EE;border-radius:6px;">
+      <tr>
+        <td width="50%" style="padding:16px 18px;border-right:1px solid #DFE8EE;">
+          <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#6b7484;letter-spacing:.14em;text-transform:uppercase;">Llegada</div>
+          <div style="font:700 16px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;margin-top:6px;">${fechaCorta(d.checkin)}</div>
+          <div style="font:400 13px/1.4 Arial,Helvetica,sans-serif;color:#6b7484;">a partir de las ${d.horaIn}</div>
+        </td>
+        <td width="50%" style="padding:16px 18px;">
+          <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#6b7484;letter-spacing:.14em;text-transform:uppercase;">Salida</div>
+          <div style="font:700 16px/1.4 Arial,Helvetica,sans-serif;color:#1F2F54;margin-top:6px;">${fechaCorta(d.checkout)}</div>
+          <div style="font:400 13px/1.4 Arial,Helvetica,sans-serif;color:#6b7484;">antes de las ${d.horaOut}</div>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <!-- Desglose -->
+  <tr><td style="padding:0 32px 8px;">
+    <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#3B528A;letter-spacing:.16em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid #1F2F54;">Desglose</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      ${fila('Folio', d.folio)}
+      ${fila('Huéspedes', d.huespedes + ' persona' + (d.huespedes==1?'':'s'))}
+      ${d.n ? fila('Noches', d.n) : ''}
+      ${filaLista}
+      ${d.items.map(it => fila(it[0], mx(it[1]))).join('')}
+      ${fila('Total de la estancia', mx(d.total), true)}
+      ${d.deposito ? fila('Depósito de garantía (reembolsable)', mx(d.deposito)) : ''}
+    </table>
+  </td></tr>
+
+  ${bloqueEspecial}
+  <tr><td style="height:18px;"></td></tr>
+  ${bloqueTransferir}
+  ${bloqueApartar}
+  ${bloqueNotas}
+  ${bloqueIncluye}
+
+  <!-- Política -->
+  ${d.politica ? `<tr><td style="padding:0 32px 26px;">
+    <div style="font:700 11px/1 Arial,Helvetica,sans-serif;color:#3B528A;letter-spacing:.16em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid #1F2F54;margin-bottom:14px;">Si algo cambia</div>
+    <p style="margin:0;font:400 14px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">${d.politica.replace(/\n/g,'<br />')}</p>
+  </td></tr>` : ''}
+
+  <!-- Cotización en línea -->
+  <tr><td style="padding:0 32px 28px;text-align:center;">
+    <a href="${ligaCot(d)}" style="display:inline-block;background:#3B528A;color:#ffffff;text-decoration:none;padding:15px 30px;border-radius:5px;font:700 13px/1 Arial,Helvetica,sans-serif;letter-spacing:.08em;text-transform:uppercase;">Ver mi cotización en línea</a>
+    <div style="font:400 13px/1.6 Arial,Helvetica,sans-serif;color:#6b7484;margin-top:10px;">Ábrela desde tu celular cuando quieras; ahí mismo puedes apartar por WhatsApp.</div>
+  </td></tr>
+
+  <!-- Cierre -->
+  <tr><td style="padding:0 32px 28px;">
+    <p style="margin:0;font:400 16px/1.7 Arial,Helvetica,sans-serif;color:#2b3444;">
+      Cualquier duda, respóndenos este correo o escríbenos al WhatsApp
+      <strong style="color:#1F2F54;">${d.tel}</strong>. Con gusto te apartamos las fechas.
+    </p>
+  </td></tr>
+
+  <!-- Pie -->
+  <tr><td style="background:#1F2F54;padding:24px 32px;text-align:center;">
+    <div style="font:400 15px/1.5 Georgia,'Times New Roman',serif;color:#ffffff;letter-spacing:.06em;">${d.firma}</div>
+    <div style="font:400 13px/1.7 Arial,Helvetica,sans-serif;color:#b9c6da;margin-top:8px;">
+      ${d.lugar.replace(' · ', ', ')} · WhatsApp ${d.tel}<br />
+      <a href="${SITIO}" style="color:#ffffff;text-decoration:underline;">${SITIO_TXT}</a>
+      &nbsp;·&nbsp;
+      <a href="${IG}" style="color:#ffffff;text-decoration:underline;">@kaurinayarit</a>
+    </div>
+    <div style="font:400 11px/1.6 Arial,Helvetica,sans-serif;color:#7f8ca6;margin-top:14px;">
+      Folio ${d.folio} · Esta cotización es informativa y no constituye una reserva.
+    </div>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>`;
+}
+
+function versionWhats(d){
+  return `*${d.marca} — Cotización* 📋
+Folio: ${d.folio}
+
+Hola ${d.nombre}, aquí está tu cotización:
+
+📅 Llegada: ${fechaCorta(d.checkin)} (desde ${d.horaIn})
+📅 Salida: ${fechaCorta(d.checkout)} (antes de ${d.horaOut})
+🌙 ${d.n} noche${d.n==1?'':'s'} · 👥 ${d.huespedes} huéspedes
+
+${d.items.map(it => '• ' + it[0] + ' — ' + mx(it[1])).join('\n')}
+
+${d.especial ? '🏷️ Tarifa normal: ' + mx(d.especial.base) + ' por noche\n💚 *Tu precio especial: ' + mx(d.especial.tarifa) + ' por noche* — ahorras ' + mx(d.especial.ahorro) + ' (' + d.especial.pct + ' % menos)' + (d.especial.motivo ? ', ' + d.especial.motivo : '') + '\n' : ''}
+💵 *Total: ${mx(d.total)}*${d.deposito ? '\n🔒 Depósito de garantía (reembolsable): ' + mx(d.deposito) + '\n➡️ Total a transferir: *' + mx(d.totalTransferir) + '*' : ''}
+${d.anticipo ? '\n✅ Para apartar: *' + mx(d.anticipo) + '*' + (d.saldo > 0 ? '\n⏳ Saldo: ' + mx(d.saldo) + (d.fechaSaldo ? ' (a más tardar el ' + fechaCorta(d.fechaSaldo) + ')' : '') : '') : ''}
+${d.vigencia ? '\n🗓️ Cotización válida hasta el ' + fechaCorta(d.vigencia) + '. Las fechas no se apartan hasta recibir el anticipo.' : ''}
+
+Aquí la tienes completa y con el desglose:
+${ligaCot(d)}
+
+¿Te la aparto?`;
+}
+
+function asunto(d){
+  return `Cotización ${d.firma} · ${fechaCorta(d.checkin)} al ${fechaCorta(d.checkout)} · Folio ${d.folio}`;
+}
+
+function render(){
+  const d = datos();
+  $('mail').innerHTML = armarCorreo(d);
+  $('asuntoTxt').textContent = asunto(d);
+  $('calc').innerHTML =
+    d.items.map(it => `${it[0]} <b>${mx(it[1])}</b>`).join('<br />')
+    + (d.items.length ? '<br />' : '')
+    + `<span style="color:#1F2F54;font-weight:700;">Total <b>${mx(d.total)}</b></span>`
+    + (d.deposito ? `<br />Depósito <b>${mx(d.deposito)}</b><br />Total a transferir <b>${mx(d.totalTransferir)}</b>` : '')
+    + (d.anticipo ? `<br />Anticipo <b>${mx(d.anticipo)}</b><br />Saldo <b>${mx(d.saldo)}</b>` : '')
+    + (d.especial ? `<br /><span style="color:#1a7f4b;font-weight:700;">Ahorro que ve el cliente <b>${mx(d.especial.ahorro)} (${d.especial.pct} %)</b></span>` : '');
+
+  // Nada de esto sale hacia el cliente: son avisos para el operador.
+  const alertas = [];
+  if(d.incluye.includes('COMPLETAR'))
+    alertas.push('La lista de "Lo que incluye" todavía trae un renglón sin llenar. Escríbelo antes de mandar la cotización.');
+  if(!d.vigencia)
+    alertas.push('Sin vigencia, la cotización no caduca nunca: el cliente puede volver en enero pidiéndote el precio de agosto.');
+  if(d.total && !d.anticipo)
+    alertas.push('No pusiste anticipo. Una cotización sin "para apartar" deja al cliente sin siguiente paso.');
+  const base = +$('tarifaBase').value || 0, tar = +$('tarifa').value || 0;
+
+  /* Cuatro estados posibles, y ninguno puede ser el silencio: el campo tiene que
+     decir siempre por qué el bloque de ahorro sale o no sale. */
+  const est = $('estadoEspecial');
+  if(!base){
+    est.className = 'estado neutro';
+    est.innerHTML = 'Sin precio especial: esta cotización se manda sin comparación. Déjalo en 0 si es lo que quieres.';
+  } else if(!tar){
+    est.className = 'estado mal';
+    est.innerHTML = '⚠️ Falta la <b>Tarifa por noche</b> allá arriba. Sin ella no hay contra qué comparar y el bloque de ahorro no aparece.';
+  } else if(base <= tar){
+    est.className = 'estado mal';
+    est.innerHTML = '⚠️ El precio normal (' + mx(base) + ') tiene que ser <b>mayor</b> que la tarifa que cobras (' + mx(tar) + ').'
+                  + '<br />¿Los pusiste al revés? El precio con descuento va arriba, en <b>Tarifa por noche</b>.';
+  } else if(!noches()){
+    est.className = 'estado mal';
+    est.innerHTML = '⚠️ Faltan las fechas: sin noches no se puede calcular el ahorro.';
+  } else {
+    const ah = (base - tar) * noches(), pc = Math.round((base - tar) / base * 100);
+    est.className = 'estado ok';
+    est.innerHTML = '✓ El cliente verá: <b>' + mx(tar) + '</b> por noche en lugar de ' + mx(base)
+                  + ' → ahorro de <b>' + mx(ah) + '</b> (' + pc + ' %) en ' + noches() + ' noche' + (noches()==1?'':'s') + '.';
+  }
+  if(d.especial && d.especial.pct >= 40)
+    alertas.push('Estás enseñando un ' + d.especial.pct + ' % de descuento. Arriba del 40 % el cliente deja de creer el precio de lista y empieza a pedir ese precio siempre.');
+  if(d.especial && !d.especial.motivo)
+    alertas.push('El precio especial no trae motivo. Sin razón, el descuento se lee como que el precio normal estaba inflado.');
+  $('alerta').innerHTML = alertas.map(a => '⚠️ ' + a).join('<br />');
+  $('alerta').className = alertas.length ? 'alerta on' : 'alerta';
+
+  // Protocolo antifraude: las LADAs 271 y 278 (Veracruz) ya dieron problemas.
+  const tel = d.telHuesped.replace(/\D/g,'');
+  const sospechosa = /^(52)?(271|278)/.test(tel) && tel.length >= 10;
+  $('avisoLada').innerHTML = sospechosa
+    ? '<b style="color:#c2410c;">⚠️ LADA 271/278 (Veracruz): revisa el protocolo antifraude antes de apartar nada.</b>'
+    : '';
+
+  pintarLiga(d);
+}
+
+/* WhatsApp parte los enlaces largos, y un enlace partido es un cliente que no
+   ve su cotización. Por eso el largo se ve aquí: hasta ~700 va bien; arriba de
+   900 conviene revisar qué texto se está mandando de más. */
+function pintarLiga(d){
+  const liga = ligaCot(d);
+  const n = liga.length;
+  $('ligaUrl').value = liga;
+  $('ligaLen').textContent = n + ' caracteres';
+  $('ligaLen').className = 'liga-len ' + (n <= 900 ? 'bien' : 'largo');
+  $('ligaAviso').textContent = n <= 900
+    ? 'Va corto: se manda por WhatsApp sin riesgo de que se corte.'
+    : 'Está largo. Suele ser porque cambiaste a mano la política o la lista de lo incluido: solo eso viaja dentro del enlace.';
+}
+
+function mitad(){
+  const d = datos();
+  $('anticipo').value = Math.round(d.total / 2);
+  render();
+}
+
+function aviso(txt){
+  $('ok').textContent = txt;
+  setTimeout(() => { $('ok').textContent = ''; }, 3200);
+}
+
+/* Copiar con formato: hay que poner text/html Y text/plain en el portapapeles,
+   si no Gmail pega el código fuente en lugar del diseño. */
+async function copiarCorreo(){
+  const html = $('mail').innerHTML;
+  const texto = $('mail').innerText;
+  try{
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        'text/html': new Blob([html], {type:'text/html'}),
+        'text/plain': new Blob([texto], {type:'text/plain'})
+      })
+    ]);
+    aviso('✓ Copiado. Pégalo en Gmail con Ctrl/Cmd + V');
+  }catch(e){
+    // Fallback para navegadores sin ClipboardItem (Firefox viejo, file:// restringido)
+    const r = document.createRange();
+    r.selectNode($('mail'));
+    const s = window.getSelection();
+    s.removeAllRanges(); s.addRange(r);
+    document.execCommand('copy');
+    s.removeAllRanges();
+    aviso('✓ Copiado. Pégalo en Gmail con Ctrl/Cmd + V');
+  }
+}
+
+/* El flujo del celular: abre WhatsApp con el mensaje y la liga ya escritos.
+   Sin teléfono capturado abre el selector de contactos, que es lo que se
+   quiere cuando la conversación ya está abierta. */
+function abrirWhats(){
+  const d = datos();
+  kWhats(versionWhats(d), d.telHuesped);
+  aviso('WhatsApp abierto con el mensaje listo');
+}
+
+async function copiarWhats(){
+  await navigator.clipboard.writeText(versionWhats(datos()));
+  aviso('✓ Texto de WhatsApp copiado');
+}
+
+async function copiarLiga(){
+  await navigator.clipboard.writeText(ligaCot(datos()));
+  aviso('✓ Liga copiada');
+}
+
+/* Vista previa contra el archivo LOCAL: sirve para revisar la cotización
+   aunque el sitio todavía no tenga publicada la página nueva. */
+function verLiga(){
+  /* Desde la Mac (file://) la página pública está en la carpeta hermana;
+     desde el panel publicado está un nivel arriba, en el sitio real. */
+  const destino = location.protocol === 'file:'
+    ? '../sitio-casa-kauri/cotizacion.html'
+    : '../cotizacion.html';
+  const liga = ligaCot(datos()).replace(PAGINA_COT, destino);
+  window.open(liga, '_blank');
+}
+
+function abrirGmail(){
+  const d = datos();
+  const url = 'https://mail.google.com/mail/?view=cm&fs=1'
+    + '&to=' + encodeURIComponent(d.correo)
+    + '&su=' + encodeURIComponent(asunto(d));
+  window.open(url, '_blank');
+  aviso('Gmail abierto — ahora copia el correo y pégalo');
+}
+
+function descargar(){
+  const d = datos();
+  const doc = '<!DOCTYPE html><html lang="es-MX"><head><meta charset="utf-8" /><title>'
+    + asunto(d) + '</title></head><body style="margin:0">' + $('mail').innerHTML + '</body></html>';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([doc], {type:'text/html'}));
+  a.download = 'cotizacion-' + d.folio + '.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  aviso('✓ Archivo descargado');
+}
+
+/* Al cambiar de alojamiento se reescriben los datos fijos. Es el punto donde se
+   evitaba el error viejo de mandarle al departamento el texto de la casa. */
+function cargarPropiedad(){
+  const p = prop();
+  $('telCasa').value = p.tel;
+  $('incluye').value = p.incluye;
+  $('hintIncluye').innerHTML = p.nota;
+  $('folio').value = generarFolio();
+  render();
+}
+
+// ---------- Arranque ----------
+campos.forEach(c => {
+  $(c).addEventListener('input', () => {
+    if(c === 'nombre' || c === 'checkin') $('folio').value = generarFolio();
+    render();
+  });
+});
+$('propiedad').addEventListener('change', cargarPropiedad);
+
+const hoy = new Date();
+const iso = d => d.toISOString().slice(0,10);
+$('checkin').value  = iso(new Date(hoy.getTime() + 7*86400000));
+$('checkout').value = iso(new Date(hoy.getTime() + 10*86400000));
+$('vigencia').value = iso(new Date(hoy.getTime() + 5*86400000));
+$('fechaSaldo').value = iso(new Date(hoy.getTime() + 4*86400000));
+cargarPropiedad();
+</script>
+</body>
+</html>
