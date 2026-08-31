@@ -37,6 +37,9 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  /* Al saltar desde el menú, el encabezado fijo tapaba el título de la sección.
+     scroll-margin-top deja el aire justo debajo de la barra. */
+  section[id] { scroll-margin-top: 86px; }
   body {
     font: var(--body-text-fonts);
     color: var(--text-color);
@@ -317,9 +320,13 @@
     width: 60px; height: 60px; border-radius: 50%;
     background: #25D366; display: grid; place-items: center;
     box-shadow: 0 8px 24px rgba(0,0,0,.28);
-    transition: transform .25s ease, box-shadow .25s ease;
+    transition: transform .3s ease, box-shadow .25s ease, opacity .3s ease, visibility .3s ease;
     animation: wa-pulse 2.4s ease-out infinite;
   }
+  /* En celular el flotante caía justo encima del último dato del hero.
+     Arranca oculto y aparece cuando el visitante empieza a bajar. */
+  .wa-float { opacity: 0; visibility: hidden; transform: scale(.85); }
+  .wa-float.visible { opacity: 1; visibility: visible; transform: scale(1); }
   .wa-float:hover { transform: scale(1.07); box-shadow: 0 12px 30px rgba(0,0,0,.34); animation: none; }
   .wa-float svg { width: 34px; height: 34px; fill: #fff; }
   @keyframes wa-pulse {
@@ -891,9 +898,12 @@
     });
   });
   var header = document.getElementById('site-header');
+  var waFloat = document.querySelector('.wa-float');
   window.addEventListener('scroll', function () {
     if (window.scrollY > 80) { header.style.background = 'rgba(31,47,84,.96)'; header.style.position = 'fixed'; }
     else { header.style.background = 'transparent'; header.style.position = 'absolute'; }
+    // El botón de WhatsApp entra pasado el hero, para no taparle los datos.
+    if (waFloat) waFloat.classList.toggle('visible', window.scrollY > 420);
   });
 
   // Carruseles (reseñas, recámaras): las flechas desplazan una tarjeta a la vez.

@@ -42,6 +42,9 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  /* Al saltar desde el menú, el encabezado fijo tapaba el título de la sección.
+     scroll-margin-top deja el aire justo debajo de la barra. */
+  section[id] { scroll-margin-top: 86px; }
   body {
     font: var(--body-text-fonts);
     color: var(--text-color);
@@ -322,9 +325,13 @@
     width: 60px; height: 60px; border-radius: 50%;
     background: #25D366; display: grid; place-items: center;
     box-shadow: 0 8px 24px rgba(0,0,0,.28);
-    transition: transform .25s ease, box-shadow .25s ease;
+    transition: transform .3s ease, box-shadow .25s ease, opacity .3s ease, visibility .3s ease;
     animation: wa-pulse 2.4s ease-out infinite;
   }
+  /* En celular el flotante caía justo encima del último dato del hero.
+     Arranca oculto y aparece cuando el visitante empieza a bajar. */
+  .wa-float { opacity: 0; visibility: hidden; transform: scale(.85); }
+  .wa-float.visible { opacity: 1; visibility: visible; transform: scale(1); }
   .wa-float:hover { transform: scale(1.07); box-shadow: 0 12px 30px rgba(0,0,0,.34); animation: none; }
   .wa-float svg { width: 34px; height: 34px; fill: #fff; }
   @keyframes wa-pulse {
@@ -503,6 +510,15 @@
     font-size: 14px; color: #394049; box-shadow: 0 6px 18px rgba(31,47,84,.06);
   }
   .mention b { color: #1F2F54; font: 600 14px 'Source Sans 3'; }
+  .mention span { color: #5a6472; }
+  .mention span::before { content: " · "; }
+  @media (max-width: 620px) {
+    /* Apiladas y centradas se veían de anchos distintos; en renglón completo
+       con el dato a la derecha se leen como una lista. */
+    .mentions { gap: 8px; }
+    .mention { flex: 1 1 100%; display: flex; justify-content: space-between; align-items: baseline; padding: 12px 16px; }
+    .mention span::before { content: ""; }
+  }
 
   /* Propiedad hermana */
   .sister { padding: 0 0 96px; }
@@ -814,13 +830,13 @@
       <h2>Lo que más mencionan los huéspedes</h2>
     </div>
     <div class="mentions">
-      <div class="mention"><b>Ubicación</b> · 13 menciones</div>
-      <div class="mention"><b>Playa</b> · 6 menciones</div>
-      <div class="mention"><b>Lo que hay cerca</b> · 3 menciones</div>
-      <div class="mention"><b>Comodidad</b> · 3 menciones</div>
-      <div class="mention"><b>Limpieza</b> · 3 menciones</div>
-      <div class="mention"><b>Familiar</b> · 2 menciones</div>
-      <div class="mention"><b>Hospitalidad</b> · 2 menciones</div>
+      <div class="mention"><b>Ubicación</b><span>13 menciones</span></div>
+      <div class="mention"><b>Playa</b><span>6 menciones</span></div>
+      <div class="mention"><b>Lo que hay cerca</b><span>3 menciones</span></div>
+      <div class="mention"><b>Comodidad</b><span>3 menciones</span></div>
+      <div class="mention"><b>Limpieza</b><span>3 menciones</span></div>
+      <div class="mention"><b>Familiar</b><span>2 menciones</span></div>
+      <div class="mention"><b>Hospitalidad</b><span>2 menciones</span></div>
     </div>
     <div class="catrats">
       <div class="catrat">
@@ -978,9 +994,12 @@
     });
   });
   var header = document.getElementById('site-header');
+  var waFloat = document.querySelector('.wa-float');
   window.addEventListener('scroll', function () {
     if (window.scrollY > 80) { header.style.background = 'rgba(31,47,84,.96)'; header.style.position = 'fixed'; }
     else { header.style.background = 'transparent'; header.style.position = 'absolute'; }
+    // El botón de WhatsApp entra pasado el hero, para no taparle los datos.
+    if (waFloat) waFloat.classList.toggle('visible', window.scrollY > 420);
   });
 
   // Carruseles (reseñas, recámaras): las flechas desplazan una tarjeta a la vez.

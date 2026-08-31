@@ -45,7 +45,7 @@
     position:relative; z-index:2; padding:34px 30px;
     display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
   }
-  .head .id{display:flex; align-items:center; gap:14px;}
+  .head .id{display:flex; align-items:center; gap:14px; color:inherit; text-decoration:none;}
   .head img{width:50px; height:auto; display:block; filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));}
   .head .brand{font:400 25px/1.15 'EB Garamond', serif; letter-spacing:.1em;}
   .head .place{
@@ -62,9 +62,12 @@
   }
   .head .folio-chip .v{font:700 15px/1.2 'Source Sans 3'; margin-top:5px; letter-spacing:.04em;}
   @media (max-width:520px){
-    .head .inner{padding:22px 20px;}
-    .head .brand{font-size:21px;}
-    .head .folio-chip{text-align:left;}
+    .head .inner{padding:22px 20px; gap:14px;}
+    .head .brand{font-size:19px; letter-spacing:.06em;}
+    .head .place{letter-spacing:.13em; font-size:9.5px;}
+    .head img{width:42px;}
+    .head .folio-chip{text-align:left; padding:8px 13px;}
+    .head .folio-chip .v{font-size:14px;}
   }
 
   /* ---------- Franja de estado ---------- */
@@ -117,10 +120,26 @@
   .dates .sub{font:400 13.5px/1.4 'Source Sans 3'; color:var(--muted); margin-top:2px;}
   .dates .out{text-align:right;}
   @media (max-width:440px){
-    .dates{grid-template-columns:1fr;}
-    .dates .out{text-align:left;}
-    .dates .nights{flex-direction:row; gap:10px; padding:12px;}
+    /* Apilar los tres bloques hacía una torre de seis renglones. En celular:
+       las noches como banda arriba y llegada/salida lado a lado, que es como
+       se lee un boleto. */
+    .dates{grid-template-columns:1fr 1fr;}
+    .dates .nights{
+      grid-column:1 / -1; order:-1; flex-direction:row; gap:9px; padding:11px;
+      border-bottom:1px solid var(--secondary-color);
+    }
     .dates .nights span{margin-top:0;}
+    .dates > div{padding:15px 16px;}
+    .dates .out{text-align:right; border-left:1px solid var(--secondary-color);}
+    .dates .val{font-size:17px;}
+    .dates .sub, .dates .hr{font-size:12.5px;}
+  }
+  @media (max-width:400px){
+    .meta > div{padding:11px 10px;}
+    .meta .k{letter-spacing:.1em; font-size:9px;}
+    .meta .v{font-size:12px;}
+    /* En columna angosta "5 personas" se partía en dos: la etiqueta ya dice Huéspedes */
+    .meta .u{display:none;}
   }
   .dates .lbl{font:700 11px/1 'Source Sans 3'; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
   .dates .val{font:700 19px/1.3 'Source Sans 3'; color:var(--primary-color); margin-top:7px;}
@@ -138,7 +157,7 @@
     text-transform:uppercase; color:var(--muted);
   }
   .meta .v{display:block; font:600 14px/1.4 'Source Sans 3'; color:var(--primary-color); margin-top:5px;}
-  @media (max-width:440px){ .meta{grid-template-columns:1fr;} }
+  @media (max-width:340px){ .meta{grid-template-columns:1fr;} }
 
   /* ---------- Tabla de importes ---------- */
   table.detail{width:100%; border-collapse:collapse; margin-top:6px;}
@@ -177,6 +196,15 @@
   .cta .gh{background:#fff; color:var(--primary-color); border:1px solid var(--primary-color); cursor:pointer;}
   .cta .gh:hover{background:var(--secondary-color);}
 
+  /* Volver al alojamiento: desde el comprobante se puede conocer la casa.
+     Va como enlace y no como botón para no competir con el de WhatsApp. */
+  .volver{
+    display:block; text-align:center; margin:18px 0 2px; text-decoration:none;
+    font:600 12.5px/1 'Source Sans 3'; letter-spacing:.06em; color:var(--highlight-color);
+    padding:12px 10px; border-radius:6px; transition:background .2s ease;
+  }
+  .volver:hover{background:#F4F8FB;}
+
   footer{text-align:center; padding:30px 20px 34px; color:var(--muted); font-size:14px;}
   footer .folio{font-size:12px; margin-top:12px; letter-spacing:.06em;}
 
@@ -189,7 +217,7 @@
     /* Sin esto Safari y Chrome imprimen la cabecera en blanco */
     *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
     body{background:#fff;}
-    .cta, footer .noprint{display:none;}
+    .cta, .volver, footer .noprint{display:none;}
     .card{box-shadow:none;}
     .doc{padding:0; max-width:none;}
     .head, .card{border-radius:0;}
@@ -211,7 +239,7 @@ const PROPS = {
     lugar:'La Peñita de Jaltemba · Nayarit',
     tel:'+52 56 2854 4253', wa:'525628544253',
     horaIn:'3:00 p.m.', horaOut:'11:00 a.m.',
-    foto:'alberca.jpg',
+    foto:'alberca.jpg', sitio:'index.html', sitioNombre:'Casa Kauri',
     /* Respaldo por si la liga es vieja y no trae la lista en el payload. */
     incluye:['Casa completa para ti: 4 recámaras, 6 camas, 2.5 baños',
              'Alberca privada y jardín cercado en todo su perímetro',
@@ -225,6 +253,7 @@ const PROPS = {
     tel:'+52 311 134 9845', wa:'523111349845',
     horaIn:'3:00 p.m.', horaOut:'12:00 p.m.',
     foto:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1200',
+    sitio:'departamento.html', sitioNombre:'Departamento Kauri',
     incluye:['Loft completo de 3 niveles solo para ti · hasta 6 huéspedes',
              'Nivel 1: sala con Smart TV, comedor, cocina equipada y balcón',
              'Nivel 2: área de descanso con 4 camas, aire acondicionado y baño completo',
@@ -425,13 +454,13 @@ function comprobante(d){
   <div class="head">
     <div class="ph" style="background-image:url('${esc(p.foto)}')"></div>
     <div class="inner">
-      <div class="id">
+      <a class="id" href="${p.sitio}" title="Ir a la página de ${esc(p.firma)}">
         <img src="logo-kauri.png" alt="${esc(p.firma)}" />
         <div>
           <div class="brand">${esc(p.marca)}</div>
           <div class="place">${esc(p.lugar)}</div>
         </div>
-      </div>
+      </a>
       ${d.folio ? '<div class="folio-chip"><div class="k">Folio de reserva</div><div class="v">' + esc(d.folio) + '</div></div>' : ''}
     </div>
   </div>
@@ -451,19 +480,19 @@ function comprobante(d){
           <div class="lbl">Llegada</div>
           <div class="val">${fIn.dia}</div>
           <div class="sub">${fIn.resto}</div>
-          <div class="hr">a partir de las ${esc(d.horaIn || p.horaIn)}</div>
+          <div class="hr">Desde las ${esc(d.horaIn || p.horaIn)}</div>
         </div>
         <div class="nights"><b>${n}</b><span>${n == 1 ? 'noche' : 'noches'}</span></div>
         <div class="out">
           <div class="lbl">Salida</div>
           <div class="val">${fOut.dia}</div>
           <div class="sub">${fOut.resto}</div>
-          <div class="hr">antes de las ${esc(d.horaOut || p.horaOut)}</div>
+          <div class="hr">Hasta las ${esc(d.horaOut || p.horaOut)}</div>
         </div>
       </div>
 
       <div class="meta">
-        <div><span class="k">Huéspedes</span><span class="v">${esc(d.huespedes)} ${d.huespedes == 1 ? 'persona' : 'personas'}</span></div>
+        <div><span class="k">Huéspedes</span><span class="v">${esc(d.huespedes)}<span class="u"> ${d.huespedes == 1 ? 'persona' : 'personas'}</span></span></div>
         <div><span class="k">Alojamiento</span><span class="v">${esc(p.firma)}</span></div>
         <div><span class="k">Emitido</span><span class="v">${emitido}</span></div>
       </div>
@@ -487,12 +516,12 @@ function comprobante(d){
         ${d.checkin ? '<a class="gh" href="#" onclick="guardarEnCalendario();return false;">Guardar en mi calendario</a>' : ''}
         <a class="gh" href="#" onclick="window.print();return false;">Descargar en PDF</a>
       </div>
+      <a class="volver" href="${p.sitio}">← Volver a ${esc(p.sitioNombre)}</a>
     </div>
 
     <footer>
       <div class="noprint">¿Alguna duda? Escríbenos al WhatsApp <strong>${esc(d.telCasa) || p.tel}</strong></div>
       <div class="folio">Folio ${esc(d.folio)} · ${esc(p.firma)}, ${esc(p.lugar.replace(' · ', ', '))}</div>
-      <div class="folio noprint"><a href="index.html">casa-kauri.github.io</a></div>
     </footer>
   </div>`;
 }
