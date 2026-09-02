@@ -238,6 +238,33 @@
   .err{margin-top:14px; color:#9a3412; font-size:14px;}
 
   /* ---------- Impresión / PDF ---------- */
+  /* Este bloque no se ve en pantalla: existe solo dentro del PDF. Un PDF que
+     viaja por WhatsApp pierde el contexto de la página, así que tiene que
+     llevar su propio camino de regreso a la versión viva. */
+  /* La apariencia se define SIEMPRE; lo único que conmuta es el display. Así el
+     bloque se ve igual venga de @media print o de la clase que pone beforeprint. */
+  .solopdf{
+    display:none; margin-top:26px; padding:16px 20px;
+    border:1.5px solid var(--primary-color); border-radius:8px;
+    page-break-inside:avoid;
+  }
+  .solopdf .k{
+    font:700 11px/1 'Source Sans 3', sans-serif; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--primary-color); margin-bottom:8px;
+  }
+  .solopdf .liga{
+    display:inline-block; font:700 16px/1.4 'Source Sans 3', sans-serif;
+    color:var(--primary-color); text-decoration:underline; word-break:break-word;
+  }
+  .solopdf .sub{font-size:13px; line-height:1.6; color:#4b5563; margin-top:8px;}
+
+  /* Dos caminos a propósito. `@media print` es lo estándar, pero si un navegador
+     lo trata distinto el huésped se queda con un PDF sin camino de regreso —
+     y ese PDF es justo lo que conserva. `beforeprint` es la red de abajo. */
+  html.imprimiendo .solopdf{display:block;}
+  html.imprimiendo .cta,
+  html.imprimiendo .volver{display:none;}
+  @media print{ .solopdf{display:block;} }
   @media print{
     /* Sin esto Safari y Chrome imprimen la cabecera en blanco */
     *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
@@ -598,6 +625,16 @@ function comprobante(d){
         <a class="gh" href="#" onclick="window.print();return false;">Descargar en PDF</a>
       </div>
       <a class="volver" href="${p.sitio}">← Volver a ${esc(p.sitioNombre)}</a>
+
+      <div class="solopdf">
+        <div class="k">Tu comprobante en línea</div>
+        <a class="liga" href="${ligaViva()}">Abrir mi comprobante en línea</a>
+        <div class="sub">
+          Este PDF es una foto de tu reserva. La versión en línea siempre está al día:
+          te dice cuántos días faltan para tu llegada y te deja guardar las fechas en tu calendario.
+          <br />Si lo estás leyendo en tu teléfono, toca el renglón azul de arriba.
+        </div>
+      </div>
     </div>
 
     <footer>
@@ -605,6 +642,13 @@ function comprobante(d){
       <div class="folio">Folio ${esc(d.folio)} · ${esc(p.firma)}, ${esc(p.lugar.replace(' · ', ', '))}</div>
     </footer>
   </div>`;
+}
+
+/* La URL de esta misma página, sin el `?pdf=1` que dispara la impresión: si se
+   colara en el enlace del PDF, abrirlo volvería a lanzar el diálogo de imprimir.
+   El hash sí va — es donde viven los datos de la reserva. */
+function ligaViva(){
+  return location.href.split('#')[0].split('?')[0] + location.hash;
 }
 
 function pintar(){
@@ -618,6 +662,19 @@ function pintar(){
 
 window.addEventListener('hashchange', pintar);
 pintar();
+
+/* El generador abre la página con ?pdf=1 para que el anfitrión llegue directo al
+   diálogo de guardar en PDF, sin explicarle dónde está el botón. */
+window.addEventListener('beforeprint', function(){
+  document.documentElement.classList.add('imprimiendo');
+});
+window.addEventListener('afterprint', function(){
+  document.documentElement.classList.remove('imprimiendo');
+});
+
+if(/[?&]pdf=1/.test(location.search)){
+  setTimeout(function(){ window.print(); }, 700);
+}
 </script>
 </body>
 </html>

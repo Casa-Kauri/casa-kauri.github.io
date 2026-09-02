@@ -178,6 +178,28 @@
   .empty h2{font:400 25px/1.3 'EB Garamond', serif; color:var(--primary-color); margin:0 0 12px;}
 
   /* ---------- Impresión / PDF ---------- */
+  /* Camino de regreso dentro del PDF. Ver reserva.html: la apariencia se define
+     siempre y solo conmuta el display, por @media print o por la clase que pone
+     beforeprint. Un PDF que viaja por WhatsApp pierde el contexto de la página. */
+  .solopdf{
+    display:none; margin-top:26px; padding:16px 20px;
+    border:1.5px solid var(--primary-color); border-radius:8px;
+    page-break-inside:avoid;
+  }
+  .solopdf .k{
+    font:700 11px/1 'Source Sans 3', sans-serif; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--primary-color); margin-bottom:8px;
+  }
+  .solopdf .liga{
+    display:inline-block; font:700 16px/1.4 'Source Sans 3', sans-serif;
+    color:var(--primary-color); text-decoration:underline; word-break:break-word;
+  }
+  .solopdf .sub{font-size:13px; line-height:1.6; color:#4b5563; margin-top:8px;}
+  html.imprimiendo .solopdf{display:block;}
+  html.imprimiendo .cta,
+  html.imprimiendo .volver{display:none;}
+  @media print{ .solopdf{display:block;} }
+
   @media print{
     /* Sin esto Safari y Chrome imprimen la cabecera en blanco */
     *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
@@ -414,6 +436,16 @@ function cotizacion(d){
         <a class="gh" href="#" onclick="window.print();return false;">Descargar en PDF</a>
       </div>
       <a class="volver" href="${p.sitio}">← Conocer ${esc(p.sitioNombre)}</a>
+
+      <div class="solopdf">
+        <div class="k">Tu cotización en línea</div>
+        <a class="liga" href="${ligaViva()}">Abrir mi cotización en línea</a>
+        <div class="sub">
+          Este PDF es una foto de tu cotización. La versión en línea es la que manda:
+          ahí se ve si sigue vigente y desde ahí puedes apartar tus fechas.
+          <br />Si lo estás leyendo en tu teléfono, toca el renglón azul de arriba.
+        </div>
+      </div>
     </div>
 
     <footer>
@@ -424,6 +456,12 @@ function cotizacion(d){
   </div>`;
 }
 
+/* La URL de esta misma página sin el `?pdf=1` que dispara la impresión: si se
+   colara en el enlace del PDF, abrirlo volvería a lanzar el diálogo de imprimir. */
+function ligaViva(){
+  return location.href.split('#')[0].split('?')[0] + location.hash;
+}
+
 function pintar(){
   const d = leerDatos();
   document.getElementById('doc').innerHTML = d ? cotizacion(d) : vacio();
@@ -431,6 +469,17 @@ function pintar(){
     const p = PROPS[d.prop] || PROPS.casa;
     document.title = 'Cotización ' + d.folio + ' · ' + p.firma;
   }
+}
+
+window.addEventListener('beforeprint', function(){
+  document.documentElement.classList.add('imprimiendo');
+});
+window.addEventListener('afterprint', function(){
+  document.documentElement.classList.remove('imprimiendo');
+});
+
+if(/[?&]pdf=1/.test(location.search)){
+  setTimeout(function(){ window.print(); }, 700);
 }
 
 window.addEventListener('hashchange', pintar);

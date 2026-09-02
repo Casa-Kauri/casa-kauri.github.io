@@ -213,6 +213,7 @@
       <button class="btn-main" onclick="copiarCorreo()">Copiar correo con formato</button>
       <button class="btn-alt" onclick="abrirGmail()">Abrir borrador en Gmail</button>
       <button class="btn-alt btn-whats" onclick="abrirWhats()">Enviar por WhatsApp</button>
+      <button class="btn-alt" onclick="guardarPDF()">Guardar PDF para mandar</button>
       <button class="btn-alt" onclick="copiarWhats()">Copiar versión corta para WhatsApp</button>
       <button class="btn-alt solo-escritorio" onclick="descargar()">Descargar como archivo .html</button>
       <div class="ok" id="ok"></div>
@@ -756,6 +757,20 @@ async function copiarCorreo(){
 /* El flujo del celular: abre WhatsApp con el mensaje y la liga ya escritos.
    Sin teléfono capturado abre el selector de contactos, que es lo que se
    quiere cuando la conversación ya está abierta. */
+/* Abre el comprobante real y lanza el diálogo de guardar en PDF. El PDF se manda
+   adjunto por WhatsApp y lleva dentro el enlace a esta misma página en vivo.
+   En iPhone el diálogo es Compartir → Imprimir → Compartir PDF. */
+function guardarPDF(){
+  const d = datos();
+  const destino = '../reserva.html';
+  const liga = ligaReserva(d).replace(PAGINA_RESERVA, destino);
+  /* El ?pdf=1 va antes del #: el fragmento tiene que quedar al final o el
+     navegador lo lee como parte del hash y los datos no se decodifican. */
+  const [pagina, hash] = liga.split('#');
+  window.open(pagina + '?pdf=1#' + hash, '_blank');
+  aviso('Se abre tu comprobante y el diálogo para guardarlo en PDF');
+}
+
 function abrirWhats(){
   const d = datos();
   kWhats(versionWhats(d), d.telHuesped);
@@ -776,11 +791,9 @@ async function copiarLiga(){
 /* Vista previa contra el archivo LOCAL: sirve para revisar el comprobante
    aunque el sitio todavía no esté publicado en Netlify. */
 function verLiga(){
-  /* Desde la Mac (file://) la página pública está en la carpeta hermana;
-     desde el panel publicado está un nivel arriba, en el sitio real. */
-  const destino = location.protocol === 'file:'
-    ? '../sitio-casa-kauri/reserva.html'
-    : '../reserva.html';
+  /* La página pública vive un nivel arriba de este panel, y ahí está tanto
+     abriendo el archivo desde la Mac como en el sitio publicado. */
+  const destino = '../reserva.html';
   const liga = ligaReserva(datos()).replace(PAGINA_RESERVA, destino);
   window.open(liga, '_blank');
 }
