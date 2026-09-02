@@ -58,6 +58,12 @@
   textarea{resize:vertical; min-height:64px;}
   .row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
   .hint{font-size:12px; color:var(--muted); margin:-6px 0 14px;}
+  /* El estado del precio especial vive PEGADO al campo, no en la columna de la
+     derecha: un aviso a media pantalla de distancia no lo lee nadie. */
+  .estado{font-size:13px; line-height:1.5; border-radius:5px; padding:9px 12px; margin:-4px 0 14px;}
+  .estado.ok{background:#EAF5EE; color:#15653c;}
+  .estado.mal{background:#FEF6F1; color:#9a3412; font-weight:600;}
+  .estado.neutro{background:var(--soft); color:var(--muted);}
   .calc{
     background:var(--soft); border-radius:6px; padding:12px 14px; margin-bottom:16px;
     font-size:13px; line-height:1.9;
@@ -176,6 +182,14 @@
       <label><span>Cargo por mascota</span><input id="cargoMascota" type="number" min="0" step="50" value="0" /></label>
     </div>
     <div class="hint">Si es cargo único (no por mascota), pon 1 mascota y ahí el monto total.</div>
+    <h2>Precio especial (opcional)</h2>
+    <div class="hint" style="margin-top:-4px;">Aquí NO va el precio especial: ese es la <b>Tarifa por noche</b> de arriba. Aquí va el precio <b>normal</b>, el más alto, para que el huésped vea el descuento que ya le diste en la cotización. <b>Si cotizaste con precio especial, cópialo tal cual aquí</b> o el comprobante contradice lo que le ofreciste.</div>
+    <label><span>Precio normal por noche (antes del descuento)</span><input id="tarifaBase" type="number" min="0" step="50" value="0" /></label>
+    <div class="estado" id="estadoEspecial"></div>
+    <label><span>Por qué tiene precio especial</span><input id="motivoEspecial" value="por reservar directo con nosotros" /></label>
+    <div class="hint">Un descuento sin motivo se lee como que el precio de lista era inventado. Dale una razón: reservar directo, temporada baja, estancia larga, huésped que regresa.</div>
+
+    <h2>Cómo quedó pagado</h2>
     <label><span>Anticipo ya pagado</span><input id="anticipo" type="number" min="0" step="50" value="0" /></label>
     <label><span>Fecha límite para el saldo</span><input id="fechaSaldo" type="date" /></label>
     <div class="calc" id="calc"></div>
@@ -304,7 +318,7 @@ function ligaReserva(d){
     extras:d.extras, mascotas:d.mascotas, cargoMascota:d.cargoMascota,
     totalMascotas:d.totalMascotas, total:d.total, anticipo:d.anticipo,
     saldo:d.saldo, fechaSaldo:d.fechaSaldo, datosPago:d.datosPago,
-    telCasa:d.telCasa, politica:d.politica, notas:d.notas
+    telCasa:d.telCasa, politica:d.politica, notas:d.notas, especial:d.especial
   };
 
   /* La liga se rompe cuando WhatsApp la parte, y se parte por larga. Todo lo
@@ -331,6 +345,7 @@ function ligaReserva(d){
 const $ = id => document.getElementById(id);
 const campos = ['propiedad','nombre','correo','telHuesped','checkin','checkout','huespedes','folio',
                 'tarifa','extras','mascotas','cargoMascota','anticipo','fechaSaldo',
+                'tarifaBase','motivoEspecial',
                 'datosPago','telCasa','incluye','llegada','politica','notas'];
 
 const mx = n => '$' + Number(n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN';
@@ -384,6 +399,23 @@ function datos(){
   const totalMascotas = mascotas * cargoMascota;
   const hospedaje = tarifa * n;
   const total = hospedaje + extras + totalMascotas;
+
+  /* Precio especial: solo existe si el precio de lista es MAYOR que lo que se
+     cobra. Un "descuento" de cero o negativo no se enseña — delata que el ancla
+     es falsa. Mismo cálculo que el generador de cotización, a propósito: los dos
+     documentos tienen que enseñar exactamente el mismo número. */
+  const tarifaBase = +$('tarifaBase').value || 0;
+  const hayEspecial = tarifaBase > tarifa && tarifa > 0 && n > 0;
+  const especial = hayEspecial ? {
+    base: tarifaBase,
+    tarifa: tarifa,
+    n: n,
+    hospedajeBase: tarifaBase * n,
+    ahorro: (tarifaBase - tarifa) * n,
+    pct: Math.round((tarifaBase - tarifa) / tarifaBase * 100),
+    motivo: $('motivoEspecial').value.trim()
+  } : null;
+
   return {
     nombre: $('nombre').value.trim() || 'Estimado huésped',
     correo: $('correo').value.trim(),
@@ -391,7 +423,7 @@ function datos(){
     checkin: $('checkin').value, checkout: $('checkout').value,
     huespedes: $('huespedes').value || '—',
     folio: $('folio').value.trim() || generarFolio(),
-    n, tarifa, extras, anticipo, hospedaje, total, saldo: total - anticipo,
+    n, tarifa, extras, anticipo, hospedaje, total, saldo: total - anticipo, especial,
     mascotas, cargoMascota, totalMascotas,
     fechaSaldo: $('fechaSaldo').value,
     datosPago: $('datosPago').value.trim(),
@@ -420,6 +452,27 @@ function lineasIncluye(d){
    Gmail, Outlook y Apple Mail ignoran el CSS externo y buena parte del moderno.
    Tablas + inline styles es lo único que se ve igual en los tres.            */
 function armarCorreo(d){
+  /* El ancla va DENTRO de la tabla, pegada al renglón de hospedaje: comparar dos
+     números separados por media pantalla no compara nada. */
+  const filaLista = d.especial ? `
+    <tr>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:400 14px/1.4 Arial,Helvetica,sans-serif;color:#9aa3b2;">Tarifa normal (${d.especial.n} × ${mx(d.especial.base)})</td>
+      <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:400 14px/1.4 Arial,Helvetica,sans-serif;color:#9aa3b2;text-align:right;"><span style="text-decoration:line-through;">${mx(d.especial.hospedajeBase)}</span></td>
+    </tr>` : '';
+
+  const bloqueEspecial = d.especial ? `
+    <tr><td style="padding:14px 32px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EAF5EE;border-radius:6px;">
+        <tr><td style="padding:16px 20px;">
+          <div style="font:700 12px/1 Arial,Helvetica,sans-serif;color:#1a7f4b;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;">Tu precio especial</div>
+          <div style="font:700 18px/1.4 Arial,Helvetica,sans-serif;color:#1a7f4b;">Ahorraste ${mx(d.especial.ahorro)} <span style="font-weight:400;font-size:15px;">(${d.especial.pct} % menos)</span></div>
+          <div style="font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#2b3444;margin-top:6px;">
+            Tu tarifa quedó en <strong>${mx(d.especial.tarifa)}</strong> por noche en lugar de ${mx(d.especial.base)}${d.especial.motivo ? ', ' + d.especial.motivo : ''}.
+          </div>
+        </td></tr>
+      </table>
+    </td></tr>` : '';
+
   const fila = (etq, val, fuerte) => `
     <tr>
       <td style="padding:9px 0;border-bottom:1px solid #e6ecf2;font:400 14px/1.4 Arial,Helvetica,sans-serif;color:#6b7484;">${etq}</td>
@@ -500,13 +553,15 @@ function armarCorreo(d){
       ${fila('Folio', d.folio)}
       ${fila('Huéspedes', d.huespedes + ' persona' + (d.huespedes==1?'':'s'))}
       ${fila('Noches', d.n)}
-      ${d.tarifa ? fila('Hospedaje (' + d.n + ' × ' + mx(d.tarifa) + ')', mx(d.hospedaje)) : ''}
+      ${filaLista}
+      ${d.tarifa ? fila((d.especial ? 'Hospedaje con tu precio especial (' : 'Hospedaje (') + d.n + ' × ' + mx(d.tarifa) + ')', mx(d.hospedaje)) : ''}
       ${d.extras ? fila('Limpieza y extras', mx(d.extras)) : ''}
       ${d.totalMascotas ? fila('Mascotas (' + d.mascotas + ' × ' + mx(d.cargoMascota) + ')', mx(d.totalMascotas)) : ''}
       ${d.total ? fila('Total', mx(d.total), true) : ''}
       ${d.anticipo ? fila('Anticipo recibido', '− ' + mx(d.anticipo)) : ''}
     </table>
   </td></tr>
+  ${bloqueEspecial}
 
   <tr><td style="height:22px;"></td></tr>
   ${bloqueSaldo}
@@ -575,7 +630,7 @@ Hola ${d.nombre}, tu reserva quedó confirmada.
 📅 Llegada: ${fechaCorta(d.checkin)} (desde ${d.horaIn})
 📅 Salida: ${fechaCorta(d.checkout)} (antes de ${d.horaOut})
 🌙 ${d.n} noche${d.n==1?'':'s'} · 👥 ${d.huespedes} huéspedes
-${d.total ? '\n💵 Total: ' + mx(d.total) + (d.anticipo ? '\n✔️ Anticipo recibido: ' + mx(d.anticipo) : '') + (d.saldo>0 ? '\n⏳ Saldo: ' + mx(d.saldo) + (d.fechaSaldo ? ' (a más tardar el ' + fechaCorta(d.fechaSaldo) + ')' : '') : '\n✔️ Pagado por completo') : ''}
+${d.especial ? '\n🏷️ Tarifa normal: ' + mx(d.especial.base) + ' por noche\n💚 *Tu precio especial: ' + mx(d.especial.tarifa) + ' por noche* — ahorraste ' + mx(d.especial.ahorro) + ' (' + d.especial.pct + ' % menos)' + (d.especial.motivo ? ', ' + d.especial.motivo : '') : ''}${d.total ? '\n💵 Total: ' + mx(d.total) + (d.anticipo ? '\n✔️ Anticipo recibido: ' + mx(d.anticipo) : '') + (d.saldo>0 ? '\n⏳ Saldo: ' + mx(d.saldo) + (d.fechaSaldo ? ' (a más tardar el ' + fechaCorta(d.fechaSaldo) + ')' : '') : '\n✔️ Pagado por completo') : ''}
 
 Te acabamos de enviar también la confirmación formal por correo${d.correo ? ' a ' + d.correo : ''}.
 
@@ -595,15 +650,43 @@ function render(){
   $('asuntoTxt').textContent = asunto(d);
   $('calc').innerHTML =
     `Noches <b>${d.n}</b>` +
+    (d.especial ? `<br /><span style="color:#9aa3b2;">Tarifa normal <b style="text-decoration:line-through;">${mx(d.especial.hospedajeBase)}</b></span>` : '') +
     `<br />Hospedaje <b>${mx(d.hospedaje)}</b>` +
     `<br />Extras <b>${mx(d.extras)}</b>` +
     (d.totalMascotas ? `<br />Mascotas (${d.mascotas}) <b>${mx(d.totalMascotas)}</b>` : '') +
     `<br />Total <b>${mx(d.total)}</b>` +
     `<br />Anticipo <b>− ${mx(d.anticipo)}</b>` +
-    `<br /><span style="color:#1F2F54;font-weight:700;">Saldo <b>${mx(d.saldo)}</b></span>`;
+    `<br /><span style="color:#1F2F54;font-weight:700;">Saldo <b>${mx(d.saldo)}</b></span>` +
+    (d.especial ? `<br /><span style="color:#1a7f4b;font-weight:700;">Ahorro que ve el huésped <b>${mx(d.especial.ahorro)} (${d.especial.pct} %)</b></span>` : '');
 
   // Nada de esto sale hacia el huésped: son avisos para el operador.
   const alertas = [];
+  const base = +$('tarifaBase').value || 0, tar = +$('tarifa').value || 0;
+
+  /* Cuatro estados posibles, y ninguno puede ser el silencio: el campo tiene que
+     decir siempre por qué el bloque de ahorro sale o no sale. */
+  const est = $('estadoEspecial');
+  if(!base){
+    est.className = 'estado neutro';
+    est.innerHTML = 'Sin precio especial: el comprobante sale sin comparación. Déjalo en 0 si así se cotizó.';
+  } else if(!tar){
+    est.className = 'estado mal';
+    est.innerHTML = '⚠️ Falta la <b>Tarifa por noche</b> allá arriba. Sin ella no hay contra qué comparar y el bloque de ahorro no aparece.';
+  } else if(base <= tar){
+    est.className = 'estado mal';
+    est.innerHTML = '⚠️ El precio normal (' + mx(base) + ') tiene que ser <b>mayor</b> que la tarifa que cobraste (' + mx(tar) + ').'
+                  + '<br />¿Los pusiste al revés? El precio con descuento va arriba, en <b>Tarifa por noche</b>.';
+  } else if(!noches()){
+    est.className = 'estado mal';
+    est.innerHTML = '⚠️ Faltan las fechas: sin noches no se puede calcular el ahorro.';
+  } else {
+    const ah = (base - tar) * noches(), pc = Math.round((base - tar) / base * 100);
+    est.className = 'estado ok';
+    est.innerHTML = '✓ El huésped verá: <b>' + mx(tar) + '</b> por noche en lugar de ' + mx(base)
+                  + ' → ahorro de <b>' + mx(ah) + '</b> (' + pc + ' %) en ' + noches() + ' noche' + (noches()==1?'':'s') + '.';
+  }
+  if(d.especial && !d.especial.motivo)
+    alertas.push('El precio especial no trae motivo. Sin razón, el descuento se lee como que el precio normal estaba inflado.');
   if(d.incluye.includes('COMPLETAR'))
     alertas.push('La lista de "Lo que ya está incluido" trae un renglón sin llenar. Escríbelo antes de mandar la confirmación.');
   if(d.mascotas > 0 && !d.cargoMascota)
