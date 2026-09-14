@@ -328,9 +328,13 @@ const PROPS = {
 
 /* La política de cancelación es la misma en las dos propiedades y no cambia
    casi nunca: si el generador no manda una distinta, se usa esta. */
-const POLITICA = 'Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se '
-  + 'reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra '
+const POLITICA = 'Cancelación sin costo hasta 31 días antes de la llegada; el anticipo se '
+  + 'reembolsa completo. Dentro de los 31 días previos, el anticipo se puede aplicar a otra '
   + 'fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.';
+/* Instrucciones de pago de fábrica del generador: si el enlace no trae `pg`,
+   se usan estas. Tienen que ser IDÉNTICAS al valor por defecto del campo
+   "Cómo se liquida el saldo" en panel-7g6d7f/confirmacion.html. */
+const PAGO_DEFAULT = 'Transferencia o depósito. Al recibirlo te confirmamos por WhatsApp y te enviamos la clave de acceso.';
 const WA = PROPS.casa.wa;
 
 /* Negritas ligeras (**así**) en los textos que el operador escribe a mano.
@@ -378,13 +382,66 @@ function fechaViaje(iso){
    no quedan en los registros de Netlify ni en referrers. */
 function decodificar(raw){
   if(!raw) return null;
-  try{
-    const b64 = raw.replace(/-/g,'+').replace(/_/g,'/');
-    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-    return JSON.parse(new TextDecoder().decode(bytes));
-  }catch(e){
-    return null;
-  }
+  /* Lo que llega copiado a mano trae basura alrededor: espacios, saltos de
+     línea que metió el correo, un punto o paréntesis que el detector de enlaces
+     pegó al final. Se limpia todo lo que no es base64url antes de decodificar. */
+  let limpio = String(raw).replace(/[^A-Za-z0-9\-_]/g, '');
+  const intentar = (b) => {
+    try{
+      const b64 = b.replace(/-/g,'+').replace(/_/g,'/');
+      const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+      return normalizar(JSON.parse(new TextDecoder().decode(bytes)));
+    }catch(e){ return null; }
+  };
+  /* Si le sobra un carácter al final (largo % 4 == 1 no es base64 válido),
+     se prueba sin él antes de darlo por perdido. */
+  return intentar(limpio) || (limpio.length % 4 === 1 ? intentar(limpio.slice(0, -1)) : null);
+}
+
+/* ---------- Enlaces cortos (formato 2, desde el 14 sep 2026) ----------
+   El generador manda solo los datos primarios —tarifa, cantidades, fechas—
+   y aquí se recalcula lo demás con la MISMA fórmula que `datos()` en
+   panel-7g6d7f/confirmacion.html. Un enlace sin la marca `_` es de los de
+   antes y pasa tal cual: las confirmaciones ya enviadas siguen abriendo igual. */
+function nochesEntre(a, b){
+  if(!a || !b) return 0;
+  const n = Math.round((new Date(b) - new Date(a)) / 86400000);
+  return n > 0 ? n : 0;
+}
+function normalizar(r){
+  if(!r || r._ !== 2) return r;
+  const prop = r.p === 'd' ? 'depto' : 'casa';
+  const p = PROPS[prop] || PROPS.casa;
+  const n = nochesEntre(r.i, r.o);
+  const tarifa = +r.t || 0, extras = +r.ex || 0, anticipo = +r.an || 0;
+  const mascotas = +r.ms || 0, cargoMascota = +r.cm || 0;
+  const totalMascotas = mascotas * cargoMascota;
+  const hospedaje = tarifa * n;
+  const total = hospedaje + extras + totalMascotas;
+  const tarifaBase = +r.tb || 0;
+  /* El bloque verde solo se arma si de verdad hay ahorro; un ancla igual o
+     menor que lo cobrado delata un descuento falso. */
+  const especial = (tarifaBase > tarifa && tarifa > 0 && n > 0) ? {
+    base:tarifaBase, tarifa:tarifa, n:n,
+    hospedajeBase:tarifaBase * n,
+    ahorro:(tarifaBase - tarifa) * n,
+    pct:Math.round((tarifaBase - tarifa) / tarifaBase * 100),
+    motivo:r.em || ''
+  } : null;
+  return {
+    prop:prop,
+    nombre:r.nb || 'Estimado huésped', folio:r.f || '',
+    checkin:r.i || '', checkout:r.o || '',
+    huespedes:r.h || '—',
+    n:n, tarifa:tarifa, hospedaje:hospedaje, extras:extras,
+    mascotas:mascotas, cargoMascota:cargoMascota, totalMascotas:totalMascotas,
+    total:total, anticipo:anticipo, saldo:total - anticipo,
+    fechaSaldo:r.fs || '',
+    datosPago: r.pg === undefined ? PAGO_DEFAULT : r.pg,
+    incluye:r.in || '', llegada:r.ll || '', politica:r.po || '', notas:r.no || '',
+    telCasa:r.tl || p.tel, horaIn:r.hi || p.horaIn, horaOut:r.ho || p.horaOut,
+    especial:especial
+  };
 }
 
 function leerDatos(){ return decodificar(location.hash.slice(1)); }

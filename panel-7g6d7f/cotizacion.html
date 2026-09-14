@@ -217,7 +217,7 @@
     <h2>Contenido</h2>
     <label><span>Lo que incluye (una línea por renglón)</span><textarea id="incluye" style="min-height:130px;"></textarea></label>
     <div class="hint" id="hintIncluye"></div>
-    <label><span>Política de cancelación</span><textarea id="politica">Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.</textarea></label>
+    <label><span>Política de cancelación</span><textarea id="politica">Cancelación sin costo hasta 31 días antes de la llegada; el anticipo se reembolsa completo. Dentro de los 31 días previos, el anticipo se puede aplicar a otra fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.</textarea></label>
     <div class="hint">⚠️ Revisa que este texto sea el que realmente manejas. Es lo único de la cotización que te puede meter en un problema.</div>
     <label><span>Notas para este cliente (opcional)</span><textarea id="notas" placeholder="Ej. Las visitas se retiran a las 22:00 h; después solo se quedan las 10 personas registradas."></textarea></label>
 
@@ -308,34 +308,63 @@ const PROPS = {
    Los datos van en el HASH, no en la query: el fragmento nunca se manda al
    servidor, así que no quedan en registros ni en referrers. base64url para
    que la liga no se rompa al pegarla en WhatsApp. */
-/* La política tal como viene de fábrica en el formulario, para saber después
-   si el operador la cambió en esta cotización. */
+/* La política y las instrucciones de pago tal como vienen de fábrica en el
+   formulario, para saber después si el operador las cambió en esta cotización.
+   Lo que no cambió no viaja dentro del enlace: la página pública lo tiene de
+   memoria. Al tocar estos textos hay que tocarlos también en cotizacion.html. */
 const POLITICA_DEFAULT = (document.getElementById('politica') || {}).value || '';
+const PAGO_DEFAULT     = (document.getElementById('datosPago') || {}).value || '';
 
 function ligaCot(d){
   const p = PROPS[d.prop] || PROPS.casa;
-  const payload = {
-    prop:d.prop, nombre:d.nombre, folio:d.folio, checkin:d.checkin, checkout:d.checkout,
-    huespedes:d.huespedes, n:d.n, items:d.items, total:d.total, deposito:d.deposito,
-    anticipo:d.anticipo, saldo:d.saldo, fechaSaldo:d.fechaSaldo, vigencia:d.vigencia,
-    datosPago:d.datosPago, incluye:d.incluye, politica:d.politica, notas:d.notas, especial:d.especial,
-    tel:d.tel, horaIn:d.horaIn, horaOut:d.horaOut
-  };
-  /* La liga se rompe cuando WhatsApp la parte, y se parte por larga. Lo que la
-     página de la cotización ya sabe de memoria NO viaja dentro: solo se manda
-     si el operador lo cambió para esta cotización. */
-  if(payload.incluye  === p.incluye)        delete payload.incluye;
-  if(payload.politica === POLITICA_DEFAULT) delete payload.politica;
-  if(payload.horaIn   === p.horaIn)         delete payload.horaIn;
-  if(payload.horaOut  === p.horaOut)        delete payload.horaOut;
-  if(payload.tel      === p.tel)            delete payload.tel;
-  Object.keys(payload).forEach(k => {
-    const v = payload[k];
-    if(v === '' || v === null || v === undefined || v === 0) delete payload[k];
-  });
+  const q = {_:2, p: d.prop === 'depto' ? 'd' : 'c'};
+  /* Un campo vacío o en cero no viaja: la página pública ya lo trata como
+     ausente, y cada campo de más son ~4 caracteres de enlace. */
+  const pon = (k, v) => { if(v !== '' && v !== 0 && v != null) q[k] = v; };
 
-  const bytes = new TextEncoder().encode(JSON.stringify(payload));
-  const b64 = btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_');
+  pon('nb', d.nombre === 'Estimado huésped' ? '' : d.nombre);
+  pon('f',  d.folio);
+  pon('i',  d.checkin);
+  pon('o',  d.checkout);
+  pon('h',  d.huespedes === '—' ? '' : d.huespedes);
+  pon('v',  d.vigencia);
+
+  /* Los números del desglose, no los renglones ya escritos: la página pública
+     los rearma con su copia de `renglones()`. */
+  pon('t',  d.tarifa);
+  pon('ne', d.numExtra);   pon('ce', d.cargoExtra);
+  pon('li', d.limpieza);
+  pon('ms', d.mascotas);   pon('cm', d.cargoMascota);
+  if(d.mon1) q.e1 = [d.etq1, d.mon1];
+  if(d.mon2) q.e2 = [d.etq2, d.mon2];
+
+  pon('dp', d.deposito);
+  pon('an', d.anticipo);
+  pon('fs', d.fechaSaldo);
+  /* Del precio especial solo la tarifa de lista y el motivo: el ahorro, el
+     porcentaje y el hospedaje a precio de lista se calculan allá. */
+  pon('tb', d.tarifaBase);
+  if(d.especial) pon('em', d.especial.motivo);
+  pon('no', d.notas);
+
+  /* Lo que la página pública ya sabe de memoria NO viaja: solo se manda si el
+     operador lo cambió para esta cotización. Si aquí se toca un texto de
+     fábrica, hay que tocarlo también en ../cotizacion.html o volverá a irse
+     dentro del enlace. */
+  /* Aquí no se usa `pon`: si el operador borró las instrucciones de pago a
+     propósito, el vacío tiene que viajar, o la página pública repondría el
+     texto de fábrica y el cliente leería algo que nadie escribió. */
+  if(d.datosPago !== PAGO_DEFAULT.trim())     q.pg = d.datosPago;
+  if(d.incluye   !== p.incluye)               pon('in', d.incluye);
+  if(d.politica  !== POLITICA_DEFAULT.trim()) pon('po', d.politica);
+  if(d.tel       !== p.tel)                   pon('tl', d.tel);
+  if(d.horaIn    !== p.horaIn)                pon('hi', d.horaIn);
+  if(d.horaOut   !== p.horaOut)               pon('ho', d.horaOut);
+
+  const bytes = new TextEncoder().encode(JSON.stringify(q));
+  /* Sin el relleno de '=': `atob` lo tolera y son dos caracteres menos. */
+  const b64 = btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   return PAGINA_COT + '#' + b64;
 }
 
@@ -375,6 +404,27 @@ function generarFolio(){
   return prop().folio + '-' + base + '-' + ap;
 }
 
+/* Los renglones del desglose. Es GEMELA de la de la página pública
+   (../cotizacion.html): el enlace ya no lleva los renglones escritos, los
+   rearma allá. Si aquí cambia una etiqueta o el orden, allá también, o el
+   cliente verá en su liga un desglose distinto al del correo. */
+function renglones(x){
+  const n = x.n || 0;
+  const hayEspecial = x.tarifaBase > x.tarifa && x.tarifa > 0 && n > 0;
+  const hospedaje = x.tarifa * n;
+  const totalExtra = x.numExtra * x.cargoExtra;
+  const totalMascotas = x.mascotas * x.cargoMascota;
+  const items = [];
+  if(hospedaje)     items.push([(hayEspecial ? 'Hospedaje con tu precio especial (' : 'Hospedaje (')
+                                 + n + ' noche' + (n==1?'':'s') + ' × ' + mx(x.tarifa) + ')', hospedaje]);
+  if(totalExtra)    items.push([x.numExtra + ' huésped' + (x.numExtra==1?'':'es') + ' extra × ' + mx(x.cargoExtra), totalExtra]);
+  if(x.mon1)        items.push([x.etq1 || 'Concepto adicional', x.mon1]);
+  if(totalMascotas) items.push(['Mascotas (' + x.mascotas + ' × ' + mx(x.cargoMascota) + ')', totalMascotas]);
+  if(x.limpieza)    items.push(['Limpieza', x.limpieza]);
+  if(x.mon2)        items.push([x.etq2 || 'Concepto adicional', x.mon2]);
+  return items;
+}
+
 function datos(){
   const p = prop();
   const n = noches();
@@ -387,13 +437,16 @@ function datos(){
   const mon1 = +$('mon1').value || 0;
   const mon2 = +$('mon2').value || 0;
 
-  const hospedaje = tarifa * n;
-  const totalExtra = numExtra * cargoExtra;
-  const totalMascotas = mascotas * cargoMascota;
-
   /* Precio especial: solo existe si el precio de lista es MAYOR que lo que se cobra.
      Un "descuento" de cero o negativo no se enseña — delata que el ancla es falsa. */
   const tarifaBase = +$('tarifaBase').value || 0;
+
+  /* Los datos primarios: los únicos que viajan dentro del enlace. El desglose,
+     los totales y los subtotales del precio especial salen de estos. */
+  const base = {n, tarifa, numExtra, cargoExtra, limpieza, mascotas, cargoMascota,
+                etq1:$('etq1').value.trim(), mon1,
+                etq2:$('etq2').value.trim(), mon2, tarifaBase};
+
   const hayEspecial = tarifaBase > tarifa && tarifa > 0 && n > 0;
   const especial = hayEspecial ? {
     base: tarifaBase,
@@ -407,14 +460,7 @@ function datos(){
 
   // El desglose es una lista de renglones: así una cotización de evento y una
   // de fin de semana normal usan exactamente la misma plantilla.
-  const items = [];
-  if(hospedaje)      items.push([(especial ? 'Hospedaje con tu precio especial (' : 'Hospedaje (')
-                                  + n + ' noche' + (n==1?'':'s') + ' × ' + mx(tarifa) + ')', hospedaje]);
-  if(totalExtra)     items.push([numExtra + ' huésped' + (numExtra==1?'':'es') + ' extra × ' + mx(cargoExtra), totalExtra]);
-  if(mon1)           items.push([$('etq1').value.trim() || 'Concepto adicional', mon1]);
-  if(totalMascotas)  items.push(['Mascotas (' + mascotas + ' × ' + mx(cargoMascota) + ')', totalMascotas]);
-  if(limpieza)       items.push(['Limpieza', limpieza]);
-  if(mon2)           items.push([$('etq2').value.trim() || 'Concepto adicional', mon2]);
+  const items = renglones(base);
 
   const total = items.reduce((s, it) => s + it[1], 0);
   const deposito = +$('deposito').value || 0;
@@ -430,6 +476,7 @@ function datos(){
     huespedes: $('huespedes').value || '—',
     vigencia: $('vigencia').value,
     folio: $('folio').value.trim() || generarFolio(),
+    ...base,
     n, items, especial, total, deposito, anticipo, saldo: total - anticipo,
     totalTransferir: total + deposito,
     fechaSaldo: $('fechaSaldo').value,
@@ -731,7 +778,7 @@ function pintarLiga(d){
   $('ligaLen').className = 'liga-len ' + (n <= 900 ? 'bien' : 'largo');
   $('ligaAviso').textContent = n <= 900
     ? 'Va corto: se manda por WhatsApp sin riesgo de que se corte.'
-    : 'Está largo. Suele ser porque cambiaste a mano la política o la lista de lo incluido: solo eso viaja dentro del enlace.';
+    : 'Está largo. Los números y las fechas ya casi no pesan: lo que lo estira es el texto que escribiste a mano — instrucciones de pago, política, lo que incluye o las notas. Recórtalos y baja solo.';
 }
 
 function mitad(){
@@ -797,8 +844,20 @@ async function copiarWhats(){
 }
 
 async function copiarLiga(){
-  await navigator.clipboard.writeText(ligaCot(datos()));
-  aviso('✓ Liga copiada');
+  const liga = ligaCot(datos());
+  try{
+    await navigator.clipboard.writeText(liga);
+    aviso('✓ Liga copiada');
+  }catch(e){
+    /* El portapapeles falla sin HTTPS o sin gesto reciente (pasa al abrir el
+       archivo desde la Mac). Se selecciona la caja del enlace y se copia a la
+       antigua; si ni así, queda seleccionada para copiar con el dedo. */
+    const caja = $('ligaUrl');
+    caja.focus(); caja.select(); caja.setSelectionRange(0, liga.length);
+    let ok = false;
+    try{ ok = document.execCommand('copy'); }catch(e2){}
+    aviso(ok ? '✓ Liga copiada' : 'No se pudo copiar sola: ya quedó seleccionada, cópiala con el dedo');
+  }
 }
 
 /* Vista previa contra el archivo LOCAL: sirve para revisar la cotización

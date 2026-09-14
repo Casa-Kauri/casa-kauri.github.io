@@ -248,9 +248,15 @@ const PROPS = {
 
 /* Misma política en las dos propiedades y casi nunca cambia: si el generador
    no manda una distinta, se usa esta y no viaja dentro del enlace. */
-const POLITICA = 'Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se '
-  + 'reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra '
+const POLITICA = 'Cancelación sin costo hasta 31 días antes de la llegada; el anticipo se '
+  + 'reembolsa completo. Dentro de los 31 días previos, el anticipo se puede aplicar a otra '
   + 'fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.';
+
+/* Instrucciones de pago tal como salen de fábrica en el generador. Si el
+   operador no las cambió, NO viajan dentro del enlace: se ponen desde aquí.
+   Este texto y el del generador son gemelos: al tocar uno, tocar el otro. */
+const PAGO_DEFAULT = 'Se aparta por transferencia o depósito. En cuanto entre el anticipo '
+  + 'bloqueamos las fechas y te mandamos tu confirmación con el folio.';
 
 const mx = n => '$' + Number(n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN';
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -280,13 +286,96 @@ function vencida(iso){
 function leerDatos(){
   const raw = location.hash.slice(1);
   if(!raw) return null;
-  try{
-    const b64 = raw.replace(/-/g,'+').replace(/_/g,'/');
-    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-    return JSON.parse(new TextDecoder().decode(bytes));
-  }catch(e){
-    return null;
-  }
+  /* Lo que llega copiado a mano trae basura alrededor: espacios, saltos de
+     línea que metió el correo, un punto o paréntesis que el detector de enlaces
+     pegó al final. Se limpia todo lo que no es base64url antes de decodificar. */
+  const limpio = raw.replace(/[^A-Za-z0-9\-_]/g, '');
+  const intentar = (b) => {
+    try{
+      const b64 = b.replace(/-/g,'+').replace(/_/g,'/');
+      const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+      return JSON.parse(new TextDecoder().decode(bytes));
+    }catch(e){ return null; }
+  };
+  /* Si le sobra un carácter al final (largo % 4 == 1 no es base64 válido),
+     se prueba sin él antes de darlo por perdido. */
+  return intentar(limpio) || (limpio.length % 4 === 1 ? intentar(limpio.slice(0, -1)) : null);
+}
+
+/* ---------- Enlaces cortos (formato 2) ----------
+   Antes el generador metía dentro del enlace los renglones ya escritos
+   ("Hospedaje (2 noches × $3,500.00 MXN)"), los totales y los subtotales del
+   precio especial: todo eso es calculable, y un enlace largo es un enlace que
+   WhatsApp parte a la mitad. Desde el 8 sep 2026 solo viajan los datos que no
+   se pueden deducir —tarifa, cantidades, fechas— y aquí se rearma lo demás.
+
+   `renglones` es GEMELA de la del generador (panel-7g6d7f/cotizacion.html):
+   si cambia una etiqueta o el orden en un lado, hay que cambiarlo en el otro,
+   o el cliente verá un desglose distinto al que se le mandó por correo. */
+function renglones(x){
+  const n = x.n || 0;
+  const hayEspecial = x.tarifaBase > x.tarifa && x.tarifa > 0 && n > 0;
+  const hospedaje = x.tarifa * n;
+  const totalExtra = x.numExtra * x.cargoExtra;
+  const totalMascotas = x.mascotas * x.cargoMascota;
+  const items = [];
+  if(hospedaje)     items.push([(hayEspecial ? 'Hospedaje con tu precio especial (' : 'Hospedaje (')
+                                 + n + ' noche' + (n==1?'':'s') + ' × ' + mx(x.tarifa) + ')', hospedaje]);
+  if(totalExtra)    items.push([x.numExtra + ' huésped' + (x.numExtra==1?'':'es') + ' extra × ' + mx(x.cargoExtra), totalExtra]);
+  if(x.mon1)        items.push([x.etq1 || 'Concepto adicional', x.mon1]);
+  if(totalMascotas) items.push(['Mascotas (' + x.mascotas + ' × ' + mx(x.cargoMascota) + ')', totalMascotas]);
+  if(x.limpieza)    items.push(['Limpieza', x.limpieza]);
+  if(x.mon2)        items.push([x.etq2 || 'Concepto adicional', x.mon2]);
+  return items;
+}
+
+/* Noches entre dos fechas ISO. Mismo criterio que el generador. */
+function nochesEntre(a, b){
+  if(!a || !b) return 0;
+  const n = Math.round((new Date(b) - new Date(a)) / 86400000);
+  return n > 0 ? n : 0;
+}
+
+/* Expande un payload corto al objeto completo que pinta `cotizacion()`.
+   Un enlace sin la marca `_` es de los de antes y pasa tal cual: las
+   cotizaciones ya enviadas tienen que seguir abriendo igual. */
+function normalizar(r){
+  if(!r || r._ !== 2) return r;
+  const p = PROPS[r.p === 'd' ? 'depto' : 'casa'] || PROPS.casa;
+  const x = {
+    tarifa:+r.t || 0, numExtra:+r.ne || 0, cargoExtra:+r.ce || 0,
+    limpieza:+r.li || 0, mascotas:+r.ms || 0, cargoMascota:+r.cm || 0,
+    etq1:(r.e1 || [])[0] || '', mon1:+(r.e1 || [])[1] || 0,
+    etq2:(r.e2 || [])[0] || '', mon2:+(r.e2 || [])[1] || 0,
+    tarifaBase:+r.tb || 0,
+    n: nochesEntre(r.i, r.o)
+  };
+  const items = renglones(x);
+  const total = items.reduce((s, it) => s + it[1], 0);
+  const anticipo = +r.an || 0;
+
+  /* El bloque verde solo se arma si de verdad hay ahorro; un ancla igual o
+     menor que lo cobrado delata un descuento falso. */
+  const especial = (x.tarifaBase > x.tarifa && x.tarifa > 0 && x.n > 0) ? {
+    base:x.tarifaBase, tarifa:x.tarifa, n:x.n,
+    hospedajeBase:x.tarifaBase * x.n,
+    ahorro:(x.tarifaBase - x.tarifa) * x.n,
+    pct:Math.round((x.tarifaBase - x.tarifa) / x.tarifaBase * 100),
+    motivo:r.em || ''
+  } : null;
+
+  return {
+    prop: r.p === 'd' ? 'depto' : 'casa',
+    nombre:r.nb || 'Estimado huésped', folio:r.f || '',
+    checkin:r.i || '', checkout:r.o || '',
+    huespedes:r.h || '—', vigencia:r.v || '',
+    n:x.n, items:items, especial:especial,
+    total:total, deposito:+r.dp || 0, anticipo:anticipo, saldo:total - anticipo,
+    fechaSaldo:r.fs || '',
+    datosPago: r.pg === undefined ? PAGO_DEFAULT : r.pg,
+    incluye: r.in || '', politica: r.po || '', notas: r.no || '',
+    tel: r.tl || p.tel, horaIn: r.hi || p.horaIn, horaOut: r.ho || p.horaOut
+  };
 }
 
 function vacio(){
@@ -463,7 +552,7 @@ function ligaViva(){
 }
 
 function pintar(){
-  const d = leerDatos();
+  const d = normalizar(leerDatos());
   document.getElementById('doc').innerHTML = d ? cotizacion(d) : vacio();
   if(d && d.folio){
     const p = PROPS[d.prop] || PROPS.casa;

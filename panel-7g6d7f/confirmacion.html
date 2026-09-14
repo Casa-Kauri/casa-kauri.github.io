@@ -205,7 +205,7 @@
     <div class="hint">Deja un renglón en blanco para separar párrafos. Aquí va el nombre del anfitrión.</div>
 
     <h2>Política y notas</h2>
-    <label><span>Política de cancelación</span><textarea id="politica">Cancelación sin costo hasta 15 días antes de la llegada; el anticipo se reembolsa completo. Dentro de los 15 días previos, el anticipo se puede aplicar a otra fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.</textarea></label>
+    <label><span>Política de cancelación</span><textarea id="politica">Cancelación sin costo hasta 31 días antes de la llegada; el anticipo se reembolsa completo. Dentro de los 31 días previos, el anticipo se puede aplicar a otra fecha dentro de los siguientes 6 meses, sujeto a disponibilidad.</textarea></label>
     <div class="hint">⚠️ Revisa que este texto sea el que realmente manejas. Es lo único del correo que te puede meter en un problema.</div>
     <label><span>Notas para este huésped (opcional)</span><textarea id="notas" placeholder="Ej. Vienen con dos perros medianos. Llegada tarde, alrededor de las 9 p.m."></textarea></label>
 
@@ -308,38 +308,59 @@ const PROPS = {
    ni en referrers. base64url para que no se rompa al pegarla en WhatsApp. */
 /* La política tal como viene de fábrica en el formulario. Se guarda al cargar
    para poder saber si el operador la cambió en esta reserva o no. */
-const POLITICA_DEFAULT = (document.getElementById('politica') || {}).value || '';
+const POLITICA_DEFAULT = ((document.getElementById('politica') || {}).value || '').trim();
+const PAGO_DEFAULT     = ((document.getElementById('datosPago') || {}).value || '').trim();
 
+/* ---------- Enlace corto (formato 2, desde el 14 sep 2026) ----------
+   El enlace de la confirmación seguía con el formato largo (claves completas,
+   totales ya calculados, instrucciones de pago de fábrica dentro): ~800
+   caracteres en una reserva típica con precio especial. Ese largo es el que
+   se corta al copiarlo de WhatsApp o del correo, y un enlace cortado abre
+   "No pudimos leer esta reserva". Ahora viajan solo los datos primarios y
+   ../reserva.html recalcula noches, hospedaje, totales, saldo y el bloque
+   del precio especial. La fórmula es GEMELA de `datos()`: si cambia aquí,
+   cambia en `normalizar()` de la página pública. */
 function ligaReserva(d){
   const p = PROPS[d.prop] || PROPS.casa;
-  const payload = {
-    prop:d.prop, incluye:d.incluye, llegada:d.llegada, horaIn:d.horaIn, horaOut:d.horaOut,
-    nombre:d.nombre, folio:d.folio, checkin:d.checkin, checkout:d.checkout,
-    huespedes:d.huespedes, n:d.n, tarifa:d.tarifa, hospedaje:d.hospedaje,
-    extras:d.extras, mascotas:d.mascotas, cargoMascota:d.cargoMascota,
-    totalMascotas:d.totalMascotas, total:d.total, anticipo:d.anticipo,
-    saldo:d.saldo, fechaSaldo:d.fechaSaldo, datosPago:d.datosPago,
-    telCasa:d.telCasa, politica:d.politica, notas:d.notas, especial:d.especial
-  };
+  const q = {_:2, p: d.prop === 'depto' ? 'd' : 'c'};
+  /* Un campo vacío o en cero no viaja: la página pública ya lo trata como
+     ausente, y cada campo de más son ~4 caracteres de enlace. */
+  const pon = (k, v) => { if(v !== '' && v !== 0 && v != null) q[k] = v; };
 
-  /* La liga se rompe cuando WhatsApp la parte, y se parte por larga. Todo lo
-     que la página del comprobante ya sabe de memoria NO viaja dentro: los
-     textos fijos del alojamiento y la política son los que más pesaban.
-     Solo se mandan si el operador los cambió para esta reserva. */
-  if(payload.incluye  === p.incluye)        delete payload.incluye;
-  if(payload.llegada  === p.llegada)        delete payload.llegada;
-  if(payload.politica === POLITICA_DEFAULT) delete payload.politica;
-  if(payload.horaIn   === p.horaIn)         delete payload.horaIn;
-  if(payload.horaOut  === p.horaOut)        delete payload.horaOut;
-  if(payload.telCasa  === p.tel)            delete payload.telCasa;
-  // Y fuera lo vacío: el comprobante ya trata undefined como "no aplica".
-  Object.keys(payload).forEach(k => {
-    const v = payload[k];
-    if(v === '' || v === null || v === undefined || v === 0) delete payload[k];
-  });
+  pon('nb', d.nombre === 'Estimado huésped' ? '' : d.nombre);
+  pon('f',  d.folio);
+  pon('i',  d.checkin);
+  pon('o',  d.checkout);
+  pon('h',  d.huespedes === '—' ? '' : d.huespedes);
 
-  const bytes = new TextEncoder().encode(JSON.stringify(payload));
-  const b64 = btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_');
+  pon('t',  d.tarifa);
+  pon('ex', d.extras);
+  pon('ms', d.mascotas);  pon('cm', d.cargoMascota);
+  pon('an', d.anticipo);
+  pon('fs', d.fechaSaldo);
+  /* Del precio especial solo la tarifa de lista y el motivo: el ahorro, el
+     porcentaje y el hospedaje a precio de lista se calculan allá. */
+  if(d.especial){ pon('tb', d.especial.base); pon('em', d.especial.motivo); }
+  pon('no', d.notas);
+
+  /* Lo que la página pública ya sabe de memoria NO viaja: solo se manda si el
+     operador lo cambió para esta reserva. Si aquí se toca un texto de fábrica,
+     hay que tocarlo también en ../reserva.html o volverá a irse dentro. */
+  /* Sin `pon`: si el operador borró las instrucciones de pago a propósito, el
+     vacío tiene que viajar, o la página repondría un texto que nadie escribió. */
+  if(d.datosPago !== PAGO_DEFAULT)      q.pg = d.datosPago;
+  if(d.incluye   !== p.incluye)         pon('in', d.incluye);
+  if(d.llegada   !== p.llegada)         pon('ll', d.llegada);
+  if(d.politica  !== POLITICA_DEFAULT)  pon('po', d.politica);
+  if(d.telCasa   !== p.tel)             pon('tl', d.telCasa);
+  if(d.horaIn    !== p.horaIn)          pon('hi', d.horaIn);
+  if(d.horaOut   !== p.horaOut)         pon('ho', d.horaOut);
+
+  const bytes = new TextEncoder().encode(JSON.stringify(q));
+  /* Sin el relleno de '=': `atob` lo tolera, son dos caracteres menos y un
+     '=' al final es justo lo que algunos detectores de enlaces dejan fuera. */
+  const b64 = btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   return PAGINA_RESERVA + '#' + b64;
 }
 
@@ -784,8 +805,20 @@ async function copiarWhats(){
 }
 
 async function copiarLiga(){
-  await navigator.clipboard.writeText(ligaReserva(datos()));
-  aviso('✓ Liga copiada');
+  const liga = ligaReserva(datos());
+  try{
+    await navigator.clipboard.writeText(liga);
+    aviso('✓ Liga copiada');
+  }catch(e){
+    /* El portapapeles falla sin HTTPS o sin gesto reciente (pasa al abrir el
+       archivo desde la Mac). Se selecciona la caja del enlace y se copia a la
+       antigua; si ni así, queda seleccionada para copiar con el dedo. */
+    const caja = $('ligaUrl');
+    caja.focus(); caja.select(); caja.setSelectionRange(0, liga.length);
+    let ok = false;
+    try{ ok = document.execCommand('copy'); }catch(e2){}
+    aviso(ok ? '✓ Liga copiada' : 'No se pudo copiar sola: ya quedó seleccionada, cópiala con el dedo');
+  }
 }
 
 /* Vista previa contra el archivo LOCAL: sirve para revisar el comprobante
