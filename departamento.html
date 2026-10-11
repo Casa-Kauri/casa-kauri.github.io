@@ -2,19 +2,23 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#1F2F54" />
+<script>(function(){var d=document.documentElement,R=false,p=null;try{R=matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}try{p=localStorage.getItem("anim")}catch(e){}var lo=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4;window.__lowfx=lo;if(lo)d.classList.add("lowfx");window.__dpr=function(){var c=false;try{c=matchMedia("(pointer: coarse)").matches}catch(e){}return Math.min(window.devicePixelRatio||1,c?1.5:(lo?1:1.5))};window.__adapt=function(r,resize,onSlow){var n=0,t=0,l=0,done=0;return function(now){if(done)return;var dt=now-l;if(l&&dt<200){t+=dt;n++}l=now;if(n>=45){done=1;if(t/n>24){if(r.getPixelRatio()>1){r.setPixelRatio(1);if(resize)resize()}if(onSlow)onSlow()}}}};window.__osReduce=R;window.__motion=p==="full"?"full":p==="off"?"off":(R?"soft":"full");d.classList.add("mo-"+window.__motion);window.__errs=[];addEventListener("error",function(e){window.__errs.push((e.message||("no cargó: "+((e.target&&(e.target.src||e.target.href))||"?")))+(e.filename?" @"+e.filename.split("/").pop()+":"+e.lineno:""))},true);try{if(sessionStorage.getItem("pt")&&window.__motion==="full")d.classList.add("pt-in")}catch(e){}})();</script>
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="favicon.png" />
-<title>Departamento Kauri — Loft privado de 3 niveles a 100 m del mar · Rincón de Guayabitos, Nayarit</title>
+<title>Departamento Kauri | Loft privado de 3 niveles a 100 m del mar en Rincón de Guayabitos, Nayarit</title>
 <meta name="description" content="Departamento Kauri: loft privado de tres niveles con rooftop, sobre el andador principal de Rincón de Guayabitos y a 100 m de la playa. Hasta 6 huéspedes · 4 camas · 2 baños completos y medio baño. Parte de Casa Kauri." />
 <link rel="canonical" href="https://casa-kauri.github.io/departamento.html" />
-<meta property="og:title" content="Departamento Kauri — Loft privado de 3 niveles a 100 m del mar" />
+<meta property="og:title" content="Departamento Kauri: loft privado de 3 niveles a 100 m del mar" />
 <meta property="og:description" content="Sobre el andador principal de Rincón de Guayabitos, a un minuto caminando de la playa. Tres niveles solo para ti, con rooftop privado." />
 <meta property="og:image" content="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1200" />
 <meta property="og:type" content="website" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
 <style>
   :root {
     --body-text-fonts: 400 16px/180% 'Source Sans 3', sans-serif;
@@ -575,6 +579,129 @@
     .logo .logo-txt small { font-size: 9px; letter-spacing: 0.14em; }
     .catrats { grid-template-columns: 1fr; }
   }
+  /* ===== v2 · diseno-web (11 oct 2026): historia que da antes de pedir, maqueta 3D y movimiento ===== */
+  /* encabezado sólido al bajar (lo pone kauri-motion.js) */
+  header.solid{position:fixed;background:rgba(31,47,84,.96)}
+  /* hero: texto a la izquierda, 4 elementos, foto con velo del lado del texto */
+  .hero{min-height:100vh;min-height:100svh;justify-content:flex-start;text-align:left;
+    background:linear-gradient(90deg,rgba(14,23,46,.82) 0%,rgba(14,23,46,.55) 48%,rgba(14,23,46,.15) 100%),
+      url("https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1920") center/cover no-repeat,#24406b}
+  .hero-inner{max-width:640px;padding:150px 24px 110px;margin-left:max(0px,calc((100vw - 1200px)/2))}
+  .hero .sub{margin:0 0 34px;max-width:52ch}
+  .hero .cta-row{justify-content:flex-start}
+  @media (max-width:760px){.hero{background:linear-gradient(180deg,rgba(14,23,46,.35) 0%,rgba(14,23,46,.6) 45%,rgba(14,23,46,.88) 100%),url("https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1200") center/cover no-repeat,#24406b;align-items:flex-end}
+    .hero-inner{padding:120px 20px 56px}.hero .cta-row .btn-primary,.hero .cta-row .btn-outline{flex:1 1 auto;text-align:center}}
+  /* franja de datos, debajo del hero */
+  .facts-band{display:grid;grid-template-columns:repeat(5,1fr);background:var(--primary-color);color:#fff}
+  .facts-band .fact{text-align:center;padding:22px 10px;border-left:1px solid rgba(255,255,255,.14)}
+  .facts-band .fact:first-child{border-left:0}
+  .facts-band .num{font-family:var(--title-fonts);font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+  .facts-band .lbl{font:600 11px/1.3 'Source Sans 3';letter-spacing:.14em;text-transform:uppercase;margin-top:8px;opacity:.85}
+  @media (max-width:620px){.facts-band{grid-template-columns:repeat(3,1fr)}.facts-band .fact:nth-child(4){border-left:0}.facts-band .fact{border-top:1px solid rgba(255,255,255,.12)}}
+  /* frases de capítulo */
+  .k-statement{padding:clamp(70px,12vw,150px) 24px;text-align:center}
+  .k-statement p{font:400 clamp(32px,5.4vw,62px)/1.12 'EB Garamond',serif;color:var(--primary-color);max-width:20ch;margin:0 auto;text-wrap:balance}
+  .k-statement em{font-style:italic;color:var(--highlight-color)}
+  .k-statement .sw{display:inline-block}
+  /* maqueta 3D */
+  .casa3d{padding:40px 0 96px;background:linear-gradient(180deg,#F4FBFF 0%,#fff 100%)}
+  .c3-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+  .c3-copy h2{font:var(--h2-title-fonts);color:var(--primary-color);margin-bottom:12px}
+  .c3-copy > p{margin-bottom:22px}
+  .c3-spots{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+  .c3-spots button{font:600 13px/1.2 'Source Sans 3',sans-serif;letter-spacing:.04em;cursor:pointer;background:#fff;color:var(--primary-color);border:1px solid var(--border-color);padding:10px 14px;transition:background .2s,color .2s,border-color .2s}
+  .c3-spots button:hover{border-color:var(--primary-color)}
+  .c3-spots button[aria-pressed="true"]{background:var(--primary-color);color:#fff;border-color:var(--primary-color)}
+  .c3-spots button:active{transform:translateY(1px)}
+  .c3-info{border-left:3px solid #E8C87A;padding:6px 0 6px 16px;margin-bottom:16px;min-height:96px}
+  .c3-info b{display:block;font:400 24px/1.25 'EB Garamond',serif;color:var(--primary-color);margin-bottom:4px}
+  .c3-info p{font-size:15px;line-height:170%}
+  .c3-note{display:block;font-size:12.5px;color:#5a6472}
+  .c3-stage{position:relative;aspect-ratio:1/.9;background:radial-gradient(60% 55% at 50% 55%,#fff7e8 0%,rgba(244,251,255,0) 70%)}
+  .c3-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:pan-y}
+  .c3-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:url("https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1200") center/cover;opacity:0;transition:opacity .4s}
+  html:not(.c3-live) .c3-stage::after{opacity:1}   /* sin WebGL: la foto real de la alberca */
+  @media (max-width:860px){.c3-grid{grid-template-columns:1fr;gap:22px}.c3-stage{order:-1;aspect-ratio:1/.85;margin:0 -24px}}
+  /* lo que conviene saber: tarjetas que se voltean (esquinas rectas, como el resto del sitio) */
+  .saber{padding:96px 0;background:#F4F8FB;text-align:center}
+  .saber h2{font:var(--h2-title-fonts);color:var(--primary-color);margin-bottom:12px}
+  .saber .subtitle{max-width:620px;margin:0 auto 44px}
+  .flips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;text-align:left}
+  .flip{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;perspective:1200px;display:grid;-webkit-tap-highlight-color:transparent}
+  .fl-in{display:grid;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+  .flip[aria-pressed="true"] .fl-in{transform:rotateY(180deg)}
+  .fl-face{grid-area:1/1;display:grid;gap:10px;align-content:start;padding:26px 22px;min-height:250px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  .fl-front{background:#fff;border:1px solid var(--secondary-color);box-shadow:0 14px 34px rgba(31,47,84,.08)}
+  .fl-back{background:var(--primary-color);color:#fff;transform:rotateY(180deg)}
+  .fl-n{font:400 40px/1 'EB Garamond',serif;color:var(--highlight-color)}
+  .fl-back .fl-n{font:600 12px/1.3 'Source Sans 3';letter-spacing:.14em;text-transform:uppercase;color:#E8C87A}
+  .fl-front b{font:400 22px/1.25 'EB Garamond',serif;color:var(--primary-color)}
+  .fl-b{font-size:15px;line-height:168%;color:rgba(255,255,255,.92)}
+  .fl-cta{margin-top:auto;font:600 11.5px/1 'Source Sans 3';letter-spacing:.1em;text-transform:uppercase;color:#5a6472}
+  .fl-back .fl-cta{color:rgba(255,255,255,.65)}
+  @media (max-width:1080px){.flips{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  /* plan de 3 pasos */
+  .plan3{padding:90px 0;text-align:center}
+  .plan3 h2{font:var(--h2-title-fonts);color:var(--primary-color);margin-bottom:40px}
+  .steps3{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;counter-reset:p;text-align:left}
+  .step3{counter-increment:p;border-top:2px solid var(--primary-color);padding-top:18px}
+  .step3::before{content:counter(p);display:block;font:400 44px/1 'EB Garamond',serif;color:#E8C87A;margin-bottom:10px}
+  .step3 b{display:block;font:400 24px/1.25 'EB Garamond',serif;color:var(--primary-color);margin-bottom:6px}
+  .step3 p{font-size:15px;line-height:170%}
+  @media (max-width:760px){.steps3{grid-template-columns:1fr}}
+  .spaces .rest-list .ico{font-size:22px;opacity:.9;color:#E8C87A}
+  /* carrusel 3D en celular (fotos y tarjetas) */
+  @media (max-width:700px){
+    .gallery-track.cf,.flips.cf{perspective:900px}
+    .gallery-track.cf .gallery-slide{transform:rotateY(var(--ry,0deg)) scale(var(--sc,1));opacity:var(--op,1);will-change:transform}
+    .flips.cf{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -24px;padding:10px 24px 26px;scrollbar-width:none}
+    .flips.cf::-webkit-scrollbar{display:none}
+    .flips.cf .flip{flex:0 0 80%;scroll-snap-align:center;transform:rotateY(var(--ry,0deg)) scale(var(--sc,1));opacity:var(--op,1)}
+    .saber .subtitle::after{content:" Desliza para ver las cuatro."}
+  }
+  /* modo de animación (lo define el script de <head>) */
+  html.mo-off *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  html.mo-off .fl-in{transition:none}
+  .motion-toggle{position:fixed;left:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:70;font:600 13px/1 'Source Sans 3',sans-serif;cursor:pointer;border:1px solid rgba(232,200,122,.6);background:var(--primary-color);color:#fff;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+  .diag{position:fixed;inset:auto 10px 10px 10px;z-index:1000;background:#1F2F54;color:#fff;border:1px solid #E8C87A;padding:16px;font:13px/1.5 ui-monospace,monospace;max-height:70vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
+  .diag b{color:#E8C87A}.diag button{float:right;font:inherit;background:#E8C87A;color:#1F2F54;border:0;padding:4px 12px;cursor:pointer}
+  html.lowfx .facts-strip{backdrop-filter:none}
+  /* ===== Modo oscuro (11 oct 2026): sigue al sistema del huésped; un solo tema por página ===== */
+  @media (prefers-color-scheme: dark){
+    html:not([data-theme="light"]){color-scheme:dark;--d-bg:#0F1A2E;--d-surface:#16233B;--d-line:#2A3B5A;--d-ink:#C9D3E1;--d-ink2:#9DABBF;--d-head:#EEF2F8;--d-accent:#9DB4E8;--d-gold:#E8C87A}
+    html:not([data-theme="light"]) body{background:var(--d-bg);color:var(--d-ink)}
+    html:not([data-theme="light"]) .intro{background:linear-gradient(180deg,var(--d-bg),var(--d-surface))}
+    html:not([data-theme="light"]) :is(.intro .lead,.rooms h2,.amenities h2,.map-section h2,.reviews h2,.reviews-head h2,.social h3,.sister h3,.c3-copy h2,.saber h2,.plan3 h2,.k-statement p,.room-card h4,.faq-q,.rating-head .score,.dist-row .d .n,.step3 b,.c3-info b,.fl-front b,.rc-who strong,.link-arrow,.depa-h){color:var(--d-head)}
+    html:not([data-theme="light"]) .section-label{color:#C7D2E4}
+    html:not([data-theme="light"]) :is(.room-card,.review-card,.sister .box,.fl-front){background:var(--d-surface);border-color:var(--d-line);box-shadow:none}
+    html:not([data-theme="light"]) :is(.room-card p,.rc-text,.am-group li,.faq-a,.step3 p,.c3-info p,.sister p){color:var(--d-ink)}
+    html:not([data-theme="light"]) :is(.rc-who span,.rating-head .count,.dist-row .d .t,.c3-note,.fl-cta,.swipe-hint){color:var(--d-ink2)}
+    html:not([data-theme="light"]) :is(.amenities,.saber){background:var(--d-surface)}
+    html:not([data-theme="light"]) .map-section{background:radial-gradient(circle at 55% 40%,var(--d-surface) 0%,var(--d-bg) 72%)}
+    html:not([data-theme="light"]) :is(.map-canvas,.faq-item,.rc-meta){border-color:var(--d-line)}
+    html:not([data-theme="light"]) .am-group h5{color:var(--d-accent);border-color:var(--d-line)}
+    html:not([data-theme="light"]) .am-group li::before{color:var(--d-accent)}
+    html:not([data-theme="light"]) .casa3d{background:linear-gradient(180deg,var(--d-bg),var(--d-surface))}
+    html:not([data-theme="light"]) .c3-stage{background:radial-gradient(60% 55% at 50% 55%,rgba(232,200,122,.14),rgba(0,0,0,0) 70%)}
+    html:not([data-theme="light"]) .c3-spots button{background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
+    html:not([data-theme="light"]) .c3-spots button[aria-pressed="true"]{background:#3B528A;border-color:#3B528A;color:#fff}
+    html:not([data-theme="light"]) .k-statement em{color:var(--d-gold)}
+    html:not([data-theme="light"]) .fl-back{background:#24406b}
+    html:not([data-theme="light"]) .fl-n{color:var(--d-accent)}
+    html:not([data-theme="light"]) .step3{border-color:var(--d-accent)}
+    html:not([data-theme="light"]) .rev-arrow{background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
+    html:not([data-theme="light"]) :is(.faq-q .chev,.social .handle){color:var(--d-accent)}
+    html:not([data-theme="light"]) :is(.btn-primary:hover,.social-btns a:hover){background:#4A64A6}
+    html:not([data-theme="light"]) .c3-info{border-color:var(--d-gold)}
+  }
+  @media (prefers-color-scheme: dark){
+    html:not([data-theme="light"]) :is(.levels h2,.level-card h4,.headsup h3,.qf-n){color:var(--d-head)}
+    html:not([data-theme="light"]) .level-card{background:var(--d-surface);box-shadow:none}
+    html:not([data-theme="light"]) :is(.level-card p,.headsup li,.qf-t){color:var(--d-ink)}
+    html:not([data-theme="light"]) .headsup{background:var(--d-surface)}
+    html:not([data-theme="light"]) .headsup p.sub{color:var(--d-ink2)}
+    html:not([data-theme="light"]) .qf{border-color:var(--d-line);background:transparent}
+  }
 </style>
 </head>
 <body>
@@ -604,22 +731,24 @@
 <!-- ===== Hero ===== -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="best-badge"><span class="stars">★★★★★</span> 4.76 · 17 evaluaciones</div>
     <span class="place">Rincón de Guayabitos · Riviera Nayarit</span>
     <h1>Departamento Kauri</h1>
-    <p class="sub">A 100 metros del mar, sobre el andador principal: un loft privado de tres niveles con rooftop donde el coche se queda estacionado toda la semana.</p>
+    <p class="sub">Un loft privado de tres niveles con rooftop, sobre el andador principal y a 100 metros del mar.</p>
     <div class="cta-row">
-      <a class="btn-primary" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">Consultar disponibilidad</a>
-      <a class="btn-outline" href="#intro">Descubre el loft</a>
+      <a class="btn-primary" href="#casa3d">Recorre el loft</a>
+      <a class="btn-outline" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">Reservar</a>
     </div>
   </div>
-  <div class="facts-strip">
-    <div class="fact"><div class="num">6</div><div class="lbl">Huéspedes</div></div>
-    <div class="fact"><div class="num">3</div><div class="lbl">Niveles privados</div></div>
-    <div class="fact"><div class="num">4</div><div class="lbl">Camas</div></div>
-    <div class="fact"><div class="num">2.5</div><div class="lbl">Baños</div></div>
-  </div>
 </section>
+<div class="facts-band" aria-label="El loft en números">
+  <div class="fact"><div class="num">6</div><div class="lbl">Huéspedes</div></div>
+  <div class="fact"><div class="num">3</div><div class="lbl">Niveles privados</div></div>
+  <div class="fact"><div class="num">4</div><div class="lbl">Camas</div></div>
+  <div class="fact"><div class="num">2.5</div><div class="lbl">Baños</div></div>
+  <div class="fact"><div class="num">4.76</div><div class="lbl">★ 17 evaluaciones</div></div>
+</div>
+
+<section class="k-statement"><p>Las vacaciones se sienten distintas cuando el mar queda a un <em>minuto</em>.</p></section>
 
 <!-- ===== Intro ===== -->
 <section class="intro" id="intro">
@@ -631,7 +760,29 @@
       <div class="qf"><span class="qf-n">1 min</span><span class="qf-t">Caminando por el andador</span></div>
       <div class="qf"><span class="qf-n">0</span><span class="qf-t">Calles con coches de por medio</span></div>
     </div>
-    <a class="btn-primary" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">Ver disponibilidad</a>
+  </div>
+</section>
+
+<!-- ===== Maqueta 3D ===== -->
+<section class="casa3d" id="casa3d">
+  <div class="wrap c3-grid">
+    <div class="c3-copy">
+      <span class="section-label">Maqueta interactiva</span>
+      <h2>Tres niveles, uno encima del otro</h2>
+      <p>Toca cada parte para ver qué hay. Gíralo con el dedo o con el mouse.</p>
+      <div class="c3-spots" role="group" aria-label="Partes del departamento">
+        <button type="button" aria-pressed="true">Nivel 1: convivencia</button>
+        <button type="button" aria-pressed="false">Nivel 2: descanso</button>
+        <button type="button" aria-pressed="false">Nivel 3: rooftop</button>
+        <button type="button" aria-pressed="false">Entrada y tienda</button>
+        <button type="button" aria-pressed="false">El andador</button>
+        <button type="button" aria-pressed="false">El mar, a 100 m</button>
+        </div>
+      <div class="c3-info" aria-live="polite"><b>Nivel 1: convivencia</b><p>Cocina integral equipada, comedor de madera para seis, sala con Smart TV, balcón al andador y medio baño.</p></div>
+      <small class="c3-note">Maqueta ilustrativa: la distribución es la real; la escala, los colores y los detalles no. Las fotos de abajo son las de verdad.</small>
+    </div>
+    <script type="application/json" id="c3-data">[["Nivel 1: convivencia", "Cocina integral equipada, comedor de madera para seis, sala con Smart TV, balcón al andador y medio baño."], ["Nivel 2: descanso", "Loft abierto bajo bóvedas de ladrillo, con las camas separadas, aire acondicionado, ventilador de techo y baño completo."], ["Nivel 3: rooftop", "Terraza privada y sin muebles, con techo de teja en una parte, medio baño, fregadero y regadera exterior para quitarte la arena."], ["Entrada y tienda", "Entrada privada con caja de seguridad para llegar a tu ritmo. En la planta baja hay una tienda de víveres y artículos de playa."], ["El andador", "Sales por la puerta y ya estás en el andador principal: restaurantes y malecón sin cruzar calles con coches."], ["El mar, a 100 m", "Un minuto caminando y tienes los pies en la arena. En Guayabitos el agua es tranquila."]]</script>
+    <div class="c3-stage"><canvas id="casa3d-cv" data-model="depa3d.js" role="img" aria-label="Maqueta 3D del Departamento Kauri: loft de tres niveles con rooftop sobre el andador, a 100 metros del mar"></canvas></div>
   </div>
 </section>
 
@@ -686,14 +837,13 @@
 <section class="spaces">
   <div class="grid">
     <div class="content">
-      <span class="section-label on-dark">El alojamiento</span>
-      <h2>Tres niveles, todos tuyos</h2>
+            <h2>Tres niveles, todos tuyos</h2>
       <p class="intro-txt">No es un cuarto dentro de un edificio: es un loft completo repartido en tres pisos independientes, sin áreas compartidas con otros huéspedes.</p>
       <ul class="rest-list">
-        <li><span class="ico">🍽</span><span class="txt"><strong>Nivel 1 · Convivencia</strong><span>Cocina integral equipada, comedor, sala con Smart TV, balcón al andador y medio baño.</span></span></li>
-        <li><span class="ico">🛏</span><span class="txt"><strong>Nivel 2 · Descanso</strong><span>Loft abierto con bóvedas de ladrillo, aire acondicionado, ventilador de techo, camas y baño completo.</span></span></li>
-        <li><span class="ico">🌅</span><span class="txt"><strong>Nivel 3 · Rooftop</strong><span>Terraza exclusiva al aire libre con medio baño, regadera exterior y fregadero.</span></span></li>
-        <li><span class="ico">🔑</span><span class="txt"><strong>Entrada privada</strong><span>Llegada autónoma con caja de seguridad, a tu ritmo. Abajo hay una tienda de víveres y artículos de playa.</span></span></li>
+        <li><i class="ico ph ph-fork-knife" aria-hidden="true"></i><span class="txt"><strong>Nivel 1 · Convivencia</strong><span>Cocina integral equipada, comedor, sala con Smart TV, balcón al andador y medio baño.</span></span></li>
+        <li><i class="ico ph ph-bed" aria-hidden="true"></i><span class="txt"><strong>Nivel 2 · Descanso</strong><span>Loft abierto con bóvedas de ladrillo, aire acondicionado, ventilador de techo, camas y baño completo.</span></span></li>
+        <li><i class="ico ph ph-sun-horizon" aria-hidden="true"></i><span class="txt"><strong>Nivel 3 · Rooftop</strong><span>Terraza exclusiva al aire libre con medio baño, regadera exterior y fregadero.</span></span></li>
+        <li><i class="ico ph ph-key" aria-hidden="true"></i><span class="txt"><strong>Entrada privada</strong><span>Llegada autónoma con caja de seguridad, a tu ritmo. Abajo hay una tienda de víveres y artículos de playa.</span></span></li>
       </ul>
     </div>
     <div class="photo" role="img" aria-label="Comedor y sala del Departamento Kauri bajo bóvedas de ladrillo" style="background-image:url('https://a0.muscache.com/im/pictures/hosting/Hosting-1283495962257484053/original/8131f6f6-72c8-4e3a-a26a-ad860c7fbe86.jpeg?im_w=1200')"></div>
@@ -703,8 +853,7 @@
 <!-- ===== Los tres niveles ===== -->
 <section class="levels" id="niveles">
   <div class="wrap">
-    <span class="section-label" style="text-align:center;">Piso por piso</span>
-    <h2>Cómo se vive el loft</h2>
+        <h2>Cómo se vive el loft</h2>
     <p class="subtitle">Cada nivel tiene una función. Se suben escaleras entre uno y otro, y esa es justo la razón por la que seis personas caben sin estorbarse.</p>
     <div class="grid">
       <article class="level-card">
@@ -738,8 +887,7 @@
 <!-- ===== Amenidades ===== -->
 <section class="amenities" id="amenidades">
   <div class="wrap">
-    <span class="section-label" style="text-align:center;">Lo que incluye</span>
-    <h2>Todo listo para llegar y quedarte</h2>
+        <h2>Todo listo para llegar y quedarte</h2>
     <p class="subtitle">Alojamiento entero, con lo necesario para cocinar, descansar y trabajar sin salir a comprar nada el primer día.</p>
     <div class="am-groups">
       <div class="am-group">
@@ -808,7 +956,7 @@
         <li><strong>Se suben escaleras</strong> entre los tres niveles, y no hay elevador.</li>
         <li><strong>El área de descanso es un loft abierto</strong>: las camas están separadas dentro del mismo espacio, no en recámaras cerradas.</li>
         <li><strong>No hay lavadora ni secadora</strong> en el departamento; hay lavandería a unos pasos.</li>
-        <li><strong>El rooftop es una terraza libre</strong>, pensada para el atardecer y la regadera de después de la playa.</li>
+        <li><strong>El rooftop no tiene muebles:</strong> es una terraza libre, pensada para el atardecer y la regadera de después de la playa.</li>
         <li><strong>Estás en el centro de Guayabitos:</strong> tienes todo caminando, y también el movimiento del pueblo en temporada alta.</li>
       </ul>
     </div>
@@ -818,8 +966,7 @@
 <!-- ===== Ubicación ===== -->
 <section class="map-section" id="ubicacion">
   <div class="wrap">
-    <span class="section-label" style="text-align:center;">Dónde estás</span>
-    <h2>Rincón de Guayabitos, Nayarit</h2>
+        <h2>Rincón de Guayabitos, Nayarit</h2>
     <p class="subtitle">Sobre el andador principal, entre el malecón y la playa. La ubicación es lo que más mencionan nuestros huéspedes.</p>
     <div class="map-canvas">
       <iframe
@@ -838,13 +985,7 @@
   </div>
 </section>
 
-<!-- ===== Franja ===== -->
-<section class="gather" style="background:linear-gradient(180deg, rgba(14,23,46,.55), rgba(14,23,46,.72)), url('https://a0.muscache.com/im/pictures/hosting/Hosting-1283495962257484053/original/65d785c3-d316-4d1a-af83-082d80fd790d.jpeg?im_w=1920') center/cover no-repeat, #24406b;">
-  <span class="section-label" style="color:#dfe8ee;">El plan</span>
-  <h2>Deja el coche y camina a todo</h2>
-  <p>Desayunar en el balcón, cruzar el andador a la playa, volver a enjuagarte en el rooftop y cenar donde huela mejor. Todo eso pasa dentro de un radio de 200 metros.</p>
-  <a class="btn-outline" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">Reserva tu estancia</a>
-</section>
+<section class="k-statement"><p>No lo decimos nosotros. Lo dicen quienes ya <em>se quedaron</em>.</p></section>
 
 <!-- ===== Opiniones ===== -->
 <section class="reviews" id="opiniones">
@@ -925,14 +1066,32 @@
   </div>
 </section>
 
+<!-- ===== Cómo reservar ===== -->
+<section class="plan3">
+  <div class="wrap">
+    <h2>Reservar es así de simple</h2>
+    <ol class="steps3">
+      <li class="step3"><b>Elige tus fechas</b><p>En Airbnb o escribiéndonos por WhatsApp.</p></li>
+      <li class="step3"><b>Recibe tu confirmación</b><p>Con la dirección, la caja de seguridad y la guía de la zona.</p></li>
+      <li class="step3"><b>Llega a tu ritmo</b><p>Te estacionas, entras con tu clave y ya no vuelves a tocar el coche.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== Franja ===== -->
+<section class="gather" style="background:linear-gradient(180deg, rgba(14,23,46,.55), rgba(14,23,46,.72)), url('https://a0.muscache.com/im/pictures/hosting/Hosting-1283495962257484053/original/65d785c3-d316-4d1a-af83-082d80fd790d.jpeg?im_w=1920') center/cover no-repeat, #24406b;">
+    <h2>Deja el coche y camina a todo</h2>
+  <p>Desayunar en el balcón, cruzar el andador a la playa, volver a enjuagarte en el rooftop y cenar donde huela mejor. Todo eso pasa dentro de un radio de 200 metros.</p>
+  <a class="btn-outline" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">Reservar</a>
+</section>
+
 <!-- ===== La otra propiedad ===== -->
 <section class="sister">
   <div class="wrap">
     <div class="box">
       <div class="ph" style="background-image:url('alberca.jpg')"></div>
       <div class="tx">
-        <span class="section-label">El otro alojamiento</span>
-        <h3>Casa Kauri</h3>
+                <h3>Casa Kauri</h3>
         <p>¿Vienen más de seis? ¿Quieren alberca climatizada, jardín cercado y cuatro recámaras cerradas? A diez minutos, en La Peñita de Jaltemba, está la casa completa: 8 huéspedes, 6 camas y 2.5 baños, con 150 evaluaciones en Airbnb.</p>
         <a class="btn-primary" href="index.html">Conocer Casa Kauri</a>
       </div>
@@ -992,11 +1151,7 @@
         <h5>Reserva</h5>
         <p>Consulta disponibilidad y tarifas directamente en nuestro anuncio de Airbnb.</p>
         <a class="ver-reserva" href="reserva.html">Ya reservé · Ver mi reserva</a>
-        <form class="newsletter" onsubmit="return false;">
-          <input type="email" placeholder="Tu correo electrónico" aria-label="Correo electrónico" />
-          <button type="submit">Enviar</button>
-        </form>
-        <a class="btn-primary" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">Reservar en Airbnb</a>
+        <a class="btn-primary" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">Reservar</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1022,14 +1177,6 @@
       document.querySelectorAll('.faq-item.open').forEach(function (el) { el.classList.remove('open'); });
       if (!isOpen) item.classList.add('open');
     });
-  });
-  var header = document.getElementById('site-header');
-  var waFloat = document.querySelector('.wa-float');
-  window.addEventListener('scroll', function () {
-    if (window.scrollY > 80) { header.style.background = 'rgba(31,47,84,.96)'; header.style.position = 'fixed'; }
-    else { header.style.background = 'transparent'; header.style.position = 'absolute'; }
-    // El botón de WhatsApp entra pasado el hero, para no taparle los datos.
-    if (waFloat) waFloat.classList.toggle('visible', window.scrollY > 420);
   });
 
   // Carruseles (reseñas, recámaras): las flechas desplazan una tarjeta a la vez.
@@ -1069,5 +1216,8 @@
     });
   }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="kauri-motion.js?v=2"></script>
 </body>
 </html>
