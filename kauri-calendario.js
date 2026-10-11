@@ -1,27 +1,42 @@
-/* Calendario de disponibilidad (11 oct 2026). Lee disponibilidad.json (lo actualiza un proceso de GitHub cada
-   3 horas desde el iCal de Airbnb) y deja elegir llegada, salida y personas; el botón arma el WhatsApp con las fechas.
-   Configuración en la sección: data-prop (casa|depa), data-max, data-wa, data-nombre.
-   Mientras no haya sincronización, no marca nada como ocupado y lo dice: la disponibilidad se confirma por WhatsApp. */
+/* Calendario de disponibilidad, v4 (11 oct 2026): un solo estado alimenta tres piezas.
+   1) La barra de búsqueda del inicio, estilo Airbnb (Llegada | Salida | Huéspedes | Buscar) con calendario desplegable.
+   2) El calendario grande de la sección #disponibilidad.
+   3) La franja "Próximo fin de semana libre".
+   Datos: disponibilidad.json (un proceso de GitHub lo actualiza cada 3 h desde el iCal de Airbnb; solo fechas).
+   Reglas: mínimo 2 noches; la salida puede caer en un día ocupado (es la mañana); sin sincronización no se marca nada
+   como ocupado y se dice que la disponibilidad se confirma por WhatsApp.
+   Configuración en .cal o .qb: data-prop (casa|depa), data-max, data-wa, data-nombre. */
 (function(){
-  var sec=document.querySelector(".cal");if(!sec)return;
-  var prop=sec.dataset.prop,max=+sec.dataset.max||8,wa=sec.dataset.wa,nombre=sec.dataset.nombre||"Casa Kauri";
+  var sec=document.querySelector(".cal"),qb=document.querySelector(".qb");if(!sec&&!qb)return;
+  var cfg=sec||qb,prop=cfg.dataset.prop,max=+cfg.dataset.max||8,wa=cfg.dataset.wa,nombre=cfg.dataset.nombre||"Casa Kauri";
+  var MIN=2;
   var MES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var MESC=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   var DIA=["L","M","M","J","V","S","D"];
-  var grid=sec.querySelector(".cal-months"),prev=sec.querySelector(".cal-prev"),next=sec.querySelector(".cal-next");
-  var sum=sec.querySelector(".cal-sum"),go=sec.querySelector(".cal-go"),st=sec.querySelector(".cal-status"),gn=sec.querySelector(".cal-g b");
   var busy={},synced=false,today=new Date();today.setHours(0,0,0,0);
-  var view=new Date(today.getFullYear(),today.getMonth(),1),a=null,b=null,hov=null,guests=Math.min(4,max);
   var last=new Date(today);last.setMonth(last.getMonth()+14);
+  var S={a:null,b:null,hov:null,guests:Math.min(4,max)};
+  var mainView=new Date(today.getFullYear(),today.getMonth(),1),popView=new Date(mainView);
+  var anim=window.gsap&&window.__motion!=="off";
 
   function k(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
   function add(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
   function nights(x,y){return Math.round((y-x)/864e5);}
   function freeBetween(x,y){for(var d=new Date(x);d<y;d=add(d,1))if(busy[k(d)])return false;return true;}
-  function months(){return matchMedia("(max-width: 700px)").matches?1:2;}
+  function mobile(){return matchMedia("(max-width: 700px)").matches;}
   function fmt(d,yr){return d.getDate()+" de "+MES[d.getMonth()]+(yr?" de "+d.getFullYear():"");}
+  function short(d){return d.getDate()+" "+MESC[d.getMonth()];}
+  function pd(s){var p=s.split("-");return new Date(+p[0],p[1]-1,+p[2]);}
+  function people(){return S.guests+(S.guests===1?" persona":" personas");}
+  function waURL(){
+    var m=(S.a&&S.b)?"Hola, vi la página de "+nombre+". ¿Está disponible del "+fmt(S.a)+" al "+fmt(S.b,true)+" ("+nights(S.a,S.b)+" noches) para "+people()+"?"
+                   :"Hola, vi la página de "+nombre+" y quiero consultar fechas.";
+    return "https://wa.me/"+wa+"?text="+encodeURIComponent(m);
+  }
 
-  function render(){
-    var n=months(),html="";
+  /* ---------- meses (la misma pieza para el calendario grande y el desplegable) ---------- */
+  function monthsHTML(view,n){
+    var html="";
     for(var m=0;m<n;m++){
       var first=new Date(view.getFullYear(),view.getMonth()+m,1),days=new Date(first.getFullYear(),first.getMonth()+1,0).getDate(),lead=(first.getDay()+6)%7;
       html+='<div class="cal-month"><div class="cal-title">'+MES[first.getMonth()]+" "+first.getFullYear()+'</div><div class="cal-grid">';
@@ -29,51 +44,104 @@
       for(var i=0;i<lead;i++)html+="<span></span>";
       for(var dd=1;dd<=days;dd++){
         var d=new Date(first.getFullYear(),first.getMonth(),dd),key=k(d),past=d<today||d>last,isBusy=!!busy[key];
-        var end=b||(a&&hov&&hov>a&&freeBetween(a,hov)?hov:null);
+        var end=S.b||(S.a&&S.hov&&nights(S.a,S.hov)>=MIN&&freeBetween(S.a,S.hov)?S.hov:null);
         var cls=["cal-d"];if(past)cls.push("past");if(isBusy)cls.push("busy");if(+d===+today)cls.push("today");
-        if(a&&+d===+a)cls.push("sel","start");if(end&&+d===+end)cls.push("sel","end");if(a&&end&&d>a&&d<end)cls.push("in");
-        var canEnd=a&&!b&&d>a&&freeBetween(a,d);                       // la salida puede caer en un día ocupado (es la mañana)
+        if(S.a&&+d===+S.a)cls.push("sel","start");if(end&&+d===+end)cls.push("sel","end");if(S.a&&end&&d>S.a&&d<end)cls.push("in");
+        var canEnd=S.a&&!S.b&&d>S.a&&nights(S.a,d)>=MIN&&freeBetween(S.a,d);
+        var tooShort=S.a&&!S.b&&d>S.a&&nights(S.a,d)<MIN&&!isBusy;
+        if(tooShort)cls.push("short");
         var dis=past||(isBusy&&!canEnd);
-        html+='<button type="button" class="'+cls.join(" ")+'" data-k="'+key+'"'+(dis?" disabled":"")+(isBusy?' title="Ocupado"':"")+' aria-label="'+fmt(d,true)+(isBusy?", ocupado":"")+'" aria-pressed="'+(cls.indexOf("sel")>-1)+'">'+dd+"</button>";
+        html+='<button type="button" class="'+cls.join(" ")+'" data-k="'+key+'"'+(dis?" disabled":"")+(isBusy?' title="Ocupado"':tooShort?' title="Mínimo 2 noches"':"")+' aria-label="'+fmt(d,true)+(isBusy?", ocupado":"")+'" aria-pressed="'+(cls.indexOf("sel")>-1)+'">'+dd+"</button>";
       }
       html+="</div></div>";
     }
-    grid.innerHTML=html;
-    prev.disabled=view<=new Date(today.getFullYear(),today.getMonth(),1);
-    summary();
+    return html;
   }
-  function summary(){
-    gn.textContent=guests;
-    var msg;
-    if(a&&b){var n=nights(a,b);sum.innerHTML="<b>"+fmt(a)+" al "+fmt(b)+"</b> · "+n+(n===1?" noche":" noches")+" · "+guests+(guests===1?" persona":" personas");
-      msg="Hola, vi la página de "+nombre+". ¿Está disponible del "+fmt(a)+" al "+fmt(b,true)+" ("+n+(n===1?" noche":" noches")+") para "+guests+(guests===1?" persona":" personas")+"?";
-      go.classList.remove("off");}
-    else{sum.textContent=a?"Ahora elige el día de salida.":"Elige el día de llegada.";
-      msg="Hola, vi la página de "+nombre+" y quiero consultar fechas.";go.classList.add("off");}
-    go.href="https://wa.me/"+wa+"?text="+encodeURIComponent(msg);
+  function pick(d){
+    if(!S.a||S.b||d<=S.a){if(busy[k(d)])return;S.a=d;S.b=null;}
+    else if(nights(S.a,d)<MIN){flash("Mínimo 2 noches");return;}
+    else if(freeBetween(S.a,d))S.b=d;
+    else{S.a=busy[k(d)]?null:d;S.b=null;}
+    S.hov=null;renderAll();
+    if(S.a&&S.b&&pop&&!pop.hidden&&!mobile())setTimeout(closePop,380);
   }
-  grid.addEventListener("click",function(e){var t=e.target.closest(".cal-d");if(!t||t.disabled)return;var p=t.dataset.k.split("-"),d=new Date(+p[0],p[1]-1,+p[2]);
-    if(!a||b||d<=a){if(busy[k(d)])return;a=d;b=null;}else if(freeBetween(a,d))b=d;else{a=busy[k(d)]?null:d;b=null;}
-    render();if(a&&b&&window.gsap&&window.__motion!=="off")gsap.fromTo(sum,{y:8,opacity:0},{y:0,opacity:1,duration:.4,ease:"power3.out"});});
-  grid.addEventListener("mouseover",function(e){var t=e.target.closest(".cal-d");if(!t||!a||b)return;var p=t.dataset.k.split("-"),h=new Date(+p[0],p[1]-1,+p[2]);if(hov&&+h===+hov)return;hov=h;render();});
-  grid.addEventListener("mouseleave",function(){if(hov){hov=null;render();}});
-  prev.addEventListener("click",function(){view=new Date(view.getFullYear(),view.getMonth()-1,1);render();});
-  next.addEventListener("click",function(){view=new Date(view.getFullYear(),view.getMonth()+1,1);render();});
-  sec.querySelector(".cal-minus").addEventListener("click",function(){guests=Math.max(1,guests-1);summary();});
-  sec.querySelector(".cal-plus").addEventListener("click",function(){guests=Math.min(max,guests+1);summary();});
-  sec.querySelector(".cal-clear").addEventListener("click",function(){a=b=null;render();});
-  addEventListener("resize",function(){clearTimeout(render.t);render.t=setTimeout(render,150);});
+  function wire(g){
+    g.addEventListener("click",function(e){var t=e.target.closest(".cal-d");if(!t||t.disabled)return;e.stopPropagation();pick(pd(t.dataset.k));});
+    g.addEventListener("mouseover",function(e){var t=e.target.closest(".cal-d");if(!t||!S.a||S.b)return;var h=pd(t.dataset.k);if(S.hov&&+h===+S.hov)return;S.hov=h;renderAll();});
+    g.addEventListener("mouseleave",function(){if(S.hov){S.hov=null;renderAll();}});
+  }
 
-  function apply(data){
-    var r=(data&&data[prop])||[];busy={};
-    r.forEach(function(x){var p=x[0].split("-"),q=x[1].split("-"),d=new Date(+p[0],p[1]-1,+p[2]),e=new Date(+q[0],q[1]-1,+q[2]);for(;d<e;d=add(d,1))busy[k(d)]=1;});
-    synced=!!(data&&data.sincronizado&&data.sincronizado[prop]);
-    if(synced&&data.actualizado){var u=new Date(data.actualizado);st.textContent="Sincronizado con Airbnb · último cambio el "+fmt(u)+". Te confirmamos al momento por WhatsApp.";st.classList.add("ok");}
-    else st.textContent="Calendario en conexión con Airbnb: elige tus fechas y te confirmamos la disponibilidad al momento por WhatsApp.";
-    nextFree();
-    render();
+  /* ---------- 2) calendario grande ---------- */
+  var grid,prev,next,sum,go,st,gn;
+  if(sec){
+    grid=sec.querySelector(".cal-months");prev=sec.querySelector(".cal-prev");next=sec.querySelector(".cal-next");
+    sum=sec.querySelector(".cal-sum");go=sec.querySelector(".cal-go");st=sec.querySelector(".cal-status");gn=sec.querySelector(".cal-g b");
+    wire(grid);
+    prev.addEventListener("click",function(){mainView=new Date(mainView.getFullYear(),mainView.getMonth()-1,1);renderAll();});
+    next.addEventListener("click",function(){mainView=new Date(mainView.getFullYear(),mainView.getMonth()+1,1);renderAll();});
+    sec.querySelector(".cal-minus").addEventListener("click",function(){S.guests=Math.max(1,S.guests-1);renderAll();});
+    sec.querySelector(".cal-plus").addEventListener("click",function(){S.guests=Math.min(max,S.guests+1);renderAll();});
+    sec.querySelector(".cal-clear").addEventListener("click",function(){S.a=S.b=null;renderAll();});
   }
-  /* franja "próximo fin de semana libre": el siguiente viernes y sábado libres según Airbnb; al tocarla deja las fechas elegidas */
+
+  /* ---------- 1) barra de búsqueda del inicio ---------- */
+  var pop=null,popGrid,res,fIn,fOut,qgn,popT,msg;
+  var openPop=function(){pop.hidden=false;qb.classList.add("open");popView=S.a?new Date(S.a.getFullYear(),S.a.getMonth(),1):new Date(today.getFullYear(),today.getMonth(),1);renderAll();
+    if(anim)gsap.fromTo(pop,{y:mobile()?40:-8,opacity:0},{y:0,opacity:1,duration:.35,ease:"power3.out"});};
+  function closePop(){if(!pop||pop.hidden)return;pop.hidden=true;qb.classList.remove("open");renderAll();}
+  if(qb){
+    pop=qb.querySelector(".qb-pop");popGrid=qb.querySelector(".qb-months");res=qb.querySelector(".qb-res");
+    fIn=qb.querySelector(".qb-in b");fOut=qb.querySelector(".qb-out b");qgn=qb.querySelector(".qb-g b");popT=qb.querySelector(".qb-pop-t");msg=qb.querySelector(".qb-msg");
+    wire(popGrid);
+    qb.querySelector(".qb-in").addEventListener("click",function(e){e.stopPropagation();if(S.b){S.a=null;S.b=null;}openPop();});
+    qb.querySelector(".qb-out").addEventListener("click",function(e){e.stopPropagation();openPop();});
+    qb.querySelector(".qb-close").addEventListener("click",closePop);
+    qb.querySelector(".qb-done").addEventListener("click",function(){closePop();if(S.a&&S.b)search();});
+    qb.querySelector(".qb-clear").addEventListener("click",function(e){e.stopPropagation();S.a=S.b=null;renderAll();});
+    qb.querySelector(".qb-prev").addEventListener("click",function(e){e.stopPropagation();popView=new Date(popView.getFullYear(),popView.getMonth()-1,1);renderAll();});
+    qb.querySelector(".qb-next").addEventListener("click",function(e){e.stopPropagation();popView=new Date(popView.getFullYear(),popView.getMonth()+1,1);renderAll();});
+    qb.querySelector(".qb-minus").addEventListener("click",function(){S.guests=Math.max(1,S.guests-1);renderAll();});
+    qb.querySelector(".qb-plus").addEventListener("click",function(){S.guests=Math.min(max,S.guests+1);renderAll();});
+    qb.addEventListener("submit",function(e){e.preventDefault();search();});
+    document.addEventListener("click",function(e){if(pop&&!pop.hidden&&!qb.contains(e.target))closePop();});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape")closePop();});
+  }
+  var flashT;function flash(t){if(!msg)return;msg.textContent=t;clearTimeout(flashT);flashT=setTimeout(function(){msg.textContent="";},2200);}
+  function search(){
+    if(!S.a||!S.b){openPop();return;}
+    closePop();
+    var n=nights(S.a,S.b),ok=freeBetween(S.a,S.b);
+    res.hidden=false;
+    res.innerHTML=(synced?(ok?'<span class="qb-ok"><i class="ph ph-check-circle" aria-hidden="true"></i> Libre</span>':'<span class="qb-no">Ocupado</span>'):'<span class="qb-ok"><i class="ph ph-calendar-check" aria-hidden="true"></i> Te confirmamos al momento</span>')+
+      '<span class="qb-what"><b>'+fmt(S.a)+' al '+fmt(S.b)+'</b> · '+n+' noches · '+people()+'</span>'+
+      '<span class="qb-acts"><a class="btn-primary" href="'+waURL()+'" target="_blank" rel="noopener">Apartar por WhatsApp</a><a class="qb-cal" href="#disponibilidad">Ver en el calendario</a></span>';
+    if(anim)gsap.fromTo(res,{y:10,opacity:0},{y:0,opacity:1,duration:.45,ease:"power3.out"});
+  }
+
+  /* ---------- pintar todo desde el mismo estado ---------- */
+  function renderAll(){
+    if(sec){
+      grid.innerHTML=monthsHTML(mainView,mobile()?1:2);
+      prev.disabled=mainView<=new Date(today.getFullYear(),today.getMonth(),1);
+      gn.textContent=S.guests;
+      if(S.a&&S.b){sum.innerHTML="<b>"+fmt(S.a)+" al "+fmt(S.b)+"</b> · "+nights(S.a,S.b)+" noches · "+people();go.classList.remove("off");}
+      else{sum.textContent=S.a?"Ahora elige el día de salida (mínimo 2 noches).":"Elige el día de llegada.";go.classList.add("off");}
+      go.href=waURL();
+    }
+    if(qb){
+      fIn.textContent=S.a?short(S.a):"Agregar fecha";fOut.textContent=S.b?short(S.b):"Agregar fecha";
+      qb.querySelector(".qb-in").classList.toggle("set",!!S.a);qb.querySelector(".qb-out").classList.toggle("set",!!S.b);
+      qgn.textContent=S.guests;
+      if(!pop.hidden){
+        popGrid.innerHTML=monthsHTML(popView,mobile()?1:2);
+        popT.textContent=!S.a?"Elige tu llegada":!S.b?"Ahora tu salida (mínimo 2 noches)":fmt(S.a)+" al "+fmt(S.b)+" · "+nights(S.a,S.b)+" noches";
+        qb.querySelector(".qb-prev").disabled=popView<=new Date(today.getFullYear(),today.getMonth(),1);
+      }
+      if(!res.hidden&&!(S.a&&S.b))res.hidden=true;
+    }
+  }
+
+  /* ---------- 3) franja "próximo fin de semana libre" ---------- */
   function nextFree(){
     var el=document.querySelector(".next-free");if(!el)return;
     if(!synced){el.hidden=true;return;}
@@ -82,13 +150,20 @@
       if(!busy[k(d)]&&!busy[k(add(d,1))]){var fri=new Date(d),sun=add(d,2);
         el.querySelector(".nf-d").textContent="viernes "+fri.getDate()+(fri.getMonth()!==sun.getMonth()?" de "+MES[fri.getMonth()]:"")+" al domingo "+sun.getDate()+" de "+MES[sun.getMonth()];
         el.hidden=false;
-        el.onclick=function(){a=fri;b=sun;view=new Date(fri.getFullYear(),fri.getMonth(),1);render();};
+        el.onclick=function(){S.a=fri;S.b=sun;mainView=new Date(fri.getFullYear(),fri.getMonth(),1);renderAll();};
         return;}
     }
     el.hidden=true;
   }
-  render();
-  /* primero la copia del repo (siempre la más reciente, sin esperar a que se reconstruya el sitio); si falla, la local */
+  function apply(data){
+    busy={};((data&&data[prop])||[]).forEach(function(x){for(var d=pd(x[0]),e=pd(x[1]);d<e;d=add(d,1))busy[k(d)]=1;});
+    synced=!!(data&&data.sincronizado&&data.sincronizado[prop]);
+    if(st){if(synced&&data.actualizado){st.textContent="Sincronizado con Airbnb · último cambio el "+fmt(new Date(data.actualizado))+". Te confirmamos al momento por WhatsApp.";st.classList.add("ok");}
+      else st.textContent="Calendario en conexión con Airbnb: elige tus fechas y te confirmamos la disponibilidad al momento por WhatsApp.";}
+    nextFree();renderAll();
+  }
+  addEventListener("resize",function(){clearTimeout(renderAll.t);renderAll.t=setTimeout(renderAll,150);});
+  renderAll();
   fetch("https://raw.githubusercontent.com/Casa-Kauri/casa-kauri.github.io/main/disponibilidad.json?t="+Date.now(),{cache:"no-store"})
     .then(function(r){if(!r.ok)throw 0;return r.json();}).then(apply)
     .catch(function(){fetch("disponibilidad.json?t="+Date.now()).then(function(r){return r.json();}).then(apply).catch(function(){apply(null);});});

@@ -34,7 +34,7 @@
 
   if(anim){
     /* entrada del hero */
-    G.from($$(".hero .place,.hero h1,.hero .sub,.hero .cta-row"),{y:soft?0:26,opacity:0,duration:.95,ease:"power3.out",stagger:.09,delay:.1,clearProps:"opacity,transform"});
+    G.from($$(".hero .place,.hero h1,.hero .sub,.hero .cta-row,.hero .qb"),{y:soft?0:26,opacity:0,duration:.95,ease:"power3.out",stagger:.09,delay:.1,clearProps:"opacity,transform"});
 
     /* frases de capítulo: palabra por palabra con el scroll */
     $$(".k-statement p").forEach(function(p){
