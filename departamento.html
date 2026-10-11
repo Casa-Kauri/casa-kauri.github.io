@@ -702,6 +702,58 @@
     html:not([data-theme="light"]) .headsup p.sub{color:var(--d-ink2)}
     html:not([data-theme="light"]) .qf{border-color:var(--d-line);background:transparent}
   }
+
+  /* ===== Calendario de disponibilidad (11 oct 2026) ===== */
+  .cal{padding:90px 0;background:#F4F8FB}
+  .cal-head{text-align:center;margin-bottom:34px}
+  .cal-head h2{font:var(--h2-title-fonts);color:var(--primary-color);margin-bottom:10px}
+  .cal-head p{max-width:600px;margin:0 auto}
+  .cal-box{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0;background:#fff;border:1px solid var(--secondary-color);box-shadow:0 18px 40px rgba(31,47,84,.08)}
+  .cal-cal{padding:26px 28px;position:relative}
+  .cal-nav{position:absolute;top:22px;left:20px;right:20px;display:flex;justify-content:space-between;pointer-events:none}
+  .cal-nav button{pointer-events:auto;width:38px;height:38px;border:1px solid var(--border-color);background:#fff;color:var(--primary-color);font:400 22px/1 'Source Sans 3';cursor:pointer}
+  .cal-nav button:disabled{opacity:.3;cursor:default}
+  .cal-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px}
+  .cal-title{text-align:center;font:400 22px/38px 'EB Garamond',serif;color:var(--primary-color);margin-bottom:12px;text-transform:capitalize}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cal-dow{text-align:center;font:600 11px/28px 'Source Sans 3';letter-spacing:.1em;color:#5a6472}
+  .cal-d{aspect-ratio:1;border:0;background:transparent;font:600 14px/1 'Source Sans 3';color:var(--primary-color);cursor:pointer;position:relative;transition:background .15s,color .15s}
+  .cal-d:hover:not(:disabled){background:var(--secondary-color)}
+  .cal-d.today{box-shadow:inset 0 0 0 1px #E8C87A}
+  .cal-d.past{color:#C4C6C8;cursor:default}
+  .cal-d.busy{color:#A9B0B8;text-decoration:line-through;cursor:default;background:repeating-linear-gradient(135deg,transparent 0 5px,rgba(31,47,84,.05) 5px 7px)}
+  .cal-d.in{background:#DFE8EE}
+  .cal-d.sel{background:var(--primary-color);color:#fff;text-decoration:none}
+  .cal-side{border-left:1px solid var(--secondary-color);padding:28px 24px;display:grid;gap:18px;align-content:start}
+  .cal-g{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .cal-g span{font:600 13px/1.3 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;color:#5a6472}
+  .cal-g div{display:flex;align-items:center;gap:12px}
+  .cal-g button{width:36px;height:36px;border:1px solid var(--border-color);background:#fff;color:var(--primary-color);font:400 20px/1 'Source Sans 3';cursor:pointer}
+  .cal-g b{font:400 26px/1 'EB Garamond',serif;color:var(--primary-color);min-width:1.4ch;text-align:center}
+  .cal-sum{font-size:15px;line-height:1.6;min-height:52px}
+  .cal-sum b{color:var(--primary-color);font-weight:600}
+  .cal-go{display:block;text-align:center}
+  .cal-go.off{background:#9AA6BC;pointer-events:none}
+  .cal-clear{background:none;border:0;color:#5a6472;font:600 12px/1 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;cursor:pointer;justify-self:start;padding:0;text-decoration:underline}
+  .cal-status{font-size:12.5px;color:#5a6472;line-height:1.5;border-top:1px solid var(--secondary-color);padding-top:14px}
+  .cal-status.ok::before{content:"● ";color:#2E8B57}
+  .cal-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#5a6472;margin-top:14px}
+  .cal-legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid var(--border-color)}
+  .cal-legend .lb{background:repeating-linear-gradient(135deg,transparent 0 3px,rgba(31,47,84,.18) 3px 5px)}
+  .cal-legend .ls{background:var(--primary-color);border-color:var(--primary-color)}
+  @media (max-width:860px){.cal-box{grid-template-columns:1fr}.cal-side{border-left:0;border-top:1px solid var(--secondary-color)}.cal-months{grid-template-columns:1fr}.cal-cal{padding:20px 14px}.cal-nav{top:18px;left:10px;right:10px}}
+  @media (prefers-color-scheme: dark){
+    html:not([data-theme="light"]) .cal{background:var(--d-bg)}
+    html:not([data-theme="light"]) :is(.cal-head h2,.cal-title,.cal-d,.cal-g b,.cal-sum b){color:var(--d-head)}
+    html:not([data-theme="light"]) .cal-box{background:var(--d-surface);border-color:var(--d-line);box-shadow:none}
+    html:not([data-theme="light"]) :is(.cal-side,.cal-status){border-color:var(--d-line)}
+    html:not([data-theme="light"]) :is(.cal-nav button,.cal-g button){background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
+    html:not([data-theme="light"]) .cal-d:hover:not(:disabled){background:#22324A}
+    html:not([data-theme="light"]) .cal-d.in{background:#24406b}
+    html:not([data-theme="light"]) .cal-d.sel{background:#3B528A;color:#fff}
+    html:not([data-theme="light"]) :is(.cal-d.past,.cal-d.busy){color:#56657C}
+    html:not([data-theme="light"]) :is(.cal-dow,.cal-g span,.cal-status,.cal-legend,.cal-clear){color:var(--d-ink2)}
+  }
 </style>
 </head>
 <body>
@@ -714,6 +766,7 @@
     </a>
     <nav class="main-nav">
       <ul>
+        <li><a href="#disponibilidad">Fechas</a></li>
         <li><a href="#ubicacion">Ubicación</a></li>
         <li><a href="#opiniones">Opiniones</a></li>
         <li class="switch"><a class="prop-switch" href="index.html">Casa Kauri ↗</a></li>
@@ -1066,12 +1119,36 @@
   </div>
 </section>
 
+<!-- ===== Calendario ===== -->
+<section class="cal" id="disponibilidad" data-prop="depa" data-max="6" data-wa="525628544253" data-nombre="Departamento Kauri">
+  <div class="wrap">
+    <div class="cal-head">
+      <h2>Elige tus fechas</h2>
+      <p>Los días tachados ya están ocupados. Elige llegada y salida, dinos cuántos vienen y te confirmamos al momento por WhatsApp.</p>
+    </div>
+    <div class="cal-box">
+      <div class="cal-cal">
+        <div class="cal-nav"><button type="button" class="cal-prev" aria-label="Mes anterior">‹</button><button type="button" class="cal-next" aria-label="Mes siguiente">›</button></div>
+        <div class="cal-months" aria-live="polite"></div>
+        <div class="cal-legend"><span><i class="lb"></i>Ocupado</span><span><i class="ls"></i>Tus fechas</span></div>
+      </div>
+      <div class="cal-side">
+        <div class="cal-g"><span>Personas<br><small style="text-transform:none;letter-spacing:0">hasta 6</small></span><div><button type="button" class="cal-minus" aria-label="Una persona menos">−</button><b>4</b><button type="button" class="cal-plus" aria-label="Una persona más">+</button></div></div>
+        <p class="cal-sum">Elige el día de llegada.</p>
+        <a class="btn-primary cal-go off" href="https://wa.me/525628544253" target="_blank" rel="noopener">Consultar fechas</a>
+        <button type="button" class="cal-clear">Borrar fechas</button>
+        <p class="cal-status">Cargando disponibilidad…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== Cómo reservar ===== -->
 <section class="plan3">
   <div class="wrap">
     <h2>Reservar es así de simple</h2>
     <ol class="steps3">
-      <li class="step3"><b>Elige tus fechas</b><p>En Airbnb o escribiéndonos por WhatsApp.</p></li>
+      <li class="step3"><b>Elige tus fechas</b><p>En el <a href="#disponibilidad" style="text-decoration:underline">calendario de arriba</a>, en Airbnb o por WhatsApp.</p></li>
       <li class="step3"><b>Recibe tu confirmación</b><p>Con la dirección, la caja de seguridad y la guía de la zona.</p></li>
       <li class="step3"><b>Llega a tu ritmo</b><p>Te estacionas, entras con tu clave y ya no vuelves a tocar el coche.</p></li>
     </ol>
@@ -1219,5 +1296,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="kauri-motion.js?v=2"></script>
+<script src="kauri-calendario.js?v=1"></script>
 </body>
 </html>
