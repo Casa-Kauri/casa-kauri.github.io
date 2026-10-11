@@ -39,7 +39,7 @@ window.KAURI_TARIFAS = {
   },
   /* Servidor de cobros (operacion/kauri-pagos, Cloudflare Worker). Vacío = la solicitud se manda por WhatsApp.
      Con valor: el botón cobra el anticipo con Mercado Pago y el calendario suma las reservas directas. */
-  servidor: ""
+  servidor: "https://kauri-pagos.casakauri.workers.dev"
 };
 
 /* Desglose de la estancia. ctx opcional: { busy: {"AAAA-MM-DD":1,...} } con las noches ocupadas (de disponibilidad.json),
