@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#1F2F54" />
+<meta name="robots" content="noindex" />
+<title>Reserva | Kauri Nayarit</title>
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<style>
+  :root{--navy:#1F2F54;--cta:#3B528A;--cta-h:#1F2F54;--soft:#DFE8EE;--line:#C4C6C8;--ink:#394049;--muted:#5a6472;--gold:#E8C87A;--bg:#F4F8FB;--card:#fff;--ok:#2E7D4F;--err:#B4542E}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--navy:#EEF2F8;--soft:#22324A;--line:#2A3B5A;--ink:#C9D3E1;--muted:#9DABBF;--bg:#0F1A2E;--card:#16233B;--ok:#6FCB95;--err:#F0A08A}}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font:400 16px/1.65 'Source Sans 3',sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .top{background:#1F2F54;color:#fff}
+  .top .in{max-width:1120px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font:400 21px/1 'EB Garamond',serif;letter-spacing:.2em}
+  .brand img{height:38px}
+  .back{font:600 13px/1 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;text-decoration:none;opacity:.9}
+  .wrap{max-width:1120px;margin:0 auto;padding:40px 24px 80px}
+  h1{font:400 clamp(30px,4vw,42px)/1.15 'EB Garamond',serif;color:var(--navy);margin-bottom:6px}
+  .lead{color:var(--muted);margin-bottom:30px}
+  .grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:36px;align-items:start}
+  .step{background:var(--card);border:1px solid var(--soft);padding:26px 26px 22px;margin-bottom:18px}
+  .step h2{display:flex;align-items:center;gap:12px;font:400 24px/1.2 'EB Garamond',serif;color:var(--navy);margin-bottom:16px}
+  .step h2 .n{width:30px;height:30px;display:grid;place-items:center;background:var(--navy);color:var(--card);font:600 14px/1 'Source Sans 3';flex:none}
+  .row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--soft)}
+  .row:last-child{border-bottom:0}
+  .row b{color:var(--navy);font-weight:600}
+  .row .ed{background:none;border:0;color:var(--cta);font:600 13px/1 'Source Sans 3';text-decoration:underline;cursor:pointer}
+  .stepper{display:flex;align-items:center;gap:12px}
+  .stepper button{width:32px;height:32px;border:1px solid var(--line);background:var(--card);color:var(--navy);font:400 18px/1 'Source Sans 3';cursor:pointer}
+  .stepper b{min-width:1.4ch;text-align:center;font:400 22px/1 'EB Garamond',serif}
+  .f{display:grid;gap:6px;margin-bottom:14px}
+  .f label{font:600 13px/1.3 'Source Sans 3';letter-spacing:.04em;color:var(--navy)}
+  .f input,.f textarea{font:400 16px/1.4 'Source Sans 3';padding:12px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}
+  .f input:focus,.f textarea:focus{outline:2px solid var(--cta);outline-offset:1px;border-color:var(--cta)}
+  .f small{color:var(--muted);font-size:13px}
+  .f .e{color:var(--err);font-size:13px;font-weight:600;display:none}
+  .f.bad .e{display:block}.f.bad input{border-color:var(--err)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .rules{background:var(--bg);padding:14px 16px;font-size:14px;line-height:1.6;margin:4px 0 14px}
+  .rules li{margin-left:18px}
+  .chk{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;cursor:pointer}
+  .chk input{width:18px;height:18px;margin-top:3px;accent-color:#3B528A;flex:none}
+  .pay{font-size:15px}
+  .pay .big{font:400 34px/1 'EB Garamond',serif;color:var(--navy);margin:6px 0 4px;display:block}
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font:600 15px/1 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--cta);border:0;padding:18px 20px;cursor:pointer;text-decoration:none;margin-top:16px;transition:background .2s}
+  .btn:hover{background:#1F2F54}
+  .btn:active{transform:translateY(1px)}
+  .btn i{font-size:20px}
+  .fine{font-size:13px;color:var(--muted);margin-top:10px;text-align:center}
+  aside{position:sticky;top:20px}
+  .sum{background:var(--card);border:1px solid var(--soft)}
+  .sum img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+  .sum .b{padding:22px 24px}
+  .sum h3{font:400 24px/1.2 'EB Garamond',serif;color:var(--navy)}
+  .sum .pl{color:var(--muted);font-size:14px;margin-bottom:14px}
+  .ln{display:flex;justify-content:space-between;gap:12px;font-size:15px;padding:6px 0}
+  .ln.t{border-top:1px solid var(--soft);margin-top:8px;padding-top:12px;font-weight:700;color:var(--navy);font-size:17px}
+  .ln.a{color:var(--ok);font-weight:600}
+  .pol{font-size:13px;color:var(--muted);border-top:1px solid var(--soft);margin-top:12px;padding-top:12px}
+  .esp{background:rgba(232,200,122,.18);border-left:3px solid var(--gold);padding:10px 12px;font-size:14px;margin-bottom:10px}
+  .esp i{color:#B07D1E}
+  .alert{background:var(--card);border-left:4px solid var(--err);padding:18px 20px;margin-bottom:20px}
+  .done{background:var(--card);border:1px solid var(--soft);padding:34px 30px;text-align:center}
+  .done i{font-size:52px;color:var(--ok)}
+  .done h2{font:400 30px/1.2 'EB Garamond',serif;color:var(--navy);margin:10px 0 6px}
+  .done .folio{font:600 14px/1 'Source Sans 3';letter-spacing:.12em;color:var(--muted);margin-bottom:16px}
+  .done ol{text-align:left;max-width:460px;margin:18px auto 0;padding-left:20px;line-height:1.8}
+  [hidden]{display:none!important}
+  @media (max-width:880px){.grid{grid-template-columns:1fr}aside{position:static;order:-1}.two{grid-template-columns:1fr}.wrap{padding-top:26px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><a class="brand" id="brand" href="index.html"><img src="logo-kauri.png" alt="" /> <span id="brandName">KAURI</span></a><a class="back" id="back" href="index.html#disponibilidad">← Cambiar fechas</a></div></header>
+
+<main class="wrap">
+  <div id="bad" class="alert" hidden></div>
+  <section id="flow">
+    <h1>Confirma tu reserva</h1>
+    <p class="lead">Tres pasos y tus fechas quedan apartadas con el 50 % de anticipo. El resto se paga antes de llegar.</p>
+    <div class="grid">
+      <div>
+        <div class="step">
+          <h2><span class="n">1</span>Tu estancia</h2>
+          <div class="row"><span>Fechas</span><span><b id="sFechas"></b> <a class="ed" id="edFechas" href="#">Cambiar</a></span></div>
+          <div class="row"><span>Personas <small id="sMax"></small></span><span class="stepper"><button type="button" id="gm" aria-label="Una persona menos">−</button><b id="sG">4</b><button type="button" id="gp" aria-label="Una persona más">+</button></span></div>
+          <div class="row"><span>Mascotas <small id="sMasc"></small></span><span class="stepper"><button type="button" id="mm" aria-label="Una mascota menos">−</button><b id="sM">0</b><button type="button" id="mp" aria-label="Una mascota más">+</button></span></div>
+        </div>
+        <form class="step" id="datos" novalidate>
+          <h2><span class="n">2</span>Tus datos</h2>
+          <div class="f" id="fNom"><label for="nom">Nombre completo</label><input id="nom" autocomplete="name" required /><span class="e">Escribe tu nombre como aparece en tu identificación.</span></div>
+          <div class="two">
+            <div class="f" id="fTel"><label for="tel">WhatsApp</label><input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="10 dígitos" required /><span class="e">Escribe los 10 dígitos de tu celular.</span></div>
+            <div class="f" id="fMail"><label for="mail">Correo</label><input id="mail" type="email" autocomplete="email" required /><span class="e">Revisa tu correo.</span></div>
+          </div>
+          <div class="f"><label for="com">Comentarios (opcional)</label><textarea id="com" rows="2" placeholder="Hora aproximada de llegada, niños, alguna petición"></textarea></div>
+          <ul class="rules" id="rules"></ul>
+          <label class="chk" id="fOk"><input type="checkbox" id="ok" /> <span>Acepto las reglas de la casa y la política de cancelación: sin costo hasta 31 días antes de la llegada (el anticipo se reembolsa completo).</span></label>
+        </form>
+        <div class="step pay">
+          <h2><span class="n">3</span>Aparta con tu anticipo</h2>
+          <span>Anticipo del 50 % para apartar</span>
+          <b class="big" id="pAnt"></b>
+          <span id="pSaldo"></span>
+          <button type="button" class="btn" id="go"><i class="ph ph-lock-simple" aria-hidden="true"></i><span id="goTxt">Enviar solicitud de reserva</span></button>
+          <p class="fine" id="goFine">Te respondemos por WhatsApp con el link de pago del anticipo (tarjeta, OXXO o transferencia). Tus fechas quedan apartadas en cuanto se paga.</p>
+        </div>
+      </div>
+      <aside>
+        <div class="sum">
+          <img id="sImg" alt="" />
+          <div class="b">
+            <h3 id="sNom"></h3>
+            <p class="pl" id="sLugar"></p>
+            <div id="lines"></div>
+            <div class="ln t"><span>Total</span><span id="sTot"></span></div>
+            <div class="ln a"><span>Anticipo hoy (50 %)</span><span id="sAnt"></span></div>
+            <div class="ln"><span>Saldo antes de llegar</span><span id="sSal"></span></div>
+            <p class="pol" id="sPol"></p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+  <section id="ok-screen" class="done" hidden>
+    <i class="ph ph-check-circle" aria-hidden="true"></i>
+    <h2>¡Solicitud enviada!</h2>
+    <p class="folio" id="dFolio"></p>
+    <p id="dTxt"></p>
+    <ol>
+      <li>Te respondemos por WhatsApp con el link para pagar el anticipo.</li>
+      <li>Al pagarlo, tus fechas quedan apartadas y te llega tu confirmación con la dirección y la clave de llegada.</li>
+      <li>El saldo se paga antes de tu llegada.</li>
+    </ol>
+    <a class="btn" id="dWa" href="#" target="_blank" rel="noopener" style="max-width:360px;margin:22px auto 0"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i>Abrir WhatsApp otra vez</a>
+  </section>
+</main>
+
+<script src="kauri-precios.js?v=2"></script>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search),prop=q.get("p")==="depa"?"depa":"casa",T=KAURI_TARIFAS[prop];
+  var INFO={casa:{lugar:"La Peñita de Jaltemba, Nayarit",img:"alberca.jpg",pag:"index.html",wa:"525628544253",
+              reglas:["Llegada desde las 3:00 p.m. y salida antes de las 11:00 a.m.","Horas de silencio de 10:00 p.m. a 6:00 a.m.","La alberca no tiene reja: los niños siempre con un adulto.","Mascotas bienvenidas: $300 por mascota, por estancia."]},
+            depa:{lugar:"Rincón de Guayabitos, Nayarit",img:"https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=960",pag:"departamento.html",wa:"525628544253",
+              reglas:["Llegada desde las 3:00 p.m. y salida antes de las 12:00 p.m.","Se suben escaleras entre los tres niveles; el área de descanso es un loft abierto.","El rooftop es una terraza libre, sin muebles.","Mascotas bienvenidas, con cargo adicional por estancia."]}}[prop];
+  var MES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var $=function(id){return document.getElementById(id);},today=new Date();today.setHours(0,0,0,0);
+  function pd(s){var p=(s||"").split("-");if(p.length!==3)return null;var d=new Date(+p[0],p[1]-1,+p[2]);return isNaN(d)?null:d;}
+  function fmt(d,yr){return d.getDate()+" de "+MES[d.getMonth()]+(yr?" de "+d.getFullYear():"");}
+  function k(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
+  var A=pd(q.get("in")),B=pd(q.get("out")),G=Math.min(T.max,Math.max(1,+q.get("g")||2)),Mm=0;
+  document.title="Reserva en "+T.nombre;
+  $("brandName").textContent=prop==="depa"?"KAURI · DEPARTAMENTO":"CASA KAURI";$("brand").href=INFO.pag;
+  $("back").href=$("edFechas").href=INFO.pag+"#disponibilidad";
+  $("sNom").textContent=T.nombre;$("sLugar").textContent=INFO.lugar;$("sImg").src=INFO.img;$("sMax").textContent="(hasta "+T.max+")";$("sMasc").textContent="($"+T.mascota+" c/u)";
+  $("rules").innerHTML=INFO.reglas.map(function(r){return "<li>"+r+"</li>";}).join("");
+  $("sPol").textContent="Cancelación sin costo hasta 31 días antes de tu llegada: el anticipo se reembolsa completo. Precio directo, sin comisiones de plataforma.";
+  function bad(msg){$("bad").hidden=false;$("bad").innerHTML=msg+' <a href="'+INFO.pag+'#disponibilidad">Elegir otras fechas →</a>';$("flow").hidden=true;}
+  var n=A&&B?Math.round((B-A)/864e5):0;
+  if(!A||!B||n<T.minNoches){bad("<b>Elige tus fechas primero.</b> La estancia mínima es de "+T.minNoches+" noches.");return;}
+  if(A<today){bad("<b>Esas fechas ya pasaron.</b>");return;}
+  var P,BUSY=null;
+  function paint(){
+    P=kauriPrecio(prop,A,B,Mm,{busy:BUSY});
+    $("sFechas").textContent=fmt(A)+" al "+fmt(B,true)+" · "+P.noches+" noches";$("sG").textContent=G;$("sM").textContent=Mm;
+    $("lines").innerHTML=(P.especial&&P.ancla?'<div class="esp"><i class="ph ph-tag" aria-hidden="true"></i> <b>Precio especial aplicado.</b> Ahorras '+kauriMoneda(P.ahorro)+' frente al precio base de '+kauriMoneda(P.ancla)+' la noche.</div>':"")+
+      P.lineas.map(function(l){return '<div class="ln"><span>'+(P.ancla&&l.precio<P.ancla?'<s style="color:var(--muted)">'+kauriMoneda(P.ancla)+"</s> ":"")+kauriMoneda(l.precio)+" × "+l.noches+(l.noches===1?" noche":" noches")+'<br><small style="color:var(--muted)">'+l.etiqueta+"</small></span><span>"+kauriMoneda(l.precio*l.noches)+"</span></div>";}).join("")+
+      '<div class="ln"><span>Limpieza (una sola vez, no diaria)</span><span>'+kauriMoneda(P.limpieza)+"</span></div>"+(P.mascotas?'<div class="ln"><span>'+P.mascotas+(P.mascotas===1?" mascota":" mascotas")+"</span><span>"+kauriMoneda(P.cargoMascotas)+"</span></div>":"");
+    $("sTot").textContent=kauriMoneda(P.total);$("sAnt").textContent=$("pAnt").textContent=kauriMoneda(P.anticipo);$("sSal").textContent=kauriMoneda(P.saldo);
+    $("pSaldo").textContent="Saldo de "+kauriMoneda(P.saldo)+" antes de tu llegada. Total de la estancia: "+kauriMoneda(P.total)+".";
+  }
+  $("gm").onclick=function(){G=Math.max(1,G-1);paint();};$("gp").onclick=function(){G=Math.min(T.max,G+1);paint();};
+  $("mm").onclick=function(){Mm=Math.max(0,Mm-1);paint();};$("mp").onclick=function(){Mm=Math.min(3,Mm+1);paint();};
+  paint();
+  /* revisa la disponibilidad otra vez (por si alguien acaba de reservar en Airbnb) y mide la ocupación del mes para el precio */
+  fetch("https://raw.githubusercontent.com/Casa-Kauri/casa-kauri.github.io/main/disponibilidad.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
+    var ocupado=false;BUSY={};(d[prop]||[]).forEach(function(x){if(k(A)<x[1]&&k(B)>x[0])ocupado=true;for(var y=pd(x[0]),e=pd(x[1]);y<e;y.setDate(y.getDate()+1))BUSY[k(y)]=1;});
+    if(!(d.sincronizado&&d.sincronizado[prop]))BUSY=null;
+    if(ocupado){bad("<b>Esas fechas acaban de ocuparse.</b> Lo sentimos: alguien las reservó hace poco.");return;}
+    paint();
+  }).catch(function(){});
+  if(KAURI_TARIFAS.pagoURL){$("goTxt").textContent="Pagar anticipo con Mercado Pago";$("goFine").textContent="Pago seguro con Mercado Pago: tarjeta, OXXO o transferencia. Al pagar te llega tu confirmación.";}
+  function check(id,ok){$(id).classList.toggle("bad",!ok);return ok;}
+  $("go").onclick=function(){
+    var nom=$("nom").value.trim(),tel=$("tel").value.replace(/[^\d+]/g,""),mail=$("mail").value.trim();
+    var ok=check("fNom",nom.length>=5&&/\s/.test(nom))&check("fTel",/^(\+\d{8,15}|\d{10})$/.test(tel))&check("fMail",/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail));
+    if(!$("ok").checked){$("fOk").style.color="var(--err)";ok=0;}else $("fOk").style.color="";
+    if(!ok){var f=document.querySelector(".f.bad input")||$("ok");f.focus();return;}
+    var folio=T.prefijo+"-"+k(A).slice(2).replace(/-/g,"")+"-"+nom.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g,"").slice(0,3).toUpperCase();
+    var datos={folio:folio,prop:prop,llegada:k(A),salida:k(B),personas:G,mascotas:Mm,nombre:nom,whatsapp:tel,correo:mail,comentarios:$("com").value.trim(),total:P.total,anticipo:P.anticipo};
+    if(KAURI_TARIFAS.pagoURL){   /* cobro real: el servidor recalcula el precio, revisa Airbnb y crea el pago */
+      $("go").disabled=true;$("goTxt").textContent="Preparando tu pago…";
+      fetch(KAURI_TARIFAS.pagoURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(datos)}).then(function(r){return r.json();})
+        .then(function(r){if(r.url)location.href=r.url;else throw r;}).catch(function(e){$("go").disabled=false;$("goTxt").textContent="Pagar anticipo con Mercado Pago";alert((e&&e.error)||"No se pudo iniciar el pago. Intenta de nuevo o escríbenos por WhatsApp.");});
+      return;
+    }
+    var msg="Solicitud de reserva "+folio+"\n"+T.nombre+": del "+fmt(A)+" al "+fmt(B,true)+" ("+P.noches+" noches)\n"+G+(G===1?" persona":" personas")+" · "+Mm+(Mm===1?" mascota":" mascotas")+
+      (P.especial&&P.ancla?"\nPrecio especial aplicado (base "+kauriMoneda(P.ancla)+" la noche): "+P.lineas.map(function(l){return l.noches+" × "+kauriMoneda(l.precio);}).join(" + "):"")+"\nTotal: "+kauriMoneda(P.total)+" (incluye limpieza "+kauriMoneda(P.limpieza)+")\nAnticipo 50 %: "+kauriMoneda(P.anticipo)+"\n\nNombre: "+nom+"\nWhatsApp: "+tel+"\nCorreo: "+mail+(datos.comentarios?"\nComentarios: "+datos.comentarios:"")+"\n\n¿Me mandas el link para pagar el anticipo?";
+    var url="https://wa.me/"+INFO.wa+"?text="+encodeURIComponent(msg);
+    $("flow").hidden=true;$("ok-screen").hidden=false;$("dFolio").textContent="FOLIO "+folio;
+    $("dTxt").textContent=T.nombre+" · del "+fmt(A)+" al "+fmt(B,true)+" · anticipo "+kauriMoneda(P.anticipo);$("dWa").href=url;
+    window.scrollTo(0,0);window.open(url,"_blank");
+  };
+})();
+</script>
+</body>
+</html>

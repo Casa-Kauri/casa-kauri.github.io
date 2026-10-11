@@ -814,6 +814,8 @@
   .qb-acts{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-left:auto}
   .qb-acts .btn-primary{padding:12px 20px}
   .qb-cal{font-size:13px;text-decoration:underline;color:#5a6472}
+  .qb-esp,.cal-sum .qb-esp{display:inline-block;font:600 11px/1 'Source Sans 3';letter-spacing:.08em;text-transform:uppercase;background:#E8C87A;color:#1F2F54;padding:4px 7px;margin-left:4px;vertical-align:2px}
+  .cal-wa{font-size:13px;color:#5a6472;text-decoration:underline;justify-self:center}
   @media (max-width:760px){
     .qb{grid-template-columns:1fr 1fr}
     .qb-f{padding:12px 14px}
@@ -1214,7 +1216,7 @@
   <div class="wrap">
     <div class="cal-head">
       <h2>Elige tus fechas</h2>
-      <p>Los días tachados ya están ocupados. Elige llegada y salida, dinos cuántos vienen y te confirmamos al momento por WhatsApp.</p>
+      <p>Los días tachados ya están ocupados. Elige llegada y salida, mira tu precio al momento y aparta con el 50 %.</p>
     </div>
     <div class="cal-box">
       <div class="cal-cal">
@@ -1225,7 +1227,8 @@
       <div class="cal-side">
         <div class="cal-g"><span>Personas<br><small style="text-transform:none;letter-spacing:0">hasta 6</small></span><div><button type="button" class="cal-minus" aria-label="Una persona menos">−</button><b>4</b><button type="button" class="cal-plus" aria-label="Una persona más">+</button></div></div>
         <p class="cal-sum">Elige el día de llegada.</p>
-        <a class="btn-primary cal-go off" href="https://wa.me/525628544253" target="_blank" rel="noopener">Consultar fechas</a>
+        <a class="btn-primary cal-go off" href="#disponibilidad">Reservar</a>
+        <a class="cal-wa" href="https://wa.me/525628544253" target="_blank" rel="noopener">o pregúntanos por WhatsApp</a>
         <button type="button" class="cal-clear">Borrar fechas</button>
         <a class="cal-airbnb" href="https://www.airbnb.mx/rooms/1283495962257484053" target="_blank" rel="noopener">¿Prefieres Airbnb? Reserva ahí ↗</a>
         <p class="cal-status">Cargando disponibilidad…</p>
@@ -1387,6 +1390,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="kauri-motion.js?v=3"></script>
-<script src="kauri-calendario.js?v=4"></script>
+<script src="kauri-precios.js?v=2"></script>
+<script src="kauri-calendario.js?v=5"></script>
 </body>
 </html>

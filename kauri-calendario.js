@@ -28,6 +28,9 @@
   function short(d){return d.getDate()+" "+MESC[d.getMonth()];}
   function pd(s){var p=s.split("-");return new Date(+p[0],p[1]-1,+p[2]);}
   function people(){return S.guests+(S.guests===1?" persona":" personas");}
+  function resURL(){return "apartar.html?p="+prop+"&in="+k(S.a)+"&out="+k(S.b)+"&g="+S.guests;}
+  function precio(){return (window.kauriPrecio&&S.a&&S.b)?window.kauriPrecio(prop,S.a,S.b,0,{busy:synced?busy:null}):null;}
+  function precioHTML(P){if(!P)return "";return ' · Total <b>'+kauriMoneda(P.total)+'</b>'+(P.especial&&P.ancla?' <span class="qb-esp">Precio especial</span>':'');}
   function waURL(){
     var m=(S.a&&S.b)?"Hola, vi la página de "+nombre+". ¿Está disponible del "+fmt(S.a)+" al "+fmt(S.b,true)+" ("+nights(S.a,S.b)+" noches) para "+people()+"?"
                    :"Hola, vi la página de "+nombre+" y quiero consultar fechas.";
@@ -113,8 +116,8 @@
     var n=nights(S.a,S.b),ok=freeBetween(S.a,S.b);
     res.hidden=false;
     res.innerHTML=(synced?(ok?'<span class="qb-ok"><i class="ph ph-check-circle" aria-hidden="true"></i> Libre</span>':'<span class="qb-no">Ocupado</span>'):'<span class="qb-ok"><i class="ph ph-calendar-check" aria-hidden="true"></i> Te confirmamos al momento</span>')+
-      '<span class="qb-what"><b>'+fmt(S.a)+' al '+fmt(S.b)+'</b> · '+n+' noches · '+people()+'</span>'+
-      '<span class="qb-acts"><a class="btn-primary" href="'+waURL()+'" target="_blank" rel="noopener">Apartar por WhatsApp</a><a class="qb-cal" href="#disponibilidad">Ver en el calendario</a></span>';
+      '<span class="qb-what"><b>'+fmt(S.a)+' al '+fmt(S.b)+'</b> · '+n+' noches · '+people()+precioHTML(precio())+'</span>'+
+      '<span class="qb-acts"><a class="btn-primary" href="'+resURL()+'">Reservar</a><a class="qb-cal" href="'+waURL()+'" target="_blank" rel="noopener">o pregúntanos por WhatsApp</a></span>';
     if(anim)gsap.fromTo(res,{y:10,opacity:0},{y:0,opacity:1,duration:.45,ease:"power3.out"});
   }
 
@@ -124,9 +127,9 @@
       grid.innerHTML=monthsHTML(mainView,mobile()?1:2);
       prev.disabled=mainView<=new Date(today.getFullYear(),today.getMonth(),1);
       gn.textContent=S.guests;
-      if(S.a&&S.b){sum.innerHTML="<b>"+fmt(S.a)+" al "+fmt(S.b)+"</b> · "+nights(S.a,S.b)+" noches · "+people();go.classList.remove("off");}
-      else{sum.textContent=S.a?"Ahora elige el día de salida (mínimo 2 noches).":"Elige el día de llegada.";go.classList.add("off");}
-      go.href=waURL();
+      if(S.a&&S.b){sum.innerHTML="<b>"+fmt(S.a)+" al "+fmt(S.b)+"</b> · "+nights(S.a,S.b)+" noches · "+people()+precioHTML(precio());go.classList.remove("off");go.href=resURL();}
+      else{sum.textContent=S.a?"Ahora elige el día de salida (mínimo 2 noches).":"Elige el día de llegada.";go.classList.add("off");go.href="#disponibilidad";}
+      var cw=sec.querySelector(".cal-wa");if(cw)cw.href=waURL();
     }
     if(qb){
       fIn.textContent=S.a?short(S.a):"Agregar fecha";fOut.textContent=S.b?short(S.b):"Agregar fecha";
