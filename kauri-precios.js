@@ -37,8 +37,9 @@ window.KAURI_TARIFAS = {
       { desde: "2027-03-20", hasta: "2027-03-28", noche: 2600, nombre: "Semana Santa" }
     ]
   },
-  /* Cuando exista el cobro con Mercado Pago: URL del servidor que crea el pago (vacío = se manda la solicitud por WhatsApp). */
-  pagoURL: ""
+  /* Servidor de cobros (operacion/kauri-pagos, Cloudflare Worker). Vacío = la solicitud se manda por WhatsApp.
+     Con valor: el botón cobra el anticipo con Mercado Pago y el calendario suma las reservas directas. */
+  servidor: ""
 };
 
 /* Desglose de la estancia. ctx opcional: { busy: {"AAAA-MM-DD":1,...} } con las noches ocupadas (de disponibilidad.json),
@@ -85,4 +86,5 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
            mascotas: m, cargoMascotas: cargoM, personasExtra: extra, cargoExtra: cargoExtra, total: total, anticipo: anticipo, saldo: total - anticipo, tarifa: T,
            ancla: T.ancla || null, especial: especial, ahorro: ahorro };
 };
+window.KAURI_TARIFAS.pagoURL = window.KAURI_TARIFAS.servidor ? window.KAURI_TARIFAS.servidor + "/pago" : "";
 window.kauriMoneda = function (n) { return "$" + Math.round(n).toLocaleString("es-MX"); };

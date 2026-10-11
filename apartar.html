@@ -144,7 +144,7 @@
   </section>
 </main>
 
-<script src="kauri-precios.js?v=3"></script>
+<script src="kauri-precios.js?v=4"></script>
 <script>
 (function(){
   var q=new URLSearchParams(location.search),prop=q.get("p")==="depa"?"depa":"casa",T=KAURI_TARIFAS[prop];
@@ -165,6 +165,22 @@
   $("rules").innerHTML=INFO.reglas.map(function(r){return "<li>"+r+"</li>";}).join("");
   $("sPol").textContent="Cancelación sin costo hasta 31 días antes de tu llegada: el anticipo se reembolsa completo. Precio directo, sin comisiones de plataforma.";
   function bad(msg){$("bad").hidden=false;$("bad").innerHTML=msg+' <a href="'+INFO.pag+'#disponibilidad">Elegir otras fechas →</a>';$("flow").hidden=true;}
+  /* regreso desde Mercado Pago: ?pago=aprobado|pendiente|rechazado&folio=... */
+  var est=q.get("pago");
+  if(est){
+    var ttl={aprobado:"¡Reserva apartada!",pendiente:"Tu pago está en proceso",rechazado:"El pago no se completó"}[est]||"Gracias";
+    var txt={aprobado:"Recibimos tu anticipo. Tus fechas quedan apartadas y en unos minutos te escribimos por WhatsApp con tu confirmación, la dirección y la clave de llegada.",
+             pendiente:"Si pagaste en OXXO o por transferencia, tus fechas quedan apartadas en cuanto Mercado Pago nos confirme el pago. Te avisamos por WhatsApp.",
+             rechazado:"No se hizo ningún cargo. Puedes intentarlo otra vez con otra tarjeta o escribirnos por WhatsApp."}[est]||"";
+    $("flow").hidden=true;$("ok-screen").hidden=false;
+    document.querySelector("#ok-screen h2").textContent=ttl;$("dFolio").textContent=q.get("folio")?"FOLIO "+q.get("folio"):"";$("dTxt").textContent=txt;
+    document.querySelector("#ok-screen ol").hidden=true;
+    if(est!=="aprobado")document.querySelector("#ok-screen i").className="ph ph-hourglass-medium";
+    if(est==="rechazado"){document.querySelector("#ok-screen i").className="ph ph-x-circle";}
+    $("dWa").href="https://wa.me/"+INFO.wa+"?text="+encodeURIComponent("Hola, mi folio de reserva es "+(q.get("folio")||"")+" ("+T.nombre+"). "+(est==="aprobado"?"Ya pagué el anticipo.":"Tengo una duda con el pago."));
+    $("dWa").lastChild.textContent=est==="aprobado"?"Mandar mi folio por WhatsApp":"Escribir por WhatsApp";
+    return;
+  }
   var n=A&&B?Math.round((B-A)/864e5):0;
   if(!A||!B||n<T.minNoches){bad("<b>Elige tus fechas primero.</b> La estancia mínima es de "+T.minNoches+" noches.");return;}
   if(A<today){bad("<b>Esas fechas ya pasaron.</b>");return;}

@@ -167,7 +167,10 @@
   }
   addEventListener("resize",function(){clearTimeout(renderAll.t);renderAll.t=setTimeout(renderAll,150);});
   renderAll();
+  /* Airbnb (vía GitHub) + reservas directas del servidor de cobros, si ya está conectado */
+  var SRV=(window.KAURI_TARIFAS&&window.KAURI_TARIFAS.servidor)||"";
+  function conDirectas(d){if(!SRV||!d)return d;return fetch(SRV+"/ocupado?p="+prop).then(function(r){return r.json();}).then(function(x){d[prop]=(d[prop]||[]).concat(x.ocupado||[]);return d;}).catch(function(){return d;});}
   fetch("https://raw.githubusercontent.com/Casa-Kauri/casa-kauri.github.io/main/disponibilidad.json?t="+Date.now(),{cache:"no-store"})
-    .then(function(r){if(!r.ok)throw 0;return r.json();}).then(apply)
+    .then(function(r){if(!r.ok)throw 0;return r.json();}).then(conDirectas).then(apply)
     .catch(function(){fetch("disponibilidad.json?t="+Date.now()).then(function(r){return r.json();}).then(apply).catch(function(){apply(null);});});
 })();
