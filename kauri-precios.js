@@ -1,12 +1,13 @@
 /* Tarifas y cálculo de precio de Casa Kauri y Departamento Kauri (11 oct 2026).
    Fuente: política de precio de Dalí. Casa (11 oct 2026): ancla $4,000; normal $3,500 entre semana y $3,800 viernes y
    sábado; mes bajo $3,200 / $3,500; mes bajo y llegada cercana $3,250 el fin de semana; piso $3,200. Depa: piso $1,500.
+   Casa: el precio es para 8 personas; desde la 9.ª, $400 por persona por noche. Depa: no admite mascotas.
    Siempre: mínimo 2 noches, limpieza $600 por estancia (una sola vez), anticipo 50 %, cancelación sin costo hasta 31
    días antes, y todo precio menor al ancla se rotula como especial o preferencial. Para cambiar un precio se edita SOLO este archivo.
    "finde" = noches de viernes y sábado. Una temporada pisa al precio base en las noches [desde, hasta). */
 window.KAURI_TARIFAS = {
   casa: {
-    nombre: "Casa Kauri", prefijo: "RES-CK", max: 8, minNoches: 2,
+    nombre: "Casa Kauri", prefijo: "RES-CK", max: 10, incluidos: 8, extraPersona: 400, minNoches: 2,   // precio para 8; desde la 9.ª persona $400 por persona por noche (Dalí, 11 oct 2026)
     entrada: "3:00 p.m.", salida: "11:00 a.m.",
     ancla: 4000,                                   // precio base que se muestra tachado (11 oct 2026)
     base: { semana: 3500, finde: 3800 },           // demanda normal
@@ -24,10 +25,10 @@ window.KAURI_TARIFAS = {
     ]
   },
   depa: {
-    nombre: "Departamento Kauri", prefijo: "RES-DK", max: 6, minNoches: 2,
+    nombre: "Departamento Kauri", prefijo: "RES-DK", max: 6, incluidos: 6, extraPersona: 0, minNoches: 2,
     entrada: "3:00 p.m.", salida: "12:00 p.m.",
     base: { semana: 1500, finde: 1800 },
-    limpieza: 600, mascota: 300, anticipo: 0.5,          // mascota: mismo cargo que la casa (por confirmar con Dalí)
+    limpieza: 600, mascota: null, anticipo: 0.5,         // el depa NO admite mascotas (Dalí, 11 oct 2026)
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 2200, nombre: "Puente de la Revolución" },
       { desde: "2026-12-23", hasta: "2027-01-03", noche: 2600, nombre: "Fiestas de fin de año" },
@@ -42,7 +43,7 @@ window.KAURI_TARIFAS = {
 
 /* Desglose de la estancia. ctx opcional: { busy: {"AAAA-MM-DD":1,...} } con las noches ocupadas (de disponibilidad.json),
    para medir qué tan lleno va cada mes. Cada noche dice si lleva precio especial y por qué. */
-window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx) {
+window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
   var T = window.KAURI_TARIFAS[prop]; if (!T) return null;
   var busy = (ctx && ctx.busy) || null, hoy = new Date(); hoy.setHours(0, 0, 0, 0);
   function k(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
@@ -76,10 +77,12 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx) {
     if (!grupos[g]) { grupos[g] = { etiqueta: etiqueta, precio: precio, noches: 0, especial: !!motivo }; orden.push(g); }
     grupos[g].noches++; noches++; subtotal += precio;
   }
-  var m = Math.max(0, mascotas | 0), cargoM = m * T.mascota, total = subtotal + T.limpieza + cargoM;
+  var m = T.mascota ? Math.max(0, mascotas | 0) : 0, cargoM = m * (T.mascota || 0);
+  var extra = Math.max(0, (personas | 0) - (T.incluidos || T.max)), cargoExtra = extra * (T.extraPersona || 0) * noches;   // por persona, por noche
+  var total = subtotal + T.limpieza + cargoM + cargoExtra;
   var anticipo = Math.round(total * T.anticipo / 50) * 50;          // redondeado a múltiplos de $50
   return { noches: noches, lineas: orden.map(function (g) { return grupos[g]; }), subtotal: subtotal, limpieza: T.limpieza,
-           mascotas: m, cargoMascotas: cargoM, total: total, anticipo: anticipo, saldo: total - anticipo, tarifa: T,
+           mascotas: m, cargoMascotas: cargoM, personasExtra: extra, cargoExtra: cargoExtra, total: total, anticipo: anticipo, saldo: total - anticipo, tarifa: T,
            ancla: T.ancla || null, especial: especial, ahorro: ahorro };
 };
 window.kauriMoneda = function (n) { return "$" + Math.round(n).toLocaleString("es-MX"); };

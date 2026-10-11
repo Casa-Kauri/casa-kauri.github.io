@@ -29,7 +29,7 @@
   function pd(s){var p=s.split("-");return new Date(+p[0],p[1]-1,+p[2]);}
   function people(){return S.guests+(S.guests===1?" persona":" personas");}
   function resURL(){return "apartar.html?p="+prop+"&in="+k(S.a)+"&out="+k(S.b)+"&g="+S.guests;}
-  function precio(){return (window.kauriPrecio&&S.a&&S.b)?window.kauriPrecio(prop,S.a,S.b,0,{busy:synced?busy:null}):null;}
+  function precio(){return (window.kauriPrecio&&S.a&&S.b)?window.kauriPrecio(prop,S.a,S.b,0,{busy:synced?busy:null},S.guests):null;}
   function precioHTML(P){if(!P)return "";return ' · Total <b>'+kauriMoneda(P.total)+'</b>'+(P.especial&&P.ancla?' <span class="qb-esp">Precio especial</span>':'');}
   function waURL(){
     var m=(S.a&&S.b)?"Hola, vi la página de "+nombre+". ¿Está disponible del "+fmt(S.a)+" al "+fmt(S.b,true)+" ("+nights(S.a,S.b)+" noches) para "+people()+"?"

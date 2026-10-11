@@ -144,14 +144,14 @@
   </section>
 </main>
 
-<script src="kauri-precios.js?v=2"></script>
+<script src="kauri-precios.js?v=3"></script>
 <script>
 (function(){
   var q=new URLSearchParams(location.search),prop=q.get("p")==="depa"?"depa":"casa",T=KAURI_TARIFAS[prop];
   var INFO={casa:{lugar:"La Peñita de Jaltemba, Nayarit",img:"alberca.jpg",pag:"index.html",wa:"525628544253",
               reglas:["Llegada desde las 3:00 p.m. y salida antes de las 11:00 a.m.","Horas de silencio de 10:00 p.m. a 6:00 a.m.","La alberca no tiene reja: los niños siempre con un adulto.","Mascotas bienvenidas: $300 por mascota, por estancia."]},
             depa:{lugar:"Rincón de Guayabitos, Nayarit",img:"https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=960",pag:"departamento.html",wa:"525628544253",
-              reglas:["Llegada desde las 3:00 p.m. y salida antes de las 12:00 p.m.","Se suben escaleras entre los tres niveles; el área de descanso es un loft abierto.","El rooftop es una terraza libre, sin muebles.","Mascotas bienvenidas, con cargo adicional por estancia."]}}[prop];
+              reglas:["Llegada desde las 3:00 p.m. y salida antes de las 12:00 p.m.","Se suben escaleras entre los tres niveles; el área de descanso es un loft abierto.","El rooftop es una terraza libre, sin muebles.","No se admiten mascotas."]}}[prop];
   var MES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
   var $=function(id){return document.getElementById(id);},today=new Date();today.setHours(0,0,0,0);
   function pd(s){var p=(s||"").split("-");if(p.length!==3)return null;var d=new Date(+p[0],p[1]-1,+p[2]);return isNaN(d)?null:d;}
@@ -161,7 +161,7 @@
   document.title="Reserva en "+T.nombre;
   $("brandName").textContent=prop==="depa"?"KAURI · DEPARTAMENTO":"CASA KAURI";$("brand").href=INFO.pag;
   $("back").href=$("edFechas").href=INFO.pag+"#disponibilidad";
-  $("sNom").textContent=T.nombre;$("sLugar").textContent=INFO.lugar;$("sImg").src=INFO.img;$("sMax").textContent="(hasta "+T.max+")";$("sMasc").textContent="($"+T.mascota+" c/u)";
+  $("sNom").textContent=T.nombre;$("sLugar").textContent=INFO.lugar;$("sImg").src=INFO.img;$("sMax").textContent=T.extraPersona?"("+T.incluidos+" incluidas · extra $"+T.extraPersona+" por noche)":"(hasta "+T.max+")";if(T.mascota)$("sMasc").textContent="($"+T.mascota+" c/u)";else $("sM").closest(".row").hidden=true;
   $("rules").innerHTML=INFO.reglas.map(function(r){return "<li>"+r+"</li>";}).join("");
   $("sPol").textContent="Cancelación sin costo hasta 31 días antes de tu llegada: el anticipo se reembolsa completo. Precio directo, sin comisiones de plataforma.";
   function bad(msg){$("bad").hidden=false;$("bad").innerHTML=msg+' <a href="'+INFO.pag+'#disponibilidad">Elegir otras fechas →</a>';$("flow").hidden=true;}
@@ -170,11 +170,11 @@
   if(A<today){bad("<b>Esas fechas ya pasaron.</b>");return;}
   var P,BUSY=null;
   function paint(){
-    P=kauriPrecio(prop,A,B,Mm,{busy:BUSY});
+    P=kauriPrecio(prop,A,B,Mm,{busy:BUSY},G);
     $("sFechas").textContent=fmt(A)+" al "+fmt(B,true)+" · "+P.noches+" noches";$("sG").textContent=G;$("sM").textContent=Mm;
     $("lines").innerHTML=(P.especial&&P.ancla?'<div class="esp"><i class="ph ph-tag" aria-hidden="true"></i> <b>Precio especial aplicado.</b> Ahorras '+kauriMoneda(P.ahorro)+' frente al precio base de '+kauriMoneda(P.ancla)+' la noche.</div>':"")+
       P.lineas.map(function(l){return '<div class="ln"><span>'+(P.ancla&&l.precio<P.ancla?'<s style="color:var(--muted)">'+kauriMoneda(P.ancla)+"</s> ":"")+kauriMoneda(l.precio)+" × "+l.noches+(l.noches===1?" noche":" noches")+'<br><small style="color:var(--muted)">'+l.etiqueta+"</small></span><span>"+kauriMoneda(l.precio*l.noches)+"</span></div>";}).join("")+
-      '<div class="ln"><span>Limpieza (una sola vez, no diaria)</span><span>'+kauriMoneda(P.limpieza)+"</span></div>"+(P.mascotas?'<div class="ln"><span>'+P.mascotas+(P.mascotas===1?" mascota":" mascotas")+"</span><span>"+kauriMoneda(P.cargoMascotas)+"</span></div>":"");
+      '<div class="ln"><span>Limpieza (una sola vez, no diaria)</span><span>'+kauriMoneda(P.limpieza)+"</span></div>"+(P.mascotas?'<div class="ln"><span>'+P.mascotas+(P.mascotas===1?" mascota":" mascotas")+"</span><span>"+kauriMoneda(P.cargoMascotas)+"</span></div>":"")+(P.personasExtra?'<div class="ln"><span>'+P.personasExtra+(P.personasExtra===1?" persona extra":" personas extra")+" × "+kauriMoneda(T.extraPersona)+" × "+P.noches+' noches<br><small style="color:var(--muted)">El precio incluye '+T.incluidos+' personas</small></span><span>'+kauriMoneda(P.cargoExtra)+"</span></div>":"");
     $("sTot").textContent=kauriMoneda(P.total);$("sAnt").textContent=$("pAnt").textContent=kauriMoneda(P.anticipo);$("sSal").textContent=kauriMoneda(P.saldo);
     $("pSaldo").textContent="Saldo de "+kauriMoneda(P.saldo)+" antes de tu llegada. Total de la estancia: "+kauriMoneda(P.total)+".";
   }
@@ -203,7 +203,7 @@
         .then(function(r){if(r.url)location.href=r.url;else throw r;}).catch(function(e){$("go").disabled=false;$("goTxt").textContent="Pagar anticipo con Mercado Pago";alert((e&&e.error)||"No se pudo iniciar el pago. Intenta de nuevo o escríbenos por WhatsApp.");});
       return;
     }
-    var msg="Solicitud de reserva "+folio+"\n"+T.nombre+": del "+fmt(A)+" al "+fmt(B,true)+" ("+P.noches+" noches)\n"+G+(G===1?" persona":" personas")+" · "+Mm+(Mm===1?" mascota":" mascotas")+
+    var msg="Solicitud de reserva "+folio+"\n"+T.nombre+": del "+fmt(A)+" al "+fmt(B,true)+" ("+P.noches+" noches)\n"+G+(G===1?" persona":" personas")+(P.personasExtra?" ("+P.personasExtra+" extra: "+kauriMoneda(P.cargoExtra)+")":"")+(T.mascota?" · "+Mm+(Mm===1?" mascota":" mascotas"):"")+
       (P.especial&&P.ancla?"\nPrecio especial aplicado (base "+kauriMoneda(P.ancla)+" la noche): "+P.lineas.map(function(l){return l.noches+" × "+kauriMoneda(l.precio);}).join(" + "):"")+"\nTotal: "+kauriMoneda(P.total)+" (incluye limpieza "+kauriMoneda(P.limpieza)+")\nAnticipo 50 %: "+kauriMoneda(P.anticipo)+"\n\nNombre: "+nom+"\nWhatsApp: "+tel+"\nCorreo: "+mail+(datos.comentarios?"\nComentarios: "+datos.comentarios:"")+"\n\n¿Me mandas el link para pagar el anticipo?";
     var url="https://wa.me/"+INFO.wa+"?text="+encodeURIComponent(msg);
     $("flow").hidden=true;$("ok-screen").hidden=false;$("dFolio").textContent="FOLIO "+folio;
