@@ -34,7 +34,7 @@
         if(a&&+d===+a)cls.push("sel","start");if(end&&+d===+end)cls.push("sel","end");if(a&&end&&d>a&&d<end)cls.push("in");
         var canEnd=a&&!b&&d>a&&freeBetween(a,d);                       // la salida puede caer en un día ocupado (es la mañana)
         var dis=past||(isBusy&&!canEnd);
-        html+='<button type="button" class="'+cls.join(" ")+'" data-k="'+key+'"'+(dis?" disabled":"")+' aria-label="'+fmt(d,true)+(isBusy?", ocupado":"")+'" aria-pressed="'+(cls.indexOf("sel")>-1)+'">'+dd+"</button>";
+        html+='<button type="button" class="'+cls.join(" ")+'" data-k="'+key+'"'+(dis?" disabled":"")+(isBusy?' title="Ocupado"':"")+' aria-label="'+fmt(d,true)+(isBusy?", ocupado":"")+'" aria-pressed="'+(cls.indexOf("sel")>-1)+'">'+dd+"</button>";
       }
       html+="</div></div>";
     }
@@ -70,7 +70,22 @@
     synced=!!(data&&data.sincronizado&&data.sincronizado[prop]);
     if(synced&&data.actualizado){var u=new Date(data.actualizado);st.textContent="Sincronizado con Airbnb · último cambio el "+fmt(u)+". Te confirmamos al momento por WhatsApp.";st.classList.add("ok");}
     else st.textContent="Calendario en conexión con Airbnb: elige tus fechas y te confirmamos la disponibilidad al momento por WhatsApp.";
+    nextFree();
     render();
+  }
+  /* franja "próximo fin de semana libre": el siguiente viernes y sábado libres según Airbnb; al tocarla deja las fechas elegidas */
+  function nextFree(){
+    var el=document.querySelector(".next-free");if(!el)return;
+    if(!synced){el.hidden=true;return;}
+    var d=new Date(today);while(d.getDay()!==5)d=add(d,1);
+    for(var i=0;i<26;i++,d=add(d,7)){
+      if(!busy[k(d)]&&!busy[k(add(d,1))]){var fri=new Date(d),sun=add(d,2);
+        el.querySelector(".nf-d").textContent="viernes "+fri.getDate()+(fri.getMonth()!==sun.getMonth()?" de "+MES[fri.getMonth()]:"")+" al domingo "+sun.getDate()+" de "+MES[sun.getMonth()];
+        el.hidden=false;
+        el.onclick=function(){a=fri;b=sun;view=new Date(fri.getFullYear(),fri.getMonth(),1);render();};
+        return;}
+    }
+    el.hidden=true;
   }
   render();
   /* primero la copia del repo (siempre la más reciente, sin esperar a que se reconstruya el sitio); si falla, la local */
