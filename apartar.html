@@ -198,7 +198,11 @@
   $("mm").onclick=function(){Mm=Math.max(0,Mm-1);paint();};$("mp").onclick=function(){Mm=Math.min(3,Mm+1);paint();};
   paint();
   /* revisa la disponibilidad otra vez (por si alguien acaba de reservar en Airbnb) y mide la ocupación del mes para el precio */
-  fetch("https://raw.githubusercontent.com/Casa-Kauri/casa-kauri.github.io/main/disponibilidad.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
+  /* + el servidor de cobros (Airbnb en vivo y directas): así el precio de aquí es el mismo que cobra Mercado Pago (11 oct 2026) */
+  fetch("https://raw.githubusercontent.com/Casa-Kauri/casa-kauri.github.io/main/disponibilidad.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).catch(function(){return {};}).then(function(d){
+    if(!KAURI_TARIFAS.servidor)return d;
+    return fetch(KAURI_TARIFAS.servidor+"/ocupado?p="+prop).then(function(r){return r.json();}).then(function(x){d[prop]=(d[prop]||[]).concat(x.ocupado||[]);if(x.airbnb){d.sincronizado=d.sincronizado||{};d.sincronizado[prop]=true;}return d;}).catch(function(){return d;});
+  }).then(function(d){
     var ocupado=false;BUSY={};(d[prop]||[]).forEach(function(x){if(k(A)<x[1]&&k(B)>x[0])ocupado=true;for(var y=pd(x[0]),e=pd(x[1]);y<e;y.setDate(y.getDate()+1))BUSY[k(y)]=1;});
     if(!(d.sincronizado&&d.sincronizado[prop]))BUSY=null;
     if(ocupado){bad("<b>Esas fechas acaban de ocuparse.</b> Lo sentimos: alguien las reservó hace poco.");return;}
