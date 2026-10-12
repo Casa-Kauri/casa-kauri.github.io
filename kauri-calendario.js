@@ -70,8 +70,10 @@
   }
   function wire(g){
     g.addEventListener("click",function(e){var t=e.target.closest(".cal-d");if(!t||t.disabled)return;e.stopPropagation();pick(pd(t.dataset.k));});
-    g.addEventListener("mouseover",function(e){var t=e.target.closest(".cal-d");if(!t||!S.a||S.b)return;var h=pd(t.dataset.k);if(S.hov&&+h===+S.hov)return;S.hov=h;renderAll();});
-    g.addEventListener("mouseleave",function(){if(S.hov){S.hov=null;renderAll();}});
+    /* la vista previa del rango solo con mouse: en iPhone el toque dispara mouseover, el calendario se redibuja y Safari
+       cancela el clic (se marcaba la llegada pero nunca la salida, 11 oct 2026) */
+    g.addEventListener("pointerover",function(e){if(e.pointerType!=="mouse")return;var t=e.target.closest(".cal-d");if(!t||!S.a||S.b)return;var h=pd(t.dataset.k);if(S.hov&&+h===+S.hov)return;S.hov=h;renderAll();});
+    g.addEventListener("pointerleave",function(e){if(e.pointerType!=="mouse")return;if(S.hov){S.hov=null;renderAll();}});
   }
 
   /* ---------- 2) calendario grande ---------- */
