@@ -64,7 +64,7 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
   }
   var diasFaltan = Math.round((new Date(llegada) - hoy) / 864e5);
   var codigo = String((ctx && ctx.cupon) || "").trim().toUpperCase(), cup = T.cupones && T.cupones[codigo], usoCupon = false;
-  if (cup && cup.vence && k(hoy) > cup.vence) cup = null;
+  var cupVencido = !!(cup && cup.vence && k(hoy) > cup.vence), cupVence = cup ? cup.vence || "" : ""; if (cupVencido) cup = null;
   var grupos = {}, orden = [], noches = 0, subtotal = 0, especial = false, ahorro = 0;
   for (var d = new Date(llegada); d < salida; d.setDate(d.getDate() + 1)) {
     var key = k(d), finde = (d.getDay() === 5 || d.getDay() === 6), tipo = finde ? "finde" : "semana";
@@ -92,7 +92,7 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
   var anticipo = Math.round(total * T.anticipo / 50) * 50;          // redondeado a múltiplos de $50
   return { noches: noches, lineas: orden.map(function (g) { return grupos[g]; }), subtotal: subtotal, limpieza: T.limpieza,
            mascotas: m, cargoMascotas: cargoM, personasExtra: extra, cargoExtra: cargoExtra, total: total, anticipo: anticipo, saldo: total - anticipo, tarifa: T,
-           ancla: T.ancla || null, especial: especial, ahorro: ahorro, cupon: usoCupon ? codigo : "", cuponInvalido: !!codigo && !usoCupon };
+           ancla: T.ancla || null, especial: especial, ahorro: ahorro, cupon: usoCupon ? codigo : "", cuponInvalido: !!codigo && !usoCupon, cuponVencido: cupVencido, cuponVence: cupVence };
 };
 window.KAURI_TARIFAS.pagoURL = window.KAURI_TARIFAS.servidor ? window.KAURI_TARIFAS.servidor + "/pago" : "";
 window.kauriMoneda = function (n) { return "$" + Math.round(n).toLocaleString("es-MX"); };

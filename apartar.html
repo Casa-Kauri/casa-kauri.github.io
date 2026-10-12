@@ -190,7 +190,7 @@
   var P,BUSY=null;
   function paint(){
     P=kauriPrecio(prop,A,B,Mm,{busy:BUSY,cupon:CUP},G);
-    $("cup").value=CUP;$("cupMsg").className=P.cupon?"ok":P.cuponInvalido?"no":"";$("cupMsg").textContent=P.cupon?"✓ aplicado":P.cuponInvalido?"no válido para estas fechas":"";
+    $("cup").value=CUP;$("cupMsg").className=P.cupon?"ok":P.cuponInvalido?"no":"";$("cupMsg").textContent=P.cupon?"✓ aplicado"+(P.cuponVence?" · válido para apartar hasta el "+fmt(pd(P.cuponVence)):""):P.cuponVencido?"este cupón venció el "+fmt(pd(P.cuponVence)):P.cuponInvalido?"no válido para estas fechas":"";
     $("sFechas").textContent=fmt(A)+" al "+fmt(B,true)+" · "+P.noches+" noches";$("sG").textContent=G;$("sM").textContent=Mm;
     $("lines").innerHTML=(P.especial&&P.ancla?'<div class="esp"><i class="ph ph-tag" aria-hidden="true"></i> <b>Precio especial aplicado.</b> Ahorras '+kauriMoneda(P.ahorro)+' frente al precio base de '+kauriMoneda(P.ancla)+' la noche.</div>':"")+
       P.lineas.map(function(l){return '<div class="ln"><span>'+(P.ancla&&l.precio<P.ancla?'<s style="color:var(--muted)">'+kauriMoneda(P.ancla)+"</s> ":"")+kauriMoneda(l.precio)+" × "+l.noches+(l.noches===1?" noche":" noches")+'<br><small style="color:var(--muted)">'+l.etiqueta+"</small></span><span>"+kauriMoneda(l.precio*l.noches)+"</span></div>";}).join("")+
