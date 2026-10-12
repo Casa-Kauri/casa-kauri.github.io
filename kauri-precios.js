@@ -22,6 +22,7 @@ window.KAURI_TARIFAS = {
       KAURI3000: { desde: "2026-11-22", hasta: "2026-11-24", noche: 3000, vence: "2026-10-16" },  // oferta de Dalí (12 oct 2026), pareja del anuncio
       /* tipo "nocheGratis": en cualquier fecha, con 3 noches o más, la noche más barata va de regalo (una por estancia);
          no aplica si alguna noche cae en temporada (puentes, fiestas, Semana Santa). */
+      NOVIEMBRE: { desde: "2026-11-20", hasta: "2026-11-22", noche: 3000, vence: "2026-10-16" },  // misma pareja: la casa estaba ocupada en el puente
       MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" }   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
     },
     temporadas: [
@@ -37,6 +38,9 @@ window.KAURI_TARIFAS = {
     entrada: "3:00 p.m.", salida: "12:00 p.m.",
     base: { semana: 1500, finde: 1800 },
     limpieza: 600, mascota: null, anticipo: 0.5,         // el depa NO admite mascotas (Dalí, 11 oct 2026)
+    cupones: {   // mismo formato que los de la casa
+      NOVIEMBRE: { desde: "2026-11-13", hasta: "2026-11-16", noche: 1750, vence: "2026-10-16" }   // puente nov, pareja (Dalí, 12 oct 2026); en la casa el mismo código vale 20–22 nov
+    },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 2200, nombre: "Puente de la Revolución" },
       { desde: "2026-12-23", hasta: "2027-01-03", noche: 2600, nombre: "Fiestas de fin de año" },
