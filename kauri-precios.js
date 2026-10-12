@@ -19,7 +19,10 @@ window.KAURI_TARIFAS = {
     /* cupones: tarifa privada para un prospecto, solo en las noches [desde, hasta) y hasta el día "vence" (incluido).
        Se aplica con ?cupon=CODIGO en apartar.html o escribiéndolo ahí; el servidor de cobros lo recalcula igual. */
     cupones: {
-      KAURI3000: { desde: "2026-11-22", hasta: "2026-11-24", noche: 3000, vence: "2026-10-16" }   // oferta de Dalí (12 oct 2026), pareja del anuncio
+      KAURI3000: { desde: "2026-11-22", hasta: "2026-11-24", noche: 3000, vence: "2026-10-16" },  // oferta de Dalí (12 oct 2026), pareja del anuncio
+      /* tipo "nocheGratis": en cualquier fecha, con 3 noches o más, la noche más barata va de regalo (una por estancia);
+         no aplica si alguna noche cae en temporada (puentes, fiestas, Semana Santa). */
+      MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" }   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
     },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
@@ -65,12 +68,14 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
   var diasFaltan = Math.round((new Date(llegada) - hoy) / 864e5);
   var codigo = String((ctx && ctx.cupon) || "").trim().toUpperCase(), cup = T.cupones && T.cupones[codigo], usoCupon = false;
   var cupVencido = !!(cup && cup.vence && k(hoy) > cup.vence), cupVence = cup ? cup.vence || "" : ""; if (cupVencido) cup = null;
+  var cupTemporada = false;
   var grupos = {}, orden = [], noches = 0, subtotal = 0, especial = false, ahorro = 0;
   for (var d = new Date(llegada); d < salida; d.setDate(d.getDate() + 1)) {
     var key = k(d), finde = (d.getDay() === 5 || d.getDay() === 6), tipo = finde ? "finde" : "semana";
     var precio = T.base[tipo], etiqueta = finde ? "Viernes y sábado" : "Domingo a jueves", motivo = "";
     var temp = null; T.temporadas.forEach(function (t) { if (key >= t.desde && key < t.hasta && !(t.vence && k(hoy) > t.vence)) temp = t; });   // vence: último día (incluido) en que vale una oferta
-    if (cup && key >= cup.desde && key < cup.hasta) { precio = cup.noche; etiqueta = "Cupón " + codigo + " · tarifa especial"; temp = cup; usoCupon = true; }
+    if (cup && cup.tipo === "nocheGratis" && temp) cupTemporada = true;
+    if (cup && !cup.tipo && key >= cup.desde && key < cup.hasta) { precio = cup.noche; etiqueta = "Cupón " + codigo + " · tarifa especial"; temp = cup; usoCupon = true; }
     else if (temp) { precio = temp.noche; etiqueta = temp.nombre; }
     else if (T.dinamica) {
       var occ = ocupacion(d);
@@ -86,13 +91,19 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
     if (!grupos[g]) { grupos[g] = { etiqueta: etiqueta, precio: precio, noches: 0, especial: !!motivo }; orden.push(g); }
     grupos[g].noches++; noches++; subtotal += precio;
   }
+  if (cup && cup.tipo === "nocheGratis" && !cupTemporada && noches >= 3) {   // se regala la noche más barata
+    var gb = null; orden.forEach(function (g) { if (!gb || grupos[g].precio < grupos[gb].precio) gb = g; });
+    var regalo = grupos[gb].precio; subtotal -= regalo; ahorro += regalo; especial = true; usoCupon = true;
+    if (!--grupos[gb].noches) orden.splice(orden.indexOf(gb), 1);
+    grupos.regalo = { etiqueta: "Noche de regalo · cupón " + codigo, precio: 0, noches: 1, especial: true }; orden.push("regalo");
+  }
   var m = T.mascota ? Math.max(0, mascotas | 0) : 0, cargoM = m * (T.mascota || 0);
   var extra = Math.max(0, (personas | 0) - (T.incluidos || T.max)), cargoExtra = extra * (T.extraPersona || 0) * noches;   // por persona, por noche
   var total = subtotal + T.limpieza + cargoM + cargoExtra;
   var anticipo = Math.round(total * T.anticipo / 50) * 50;          // redondeado a múltiplos de $50
   return { noches: noches, lineas: orden.map(function (g) { return grupos[g]; }), subtotal: subtotal, limpieza: T.limpieza,
            mascotas: m, cargoMascotas: cargoM, personasExtra: extra, cargoExtra: cargoExtra, total: total, anticipo: anticipo, saldo: total - anticipo, tarifa: T,
-           ancla: T.ancla || null, especial: especial, ahorro: ahorro, cupon: usoCupon ? codigo : "", cuponInvalido: !!codigo && !usoCupon, cuponVencido: cupVencido, cuponVence: cupVence };
+           ancla: T.ancla || null, especial: especial, ahorro: ahorro, cupon: usoCupon ? codigo : "", cuponInvalido: !!codigo && !usoCupon, cuponVencido: cupVencido, cuponVence: cupVence, cuponTemporada: cupTemporada };
 };
 window.KAURI_TARIFAS.pagoURL = window.KAURI_TARIFAS.servidor ? window.KAURI_TARIFAS.servidor + "/pago" : "";
 window.kauriMoneda = function (n) { return "$" + Math.round(n).toLocaleString("es-MX"); };
