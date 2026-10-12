@@ -18,6 +18,7 @@ window.KAURI_TARIFAS = {
     limpieza: 600, mascota: 300, anticipo: 0.5,
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
+      { desde: "2026-11-22", hasta: "2026-11-24", noche: 3000, nombre: "Tarifa especial", vence: "2026-10-16" },   // oferta puntual de Dalí (12 oct 2026); se apaga sola después del 16 oct
       { desde: "2026-12-23", hasta: "2027-01-03", noche: 4500, nombre: "Fiestas de fin de año" },
       { desde: "2027-01-29", hasta: "2027-02-01", noche: 4200, nombre: "Puente de la Constitución" },
       { desde: "2027-03-12", hasta: "2027-03-15", noche: 4200, nombre: "Puente de Benito Juárez" },
@@ -62,7 +63,7 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
   for (var d = new Date(llegada); d < salida; d.setDate(d.getDate() + 1)) {
     var key = k(d), finde = (d.getDay() === 5 || d.getDay() === 6), tipo = finde ? "finde" : "semana";
     var precio = T.base[tipo], etiqueta = finde ? "Viernes y sábado" : "Domingo a jueves", motivo = "";
-    var temp = null; T.temporadas.forEach(function (t) { if (key >= t.desde && key < t.hasta) temp = t; });
+    var temp = null; T.temporadas.forEach(function (t) { if (key >= t.desde && key < t.hasta && !(t.vence && k(hoy) > t.vence)) temp = t; });   // vence: último día (incluido) en que vale una oferta
     if (temp) { precio = temp.noche; etiqueta = temp.nombre; }
     else if (T.dinamica) {
       var occ = ocupacion(d);
