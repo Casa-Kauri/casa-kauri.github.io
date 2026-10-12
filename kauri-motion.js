@@ -28,7 +28,7 @@
   if(spots.length)pick(0);
   var stage=$("#casa3d-cv");
   function load3d(){if(load3d.done)return;load3d.done=true;
-    function go(){var s=document.createElement("script");s.src=(stage.getAttribute("data-model")||"casa3d.js")+"?v=2";s.onload=function(){var cur=spots.findIndex(function(b){return b.getAttribute("aria-pressed")==="true";});if(window.__casa3d&&cur>0)window.__casa3d.face(cur);};document.body.appendChild(s);}
+    function go(){var s=document.createElement("script");s.src=(stage.getAttribute("data-model")||"casa3d.js")+"?v=3";s.onload=function(){var cur=spots.findIndex(function(b){return b.getAttribute("aria-pressed")==="true";});if(window.__casa3d&&cur>0)window.__casa3d.face(cur);};document.body.appendChild(s);}
     if(window.THREE)go();else{var t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";t.onload=go;document.body.appendChild(t);}}
   if(stage){if("IntersectionObserver" in window){var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){load3d();o.disconnect();}},{rootMargin:"700px 0px"});o.observe(stage);}else load3d();}
 

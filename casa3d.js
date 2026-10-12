@@ -1,5 +1,5 @@
-/* Maqueta 3D de Casa Kauri (11 oct 2026). Solo lo que la casa tiene de verdad: dos plantas, alberca climatizada con
-   chapoteadero, terraza con asador de ladrillo, terraza superior con vista, jardín cercado, entrada privada y palmeras.
+/* Maqueta 3D de Casa Kauri (11 oct 2026). Copiada de las fotos: casa de patio con alberca larga al centro, ala de dos
+   plantas con pórtico de columnas y pasillo-balcón, ala del fondo con terraza, jardín tropical, celosía y cochera.
    La escala y los colores son ilustrativos (lo dice la nota junto a la maqueta). Se carga solo cuando la sección se acerca.
    Lee el modo central de <head>: window.__motion (full | soft | off), __dpr, __adapt, __lowfx. */
 (function(){
@@ -29,76 +29,111 @@
 
   var root=new T.Group();scene.add(root);
 
-  /* base: terreno redondo de maqueta, pasto y andadores */
-  var base=new T.Mesh(new T.CylinderGeometry(7.4,7.6,.5,96),M(0xE6D6B8,{roughness:.95}));base.position.y=-.25;base.receiveShadow=SH;root.add(base);
-  var lawn=new T.Mesh(new T.CylinderGeometry(6.9,6.9,.06,96),M(0x6F9A5E,{roughness:1}));lawn.position.y=.03;lawn.receiveShadow=SH;root.add(lawn);
-
-  /* sombra suave bajo la casa */
+  /* v3 (11 oct 2026): copiada de las fotos reales. Casa de patio: alberca larga al centro; ala de dos plantas a la
+     izquierda (pórtico de columnas blancas abajo, recámaras y pasillo-balcón con barandal negro arriba, bóvedas de
+     ladrillo bajo los aleros); ala del fondo con balcón; cochera al frente; jardín tropical a la derecha; celosía de
+     madera oscura; foquitos sobre el patio. */
+  var base=new T.Mesh(new T.CylinderGeometry(7.6,7.8,.5,96),M(0xE6D6B8,{roughness:.95}));base.position.y=-.25;root.add(base);
+  var lawn=new T.Mesh(new T.BoxGeometry(8.2,.06,12.4),M(0xD8D3C8,{roughness:.95}));lawn.position.y=.03;root.add(lawn);   // piso del patio
   var sc=document.createElement("canvas");sc.width=sc.height=128;var g2=sc.getContext("2d"),gr=g2.createRadialGradient(64,64,6,64,64,64);
-  gr.addColorStop(0,"rgba(30,40,60,.45)");gr.addColorStop(1,"rgba(30,40,60,0)");g2.fillStyle=gr;g2.fillRect(0,0,128,128);
-  var sh=new T.Mesh(new T.PlaneGeometry(9,7),new T.MeshBasicMaterial({map:new T.CanvasTexture(sc),transparent:true,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.set(-.6,.07,-1.2);root.add(sh);
+  gr.addColorStop(0,"rgba(30,40,60,.4)");gr.addColorStop(1,"rgba(30,40,60,0)");g2.fillStyle=gr;g2.fillRect(0,0,128,128);
+  var sh=new T.Mesh(new T.PlaneGeometry(11,15),new T.MeshBasicMaterial({map:new T.CanvasTexture(sc),transparent:true,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.set(-1,.07,-.5);root.add(sh);
 
-  /* la casa: planta baja abierta, planta alta con recámaras, azotea plana con pretil */
-  var wall=M(0xF4F1EA),trim=M(0xD8D2C4),glassM=M(0x9FC3D6,{roughness:.15,metalness:.2,transparent:true,opacity:.85}),wood=M(0x9A6B45,{roughness:.8}),dark=M(0x3B4652);
-  var H=new T.Group();H.position.set(-.6,0,-1.4);root.add(H);
-  box(4.6,1.5,3.2,wall,0,.82,0,H);                                   // planta baja
-  box(3.0,.06,1.3,glassM,-.4,.85,1.62,H);                           // ventanales al jardín
-  box(4.9,.14,3.5,trim,0,1.62,0,H);                                 // losa
-  box(3.6,1.35,3.0,wall,.5,2.37,-.1,H);                             // planta alta (4 recámaras)
-  [[-0.6,2.4],[0.5,2.4],[1.6,2.4]].forEach(function(p){box(.62,.5,.05,glassM,p[0],p[1],1.43,H);});
-  box(3.8,.12,3.2,trim,.5,3.1,-.1,H);                               // azotea
-  box(3.8,.22,.08,trim,.5,3.27,1.46,H);box(3.8,.22,.08,trim,.5,3.27,-1.66,H);   // pretil
-  box(.08,.22,3.2,trim,-1.36,3.27,-.1,H);box(.08,.22,3.2,trim,2.36,3.27,-.1,H);
-  /* terraza superior con vista (sobre la losa, al frente izquierdo) con barandal */
-  box(1.15,.05,1.6,wood,-1.85,1.72,.75,H);
-  for(var bi=0;bi<6;bi++)box(.04,.4,.04,dark,-2.4,1.95,.05+bi*.28,H);
-  box(.04,.04,1.6,dark,-2.4,2.15,.75,H);
-  /* puerta y escalones */
-  box(.55,.95,.06,wood,1.35,.55,1.62,H);
+  var wall=M(0xF5F2EC),trim=M(0xE4DED3),wood=M(0x8A5A36,{roughness:.7}),dark=M(0x23272B,{roughness:.6}),slat=M(0x3A2E26,{roughness:.8}),grass=M(0x5E8E4E,{roughness:1}),paver=M(0xC9C4B8,{roughness:.95}),brick=M(0xB4643C,{roughness:.9,side:T.DoubleSide}),glassM=M(0x2E3A44,{roughness:.2,metalness:.3});
+  function vaults(x0,x1,z0,z1,top,alongZ){               // bóvedas de ladrillo: arcos rebajados pegados bajo la losa (se ven desde abajo)
+    var n=Math.max(2,Math.round((alongZ?(z1-z0):(x1-x0))/.55)),r0=alongZ?(z1-z0)/n/2:(x1-x0)/n/2;
+    for(var i=0;i<n;i++){var t=(i+.5)/n,len=alongZ?(x1-x0):(z1-z0),c=new T.Mesh(new T.CylinderGeometry(r0,r0,len,14,1,true,0,Math.PI),brick),g=new T.Group();
+      c.rotation.z=Math.PI/2;if(!alongZ)g.rotation.y=Math.PI/2;g.add(c);
+      var w=new T.Group();w.add(g);w.scale.y=.4;w.position.set(alongZ?(x0+x1)/2:x0+t*(x1-x0),top-r0*.4,alongZ?z0+t*(z1-z0):(z0+z1)/2);root.add(w);}
+  }
+  function railing(x0,z0,x1,z1,y){                      // barandal negro: postes + pasamanos
+    var L=Math.hypot(x1-x0,z1-z0),n=Math.round(L/.45);
+    for(var i=0;i<=n;i++){var t=i/n;box(.035,.42,.035,dark,x0+t*(x1-x0),y+.21,z0+t*(z1-z0));}
+    var r=box(x1===x0?.035:L,.035,z1===z0?.035:L,dark,(x0+x1)/2,y+.42,(z0+z1)/2);
+    box(x1===x0?.025:L,.025,z1===z0?.025:L,dark,(x0+x1)/2,y+.22,(z0+z1)/2);
+  }
 
-  /* terraza de planta baja con comedor y asador de ladrillo */
-  var deck=box(3.2,.08,1.5,wood,-1.4,.1,1.15);
-  box(1.0,.05,.6,M(0x6E5136),-1.6,.6,1.15);box(.06,.45,.06,dark,-1.6,.36,1.15);   // mesa
-  var brick=M(0xB5573A,{roughness:.9});box(.7,.75,.55,brick,-2.75,.5,1.2);box(.55,.12,.4,dark,-2.75,.92,1.2);   // asador
+  /* ala larga de dos plantas (izquierda), x -4…-1.6, z -6…3.4 */
+  box(1.0,1.4,9.4,wall,-3.5,.72,-1.3);                                // recámaras / cocina al fondo del pórtico
+  for(var z=-5.2;z<=3.0;z+=1.65){box(.16,1.4,.16,M(0xFBFAF7),-1.72,.72,z);}   // columnas blancas del pórtico
+  box(2.6,.12,9.6,trim,-2.8,1.48,-1.3);                               // losa entre plantas
+  vaults(-3.0,-1.62,-6.0,3.4,1.42,true);                              // bóvedas del pórtico
+  box(1.35,1.3,9.4,wall,-3.33,2.2,-1.3);                              // planta alta: recámaras
+  for(var z2=-5.0;z2<=2.6;z2+=1.9){box(.05,.8,.42,wood,-2.64,2.0,z2);box(.05,.55,.5,glassM,-2.64,2.15,z2+.75);}   // puertas de madera y ventanas
+  railing(-1.66,-6.0,-1.66,3.4,1.54);                                 // pasillo-balcón con barandal negro
+  box(2.7,.12,9.8,trim,-2.85,2.92,-1.3);                              // azotea
+  vaults(-2.6,-1.55,-6.0,3.4,2.86,true);                              // bóvedas del pasillo de arriba
+  /* ala del fondo, x -1.6…4, z -6…-4.6, también de dos plantas con balcón */
+  box(5.6,1.4,.9,wall,1.2,.72,-5.55);
+  for(var x=-.8;x<=3.6;x+=1.5){box(.42,.8,.05,wood,x,.42,-5.08);}
+  box(5.7,.12,1.6,trim,1.15,1.48,-5.2);
+  box(5.6,1.3,.9,wall,1.2,2.2,-5.55);
+  for(var x2=-.6;x2<=3.6;x2+=1.6){box(.42,.8,.05,wood,x2,2.0,-5.08);}
+  railing(-1.6,-4.42,4.0,-4.42,1.54);
+  box(5.8,.12,1.8,trim,1.1,2.92,-5.15);
+  vaults(-1.6,4.0,-5.05,-4.4,2.86,false);vaults(-1.6,4.0,-5.05,-4.4,1.42,false);
+  [[1.1,-4.75],[1.6,-4.75]].forEach(function(p){box(.26,.26,.26,dark,p[0],1.68,p[1]);});   // sillas de la terraza de arriba
 
-  /* alberca climatizada con chapoteadero y camastros */
-  var poolEdge=box(3.9,.16,2.5,M(0xEDE7DA),2.2,.1,1.9);
-  var water=new T.Mesh(new T.PlaneGeometry(3.4,2.0,24,14),new T.MeshPhysicalMaterial({color:L(0x13A3BD),roughness:.1,metalness:0,clearcoat:.6,clearcoatRoughness:.08,envMapIntensity:.55,emissive:L(0x0A6A80),emissiveIntensity:.45}));
-  water.rotation.x=-Math.PI/2;water.position.set(2.2,.19,1.9);root.add(water);
-  var kid=new T.Mesh(new T.CylinderGeometry(.55,.55,.04,32),new T.MeshPhysicalMaterial({color:L(0x3CC4D6),roughness:.1,clearcoat:.5,envMapIntensity:.5,emissive:L(0x0F7484),emissiveIntensity:.4}));kid.position.set(.55,.2,2.55);root.add(kid);   // chapoteadero
-  var lounger=M(0xF7F7F2);[[3.0,3.55],[1.9,3.55]].forEach(function(p){box(.42,.08,.9,lounger,p[0],.2,p[1]);box(.42,.25,.08,lounger,p[0],.33,p[1]-.42).rotation.x=-.5;});
+  /* pórtico: sala, comedor y asador */
+  box(1.0,.06,.6,M(0x7A5234),-2.4,.6,-1.6);box(.08,.48,.08,dark,-2.4,.33,-1.6);    // comedor
+  box(.7,.22,.45,M(0xD9D2C3),-2.5,.2,.6);box(.45,.22,.45,M(0xD9D2C3),-2.1,.2,1.3);  // sillones
+  box(.55,.6,.45,brick,-3.0,.36,2.4);box(.45,.08,.35,dark,-3.0,.7,2.4);            // asador de ladrillo
 
-  /* palmeras */
+  /* cochera al frente del ala, con portón */
+  box(2.4,.03,2.4,M(0xB8B2A6),-2.8,.07,4.7);
+  box(2.4,.1,2.5,trim,-2.8,1.48,4.65);box(.16,1.4,.16,M(0xFBFAF7),-1.72,.72,5.8);
+  box(2.2,1.2,.06,slat,-2.8,.66,5.95);                                 // portón de madera oscura
+
+  /* alberca larga al centro, con chapoteadero y fuente */
+  box(2.7,.14,7.4,M(0x8E9499,{roughness:.6}),1.3,.1,-.2);             // borde de piedra gris
+  var water=new T.Mesh(new T.PlaneGeometry(2.2,6.9,12,40),new T.MeshPhysicalMaterial({color:L(0x1AA9C4),roughness:.1,metalness:0,clearcoat:.6,clearcoatRoughness:.08,envMapIntensity:.55,emissive:L(0x0A6A80),emissiveIntensity:.45}));
+  water.rotation.x=-Math.PI/2;water.position.set(1.3,.18,-.2);root.add(water);
+  var kid=new T.Mesh(new T.BoxGeometry(2.2,.03,.9),new T.MeshPhysicalMaterial({color:L(0x4FCBDA),roughness:.1,clearcoat:.5,envMapIntensity:.5,emissive:L(0x0F7484),emissiveIntensity:.35}));kid.position.set(1.3,.2,-3.15);root.add(kid);   // chapoteadero (escalón)
+  var jet=new T.Mesh(new T.CylinderGeometry(.02,.05,.6,8),new T.MeshBasicMaterial({color:0xDFF6FA,transparent:true,opacity:.55}));jet.position.set(1.3,.5,-3.55);root.add(jet);   // fuente
+
+  /* andador de losetas en el pasto, entre pórtico y alberca */
+  box(1.2,.05,9.0,grass,-.6,.07,-.2);
+  for(var zp=-4.2;zp<=3.8;zp+=.75){box(.62,.06,.42,paver,-.6,.1,zp);}
+  /* jardín tropical a la derecha: palmeras y plátanos */
+  box(1.5,.08,10.2,grass,3.3,.08,.3);
   function palm(x,z,hgt,lean){
     var p=new T.Group(),seg=6,trunkM=M(0x8C6A4A,{roughness:.95}),leafM=M(0x2F7444,{roughness:.8,side:T.DoubleSide});
-    for(var s=0;s<seg;s++){var t=new T.Mesh(new T.CylinderGeometry(.09-s*.006,.11-s*.006,hgt/seg,8),trunkM);t.position.set(Math.sin(s/seg*1.2)*lean,hgt/seg*(s+.5),0);p.add(t);}
+    for(var s=0;s<seg;s++){var t=new T.Mesh(new T.CylinderGeometry(.08-s*.006,.1-s*.006,hgt/seg,8),trunkM);t.position.set(Math.sin(s/seg*1.2)*lean,hgt/seg*(s+.5),0);p.add(t);}
     var top=new T.Group();top.position.set(Math.sin(1.2)*lean,hgt,0);p.add(top);
-    for(var l=0;l<9;l++){var leaf=new T.Mesh(new T.ConeGeometry(.22,1.5,4,1,true),leafM);leaf.scale.set(1,1,.25);leaf.position.y=.05;var arm=new T.Group();arm.rotation.y=l/9*Math.PI*2;leaf.rotation.z=-1.15;leaf.position.x=.65;arm.add(leaf);top.add(arm);}
+    for(var l=0;l<9;l++){var leaf=new T.Mesh(new T.ConeGeometry(.2,1.35,4,1,true),leafM);leaf.scale.set(1,1,.25);var arm=new T.Group();arm.rotation.y=l/9*Math.PI*2;leaf.rotation.z=-1.15;leaf.position.set(.6,.05,0);arm.add(leaf);top.add(arm);}
     p.position.set(x,0,z);root.add(p);return top;
   }
-  var tops=[palm(4.6,3.6,2.6,.35),palm(5.2,.4,3.0,-.3),palm(-4.4,2.9,2.4,.25),palm(-3.9,-3.6,2.8,-.2)];
+  function banana(x,z,s){                                // planta de plátano: hojas grandes
+    var g=new T.Group(),lm=M(0x3E8A4C,{roughness:.75,side:T.DoubleSide});
+    for(var i=0;i<6;i++){var lf=new T.Mesh(new T.SphereGeometry(.5,10,6),lm);lf.scale.set(.25,.08,1);var a=new T.Group();a.rotation.y=i/6*Math.PI*2;lf.position.set(0,0,.45);lf.rotation.x=-.5;a.add(lf);a.position.y=.9*s;g.add(a);}
+    var st=new T.Mesh(new T.CylinderGeometry(.06,.08,.9*s,8),M(0x6E8C4A));st.position.y=.45*s;g.add(st);
+    g.position.set(x,0,z);g.scale.setScalar(s);root.add(g);return g;
+  }
+  var tops=[palm(3.2,3.6,2.9,.3),palm(3.5,1.0,3.3,-.25),palm(3.1,-1.6,2.7,.2),palm(3.6,-3.6,3.1,-.3),palm(-.6,4.9,2.4,.25)];
+  banana(3.0,2.4,1.1);banana(3.6,-.4,1.2);banana(3.0,-2.8,1.0);banana(3.4,4.6,1.0);
 
-  /* jardín cercado: postes y barda baja alrededor */
-  var fenceM=M(0xCFC6B4);
-  for(var f=0;f<64;f++){var a=f/64*Math.PI*2;if(a>5.15&&a<5.55)continue;   // hueco de la entrada
-    box(.07,.42,.07,fenceM,Math.cos(a)*6.75,.25,Math.sin(a)*6.75);}
-  var rail=new T.Mesh(new T.TorusGeometry(6.75,.025,6,160,Math.PI*2-.4),fenceM);rail.rotation.x=Math.PI/2;rail.rotation.z=5.55;   // el arco empieza en 5.55 rad y deja libre el hueco de la entrada (5.15–5.55)
- rail.position.y=.42;root.add(rail);
-  /* entrada privada y estacionamiento */
-  box(1.7,.04,2.4,M(0xBDB6A8,{roughness:1}),3.6,.06,-3.4);
-  box(.08,.7,.08,dark,4.05,.38,-5.25);box(.08,.7,.08,dark,2.95,.38,-5.6);
+  /* celosía de madera oscura: muro derecho y frente */
+  for(var i2=0;i2<7;i2++){box(.06,.11,12.2,slat,4.08,.25+i2*.24,0);}
+  for(var i3=0;i3<5;i3++){box(5.4,.11,.06,slat,1.35,.25+i3*.24,6.08);}
 
-  root.traverse(function(o){if(o.isMesh&&o!==base&&o!==lawn&&o!==sh){o.castShadow=SH;o.receiveShadow=SH;}});
+  /* foquitos sobre el patio (de la terraza de arriba al frente) */
+  var bulbM=new T.MeshBasicMaterial({color:0xFFE3A3});
+  [[-1.6,-4.4,4.0,5.6],[-1.6,-1.0,4.0,2.6]].forEach(function(c){
+    var n=14;for(var k=0;k<=n;k++){var t=k/n,x3=c[0]+t*(c[2]-c[0]),z3=c[1]+t*(c[3]-c[1]),y3=2.55-Math.sin(t*Math.PI)*.35;var bb=new T.Mesh(new T.SphereGeometry(.045,8,6),bulbM);bb.position.set(x3,y3,z3);root.add(bb);}
+  });
 
-  /* marcadores de cada parte (los botones de la sección) */
-  var spots=[[2.2,.5,1.9],[-2.2,1.0,1.2],[0,2.9,-1.4],[-2.5,2.1,-.65],[-4.6,.6,-1.8],[3.6,.6,-3.4]];
+  root.traverse(function(o){if(o.isMesh&&o!==base&&o!==lawn&&o!==sh&&o.material!==bulbM){o.castShadow=SH;o.receiveShadow=SH;}});
+  base.receiveShadow=lawn.receiveShadow=SH;
+
+  /* marcadores (orden = botones): alberca, pórtico y asador, recámaras de arriba, terraza de arriba, jardín, cochera */
+  var spots=[[1.3,.45,-.2],[-2.4,.95,.4],[-3.0,2.45,-1.5],[1.4,2.05,-4.8],[3.3,.7,1.2],[-2.8,.5,4.7]];
   var markM=new T.MeshBasicMaterial({color:0xE8C87A}),mark=new T.Mesh(new T.SphereGeometry(.13,18,14),markM);root.add(mark);
   var halo=new T.Mesh(new T.RingGeometry(.2,.3,32),new T.MeshBasicMaterial({color:0xE8C87A,transparent:true,opacity:.8,side:T.DoubleSide}));root.add(halo);
 
   /* cámara, tamaño y adaptación */
-  var dist=22,elev=10.5;
+  var dist=23,elev=12;
   /* encuadre: la base mide ~15 unidades; con fov 36 a ~24 de distancia el cuadro mide ~17.6 de ancho (cabe con aire) */
-  function size(){var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;r.setSize(w,h,false);cam.aspect=w/h;var mob=w<560;dist=mob?22.5:22;elev=mob?11:10.5;cam.fov=mob?38:36;cam.updateProjectionMatrix();}
+  function size(){var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;r.setSize(w,h,false);cam.aspect=w/h;var mob=w<560;var k=Math.max(1,1.15/cam.aspect);dist=(mob?24:23)*k;elev=(mob?13:12)*k;cam.fov=mob?38:36;cam.updateProjectionMatrix();}
   addEventListener("resize",size);size();
   function noShadows(){if(!r.shadowMap.enabled)return;r.shadowMap.enabled=false;scene.traverse(function(o){if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(function(m){m.needsUpdate=true;});});}
   var adapt=window.__adapt?window.__adapt(r,size,noShadows):null;
