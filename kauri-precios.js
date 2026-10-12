@@ -16,9 +16,13 @@ window.KAURI_TARIFAS = {
        Piso nuevo: $3,200. Puentes y fiestas no bajan. */
     dinamica: { ocupacionBaja: 0.4, diasCerca: 10, baja: { semana: 3200, finde: 3500 }, bajaCerca: { semana: 3200, finde: 3250 } },
     limpieza: 600, mascota: 300, anticipo: 0.5,
+    /* cupones: tarifa privada para un prospecto, solo en las noches [desde, hasta) y hasta el día "vence" (incluido).
+       Se aplica con ?cupon=CODIGO en apartar.html o escribiéndolo ahí; el servidor de cobros lo recalcula igual. */
+    cupones: {
+      KAURI3000: { desde: "2026-11-22", hasta: "2026-11-24", noche: 3000, vence: "2026-10-16" }   // oferta de Dalí (12 oct 2026), pareja del anuncio
+    },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
-      { desde: "2026-11-22", hasta: "2026-11-24", noche: 3000, nombre: "Tarifa especial", vence: "2026-10-16" },   // oferta puntual de Dalí (12 oct 2026); se apaga sola después del 16 oct
       { desde: "2026-12-23", hasta: "2027-01-03", noche: 4500, nombre: "Fiestas de fin de año" },
       { desde: "2027-01-29", hasta: "2027-02-01", noche: 4200, nombre: "Puente de la Constitución" },
       { desde: "2027-03-12", hasta: "2027-03-15", noche: 4200, nombre: "Puente de Benito Juárez" },
@@ -59,12 +63,15 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
     return (occCache[key] = tot ? oc / tot : null);
   }
   var diasFaltan = Math.round((new Date(llegada) - hoy) / 864e5);
+  var codigo = String((ctx && ctx.cupon) || "").trim().toUpperCase(), cup = T.cupones && T.cupones[codigo], usoCupon = false;
+  if (cup && cup.vence && k(hoy) > cup.vence) cup = null;
   var grupos = {}, orden = [], noches = 0, subtotal = 0, especial = false, ahorro = 0;
   for (var d = new Date(llegada); d < salida; d.setDate(d.getDate() + 1)) {
     var key = k(d), finde = (d.getDay() === 5 || d.getDay() === 6), tipo = finde ? "finde" : "semana";
     var precio = T.base[tipo], etiqueta = finde ? "Viernes y sábado" : "Domingo a jueves", motivo = "";
     var temp = null; T.temporadas.forEach(function (t) { if (key >= t.desde && key < t.hasta && !(t.vence && k(hoy) > t.vence)) temp = t; });   // vence: último día (incluido) en que vale una oferta
-    if (temp) { precio = temp.noche; etiqueta = temp.nombre; }
+    if (cup && key >= cup.desde && key < cup.hasta) { precio = cup.noche; etiqueta = "Cupón " + codigo + " · tarifa especial"; temp = cup; usoCupon = true; }
+    else if (temp) { precio = temp.noche; etiqueta = temp.nombre; }
     else if (T.dinamica) {
       var occ = ocupacion(d);
       if (occ !== null && occ < T.dinamica.ocupacionBaja) {
@@ -85,7 +92,7 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
   var anticipo = Math.round(total * T.anticipo / 50) * 50;          // redondeado a múltiplos de $50
   return { noches: noches, lineas: orden.map(function (g) { return grupos[g]; }), subtotal: subtotal, limpieza: T.limpieza,
            mascotas: m, cargoMascotas: cargoM, personasExtra: extra, cargoExtra: cargoExtra, total: total, anticipo: anticipo, saldo: total - anticipo, tarifa: T,
-           ancla: T.ancla || null, especial: especial, ahorro: ahorro };
+           ancla: T.ancla || null, especial: especial, ahorro: ahorro, cupon: usoCupon ? codigo : "", cuponInvalido: !!codigo && !usoCupon };
 };
 window.KAURI_TARIFAS.pagoURL = window.KAURI_TARIFAS.servidor ? window.KAURI_TARIFAS.servidor + "/pago" : "";
 window.kauriMoneda = function (n) { return "$" + Math.round(n).toLocaleString("es-MX"); };

@@ -32,6 +32,8 @@
   .step h2 .n{width:30px;height:30px;display:grid;place-items:center;background:var(--navy);color:var(--card);font:600 14px/1 'Source Sans 3';flex:none}
   .row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--soft)}
   .row:last-child{border-bottom:0}
+  .row.cup{align-items:center}.row.cup input{font:600 16px/1 'Source Sans 3';width:120px;padding:8px 10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-transform:uppercase}
+  #cupMsg.ok{color:var(--ok);font-weight:600}#cupMsg.no{color:var(--err);font-weight:600}
   .row b{color:var(--navy);font-weight:600}
   .row .ed{background:none;border:0;color:var(--cta);font:600 13px/1 'Source Sans 3';text-decoration:underline;cursor:pointer}
   .stepper{display:flex;align-items:center;gap:12px}
@@ -93,6 +95,7 @@
           <div class="row"><span>Fechas</span><span><b id="sFechas"></b> <a class="ed" id="edFechas" href="#">Cambiar</a></span></div>
           <div class="row"><span>Personas <small id="sMax"></small></span><span class="stepper"><button type="button" id="gm" aria-label="Una persona menos">−</button><b id="sG">4</b><button type="button" id="gp" aria-label="Una persona más">+</button></span></div>
           <div class="row"><span>Mascotas <small id="sMasc"></small></span><span class="stepper"><button type="button" id="mm" aria-label="Una mascota menos">−</button><b id="sM">0</b><button type="button" id="mp" aria-label="Una mascota más">+</button></span></div>
+          <div class="row cup"><span>Cupón <small id="cupMsg"></small></span><span><input id="cup" autocomplete="off" autocapitalize="characters" placeholder="Código" aria-label="Código de cupón" /> <button type="button" class="ed" id="cupBtn">Aplicar</button></span></div>
         </div>
         <form class="step" id="datos" novalidate>
           <h2><span class="n">2</span>Tus datos</h2>
@@ -157,7 +160,7 @@
   function pd(s){var p=(s||"").split("-");if(p.length!==3)return null;var d=new Date(+p[0],p[1]-1,+p[2]);return isNaN(d)?null:d;}
   function fmt(d,yr){return d.getDate()+" de "+MES[d.getMonth()]+(yr?" de "+d.getFullYear():"");}
   function k(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
-  var A=pd(q.get("in")),B=pd(q.get("out")),G=Math.min(T.max,Math.max(1,+q.get("g")||2)),Mm=0;
+  var A=pd(q.get("in")),B=pd(q.get("out")),G=Math.min(T.max,Math.max(1,+q.get("g")||2)),Mm=0,CUP=(q.get("cupon")||"").trim().toUpperCase();
   document.title="Reserva en "+T.nombre;
   $("brandName").textContent=prop==="depa"?"KAURI · DEPARTAMENTO":"CASA KAURI";$("brand").href=INFO.pag;
   $("back").href=$("edFechas").href=INFO.pag+"#disponibilidad";
@@ -186,7 +189,8 @@
   if(A<today){bad("<b>Esas fechas ya pasaron.</b>");return;}
   var P,BUSY=null;
   function paint(){
-    P=kauriPrecio(prop,A,B,Mm,{busy:BUSY},G);
+    P=kauriPrecio(prop,A,B,Mm,{busy:BUSY,cupon:CUP},G);
+    $("cup").value=CUP;$("cupMsg").className=P.cupon?"ok":P.cuponInvalido?"no":"";$("cupMsg").textContent=P.cupon?"✓ aplicado":P.cuponInvalido?"no válido para estas fechas":"";
     $("sFechas").textContent=fmt(A)+" al "+fmt(B,true)+" · "+P.noches+" noches";$("sG").textContent=G;$("sM").textContent=Mm;
     $("lines").innerHTML=(P.especial&&P.ancla?'<div class="esp"><i class="ph ph-tag" aria-hidden="true"></i> <b>Precio especial aplicado.</b> Ahorras '+kauriMoneda(P.ahorro)+' frente al precio base de '+kauriMoneda(P.ancla)+' la noche.</div>':"")+
       P.lineas.map(function(l){return '<div class="ln"><span>'+(P.ancla&&l.precio<P.ancla?'<s style="color:var(--muted)">'+kauriMoneda(P.ancla)+"</s> ":"")+kauriMoneda(l.precio)+" × "+l.noches+(l.noches===1?" noche":" noches")+'<br><small style="color:var(--muted)">'+l.etiqueta+"</small></span><span>"+kauriMoneda(l.precio*l.noches)+"</span></div>";}).join("")+
@@ -196,6 +200,8 @@
   }
   $("gm").onclick=function(){G=Math.max(1,G-1);paint();};$("gp").onclick=function(){G=Math.min(T.max,G+1);paint();};
   $("mm").onclick=function(){Mm=Math.max(0,Mm-1);paint();};$("mp").onclick=function(){Mm=Math.min(3,Mm+1);paint();};
+  $("cupBtn").onclick=function(){CUP=$("cup").value.trim().toUpperCase();paint();};
+  $("cup").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("cupBtn").onclick();}};
   paint();
   /* revisa la disponibilidad otra vez (por si alguien acaba de reservar en Airbnb) y mide la ocupación del mes para el precio */
   /* + el servidor de cobros (Airbnb en vivo y directas): así el precio de aquí es el mismo que cobra Mercado Pago (11 oct 2026) */
@@ -216,7 +222,7 @@
     if(!$("ok").checked){$("fOk").style.color="var(--err)";ok=0;}else $("fOk").style.color="";
     if(!ok){var f=document.querySelector(".f.bad input")||$("ok");f.focus();return;}
     var folio=T.prefijo+"-"+k(A).slice(2).replace(/-/g,"")+"-"+nom.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g,"").slice(0,3).toUpperCase();
-    var datos={folio:folio,prop:prop,llegada:k(A),salida:k(B),personas:G,mascotas:Mm,nombre:nom,whatsapp:tel,correo:mail,comentarios:$("com").value.trim(),total:P.total,anticipo:P.anticipo};
+    var datos={folio:folio,prop:prop,llegada:k(A),salida:k(B),personas:G,mascotas:Mm,nombre:nom,whatsapp:tel,correo:mail,comentarios:$("com").value.trim(),cupon:P.cupon,total:P.total,anticipo:P.anticipo};
     if(KAURI_TARIFAS.pagoURL){   /* cobro real: el servidor recalcula el precio, revisa Airbnb y crea el pago */
       $("go").disabled=true;$("goTxt").textContent="Preparando tu pago…";
       fetch(KAURI_TARIFAS.pagoURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(datos)}).then(function(r){return r.json();})
@@ -224,7 +230,7 @@
       return;
     }
     var msg="Solicitud de reserva "+folio+"\n"+T.nombre+": del "+fmt(A)+" al "+fmt(B,true)+" ("+P.noches+" noches)\n"+G+(G===1?" persona":" personas")+(P.personasExtra?" ("+P.personasExtra+" extra: "+kauriMoneda(P.cargoExtra)+")":"")+(T.mascota?" · "+Mm+(Mm===1?" mascota":" mascotas"):"")+
-      (P.especial&&P.ancla?"\nPrecio especial aplicado (base "+kauriMoneda(P.ancla)+" la noche): "+P.lineas.map(function(l){return l.noches+" × "+kauriMoneda(l.precio);}).join(" + "):"")+"\nTotal: "+kauriMoneda(P.total)+" (incluye limpieza "+kauriMoneda(P.limpieza)+")\nAnticipo 50 %: "+kauriMoneda(P.anticipo)+"\n\nNombre: "+nom+"\nWhatsApp: "+tel+"\nCorreo: "+mail+(datos.comentarios?"\nComentarios: "+datos.comentarios:"")+"\n\n¿Me mandas el link para pagar el anticipo?";
+      (P.especial&&P.ancla?"\nPrecio especial aplicado (base "+kauriMoneda(P.ancla)+" la noche): "+P.lineas.map(function(l){return l.noches+" × "+kauriMoneda(l.precio);}).join(" + "):"")+(P.cupon?"\nCupón: "+P.cupon:"")+"\nTotal: "+kauriMoneda(P.total)+" (incluye limpieza "+kauriMoneda(P.limpieza)+")\nAnticipo 50 %: "+kauriMoneda(P.anticipo)+"\n\nNombre: "+nom+"\nWhatsApp: "+tel+"\nCorreo: "+mail+(datos.comentarios?"\nComentarios: "+datos.comentarios:"")+"\n\n¿Me mandas el link para pagar el anticipo?";
     var url="https://wa.me/"+INFO.wa+"?text="+encodeURIComponent(msg);
     $("flow").hidden=true;$("ok-screen").hidden=false;$("dFolio").textContent="FOLIO "+folio;
     $("dTxt").textContent=T.nombre+" · del "+fmt(A)+" al "+fmt(B,true)+" · anticipo "+kauriMoneda(P.anticipo);$("dWa").href=url;
