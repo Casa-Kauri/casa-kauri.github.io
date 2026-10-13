@@ -40,11 +40,12 @@ window.KAURI_TARIFAS = {
     base: { semana: 1500, finde: 1800 },
     limpieza: 600, mascota: null, anticipo: 0.5,         // el depa NO admite mascotas (Dalí, 11 oct 2026)
     cupones: {   // mismo formato que los de la casa
+      NAVIDAD: { desde: "2026-12-31", hasta: "2027-01-02", noche: 2200, vence: "2026-10-16" },   // Año Nuevo a $2,200 (Dalí, 13 oct 2026); en la casa el mismo código vale 21–23 dic
       NOVIEMBRE: { desde: "2026-11-13", hasta: "2026-11-16", noche: 1750, vence: "2026-10-16" }   // puente nov, pareja (Dalí, 12 oct 2026); en la casa el mismo código vale 20–22 nov
     },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 2200, nombre: "Puente de la Revolución" },
-      { desde: "2026-12-23", hasta: "2027-01-03", noche: 2600, nombre: "Fiestas de fin de año" },
+      { desde: "2026-12-23", hasta: "2027-01-03", noche: 3000, nombre: "Fiestas de fin de año" },   // $3,000 (Dalí, 13 oct 2026; antes $2,600)
       { desde: "2027-01-29", hasta: "2027-02-01", noche: 2200, nombre: "Puente de la Constitución" },
       { desde: "2027-03-12", hasta: "2027-03-15", noche: 2200, nombre: "Puente de Benito Juárez" },
       { desde: "2027-03-20", hasta: "2027-03-28", noche: 2600, nombre: "Semana Santa" }
