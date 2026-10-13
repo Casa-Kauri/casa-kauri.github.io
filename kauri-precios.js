@@ -23,11 +23,12 @@ window.KAURI_TARIFAS = {
       /* tipo "nocheGratis": en cualquier fecha, con 3 noches o más, la noche más barata va de regalo (una por estancia);
          no aplica si alguna noche cae en temporada (puentes, fiestas, Semana Santa). */
       NOVIEMBRE: { desde: "2026-11-20", hasta: "2026-11-22", noche: 3000, vence: "2026-10-16" },  // misma pareja: la casa estaba ocupada en el puente
+      NAVIDAD: { desde: "2026-12-21", hasta: "2026-12-23", noche: 3750, vence: "2026-10-16" },   // prospecto con mascota, antes de Navidad (Dalí, 13 oct 2026)
       MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" }   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
     },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
-      { desde: "2026-12-23", hasta: "2027-01-03", noche: 4500, nombre: "Fiestas de fin de año" },
+      { desde: "2026-12-20", hasta: "2027-01-03", noche: 4500, nombre: "Fiestas de fin de año" },   // desde el 20: política del 19 sep 2026 (antes decía 23)
       { desde: "2027-01-29", hasta: "2027-02-01", noche: 4200, nombre: "Puente de la Constitución" },
       { desde: "2027-03-12", hasta: "2027-03-15", noche: 4200, nombre: "Puente de Benito Juárez" },
       { desde: "2027-03-20", hasta: "2027-03-28", noche: 4500, nombre: "Semana Santa" }
