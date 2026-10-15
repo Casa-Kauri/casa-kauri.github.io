@@ -93,7 +93,7 @@
   var stage=cv.parentNode,EN=document.documentElement.getAttribute("data-l")==="en";
   var marks=[
     {p:P(414,566),y:20,t:"Casa Kauri",cls:"home"},
-    {p:P(250,462),y:10,t:"Mi Canasta",cls:""},
+    {p:P(236,482),y:10,t:"Mi Canasta",cls:""},{k:"giro",p:P(205,585),y:2,t:EN?"Turn right":"Vuelta a la derecha",cls:"turn"},
     {k:"modulo",p:P(590,835),y:10,t:EN?"Security booth":"Módulo de seguridad",cls:""},
     {p:P(-100,125),y:8,t:"Playa El Naranjo",cls:"beach"},
     {k:"tepic",p:P(790,500),y:4,t:EN?"To Tepic and Guadalajara":"A Tepic y Guadalajara",cls:"road"},{k:"vallarta",p:P(450,1050),y:4,t:EN?"To Puerto Vallarta":"A Puerto Vallarta",cls:"road"},
@@ -107,11 +107,13 @@
     gdl:{tags:["Casa Kauri","Higueras","Chihuahua","tepic","modulo"],pts:[P(800,475),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:80},
     auto:{tags:["Casa Kauri","Higueras","Chihuahua","vallarta","modulo"],pts:[P(450,1052),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:70},
     playa:{tags:["Casa Kauri","Playa El Naranjo","Mi Canasta","Capomo"],pts:[P(430,565),P(379,650),P(195,543),P(60,465),P(-40,410),P(-80,290),P(-100,125)],w:9,col:0xD9603B,speed:110},
-    tienda:{tags:["Casa Kauri","Mi Canasta","Capomo","Huanacaxtle"],pts:[P(430,565),P(379,650),P(195,543),P(240,468)],w:9,col:0x2E4A8C,speed:70}
+    tienda:{tags:["Casa Kauri","Mi Canasta","Huanacaxtle","giro"],pts:[P(430,565),P(379,650),P(195,543),P(228,488)],w:9,turn:[P(195,543),P(228,488)],view:{c:P(250,560),d:250},col:0x2E4A8C,speed:70}
   };
   function sample(pts){var o=[pts[0]],L2=0;for(var i=0;i<pts.length-1;i++){var a=pts[i],b=pts[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.round(l/2));for(var k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);L2+=l;}o.len=L2;return o;}
   Object.keys(routes).forEach(function(k){var R=routes[k];R.s=sample(R.pts);R.mesh=ribbon(R.s,R.w,new T.MeshBasicMaterial({color:R.col,side:T.DoubleSide,toneMapped:false}),.6);R.mesh.visible=false;
     var xs=R.s.map(function(p){return p[0];}),zs=R.s.map(function(p){return p[1];});R.c=[(Math.min.apply(0,xs)+Math.max.apply(0,xs))/2,(Math.min.apply(0,zs)+Math.max.apply(0,zs))/2];R.span=Math.max(Math.max.apply(0,xs)-Math.min.apply(0,xs),Math.max.apply(0,zs)-Math.min.apply(0,zs));});
+  Object.keys(routes).forEach(function(k){var R=routes[k];if(!R.turn)return;var a=R.turn[0],b=R.turn[1],ar=new T.Mesh(new T.ConeGeometry(9,22,3),new T.MeshBasicMaterial({color:0xffffff,toneMapped:false}));
+    ar.rotation.x=Math.PI/2;var g=new T.Group();g.add(ar);g.position.set((a[0]+b[0])/2,2,(a[1]+b[1])/2);g.rotation.y=Math.atan2(b[0]-a[0],b[1]-a[1]);g.visible=false;scene.add(g);R.arrow=g;});
   var walker=new T.Mesh(new T.SphereGeometry(6,18,14),new T.MeshBasicMaterial({color:0xffffff,toneMapped:false}));scene.add(walker);var wcore=new T.Mesh(new T.SphereGeometry(3.6,16,12),new T.MeshBasicMaterial({color:0x1F2F54,toneMapped:false}));walker.add(wcore);wcore.position.y=1.5;walker.scale.set(1,.5,1);
   var halo=new T.Mesh(new T.RingGeometry(8,11,32),new T.MeshBasicMaterial({color:0xE8C87A,transparent:true,opacity:.7,side:T.DoubleSide}));halo.rotation.x=-Math.PI/2;scene.add(halo);
 
@@ -120,8 +122,8 @@
   function size(){var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
   addEventListener("resize",size);size();
   var adapt=window.__adapt?window.__adapt(r,size):null;
-  function pick(k){cur=routes[k];Object.keys(routes).forEach(function(n){routes[n].mesh.visible=n===k;});prog=reduce?1:0;
-    goalCtr=cur.c.slice();goalDist=Math.max(330,cur.span*1.95/Math.min(1,cam.aspect*.9));if(reduce){ctr=goalCtr.slice();dist=goalDist;}}
+  function pick(k){cur=routes[k];Object.keys(routes).forEach(function(n){routes[n].mesh.visible=n===k;if(routes[n].arrow)routes[n].arrow.visible=n===k;});prog=reduce?1:0;
+    goalCtr=cur.view?cur.view.c.slice():cur.c.slice();goalDist=cur.view?cur.view.d/Math.min(1,cam.aspect):Math.max(330,cur.span*1.95/Math.min(1,cam.aspect*.9));if(reduce){ctr=goalCtr.slice();dist=goalDist;}}
   window.__croquis={pick:pick};
   cv.addEventListener("pointerdown",function(e){down=true;lx=e.clientX;});
   addEventListener("pointerup",function(){down=false;});

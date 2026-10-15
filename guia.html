@@ -148,6 +148,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   .cq-tag{position:absolute;left:0;top:0;pointer-events:none;white-space:nowrap;font:600 12px/1 'Source Sans 3';padding:6px 9px;background:#1F2F54;color:#fff;border-radius:999px;box-shadow:0 6px 16px -8px rgba(0,0,0,.5);transition:opacity .2s}
   .cq-tag.home{background:#E8C87A;color:#1F2F54;font-size:13px}
   .cq-tag.beach{background:#D9714A}
+  .cq-tag.turn{background:#2E4A8C;font-size:12.5px}
   .cq-tag.road{background:rgba(255,255,255,.85);color:#3a4250;box-shadow:none;font-weight:600;font-size:11px;padding:4px 7px}
   .cq-steps{counter-reset:c;margin-top:14px;display:grid;gap:8px}
   .cq-steps[hidden]{display:none}
@@ -950,7 +951,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     try{localStorage.setItem("guia-l",l)}catch(e){}var u=new URL(location.href);u.searchParams.set("l",l);location.replace(u.toString());});});
 
   /* canal: ?c=d = huésped que reservó directo (ve el calendario); cualquier otro valor = Airbnb */
-  if(new URLSearchParams(location.search).get("c")==="d"){$$(".via-direct").forEach(function(e){e.hidden=false});$$(".via-airbnb").forEach(function(e){e.hidden=true});}
+  if(new URLSearchParams(location.search).get("c")==="d"){$$(".via-direct").forEach(function(e){e.hidden=false});$$(".via-airbnb").forEach(function(e){e.hidden=true});var lg=$(".logo");if(lg)lg.href="./";}
 
   /* Hoy en Kauri: atardecer calculado (fórmula de NOAA) para La Peñita, que vive en UTC-7 todo el año.
      Se usa la hora de Nayarit aunque el teléfono esté en otra zona. Probado contra tablas publicadas (jun: 6:45 p.m.). */
@@ -986,7 +987,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   (function(){var bs=$$(".cq-routes button"),st=$$(".cq-steps");if(!bs.length)return;
     bs.forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-r");bs.forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
       st.forEach(function(o){o.hidden=o.getAttribute("data-r")!==k;});if(window.__croquis)window.__croquis.pick(k);});});
-    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=9";document.body.appendChild(s);}
+    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=12";document.body.appendChild(s);}
     function load(){if(load.d)return;load.d=1;if(window.THREE)return go();var t0=Date.now();(function wait(){if(window.THREE)return go();
       if(!document.querySelector('script[src*="three.min.js"]')){var t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";document.body.appendChild(t);}
       if(Date.now()-t0<15000)setTimeout(wait,200);})();}
