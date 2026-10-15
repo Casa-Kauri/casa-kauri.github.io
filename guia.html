@@ -508,14 +508,20 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
       <div>
         <div class="cq">
           <div class="cq-routes" role="group" aria-label="Recorridos">
-            <button type="button" data-r="auto" aria-pressed="true"><i class="ph ph-car"></i><span lang="es">Llegar en auto</span><span lang="en">Driving in</span></button>
+            <button type="button" data-r="auto" aria-pressed="true"><i class="ph ph-car"></i><span lang="es">Desde Vallarta</span><span lang="en">From Vallarta</span></button>
+            <button type="button" data-r="gdl" aria-pressed="false"><i class="ph ph-car"></i><span lang="es">Desde Guadalajara</span><span lang="en">From Guadalajara</span></button>
             <button type="button" data-r="playa" aria-pressed="false"><i class="ph ph-waves"></i><span lang="es">A la playa</span><span lang="en">To the beach</span></button>
             <button type="button" data-r="tienda" aria-pressed="false"><i class="ph ph-shopping-cart"></i><span lang="es">A la tienda</span><span lang="en">To the store</span></button>
           </div>
           <div class="cq-stage"><canvas id="croquis-cv" role="img" aria-label="Croquis 3D del camino a Casa Kauri"></canvas></div>
           <ol class="cq-steps" data-r="auto">
-            <li lang="es">Sobre la carretera Tepic a Vallarta, entra a la colonia por <b>Higueras</b>, a la altura del módulo de seguridad.</li><li lang="en">On the Tepic to Vallarta highway, turn into the neighborhood on <b>Higueras</b>, by the security booth.</li>
-            <li lang="es">Sigue por Higueras y cruza Chihuahua.</li><li lang="en">Stay on Higueras and cross Chihuahua.</li>
+            <li lang="es">Por la carretera 200 rumbo a Tepic, pasa el centro de La Peñita.</li><li lang="en">On highway 200 heading to Tepic, drive past downtown La Peñita.</li>
+            <li lang="es">A la altura del módulo de seguridad da vuelta a la <b>izquierda</b> en <b>Higueras</b> y cruza Chihuahua.</li><li lang="en">At the security booth turn <b>left</b> onto <b>Higueras</b> and cross Chihuahua.</li>
+            <li lang="es">En la siguiente calle da vuelta a la derecha. A unos 150 m, del lado izquierdo, está la casa: el portón está al frente y ahí te estacionas.</li><li lang="en">Turn right at the next street. About 150 m on, on your left, is the house: the gate is at the front and you park inside.</li>
+          </ol>
+          <ol class="cq-steps" data-r="gdl" hidden>
+            <li lang="es">Bajando de Tepic por la carretera 200 rumbo a Vallarta, la colonia está antes del centro de La Peñita.</li><li lang="en">Coming down from Tepic on highway 200 toward Vallarta, the neighborhood comes before downtown La Peñita.</li>
+            <li lang="es">A la altura del módulo de seguridad da vuelta a la <b>derecha</b> en <b>Higueras</b> y cruza Chihuahua.</li><li lang="en">At the security booth turn <b>right</b> onto <b>Higueras</b> and cross Chihuahua.</li>
             <li lang="es">En la siguiente calle da vuelta a la derecha. A unos 150 m, del lado izquierdo, está la casa: el portón está al frente y ahí te estacionas.</li><li lang="en">Turn right at the next street. About 150 m on, on your left, is the house: the gate is at the front and you park inside.</li>
           </ol>
           <ol class="cq-steps" data-r="playa" hidden>
@@ -980,7 +986,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   (function(){var bs=$$(".cq-routes button"),st=$$(".cq-steps");if(!bs.length)return;
     bs.forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-r");bs.forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
       st.forEach(function(o){o.hidden=o.getAttribute("data-r")!==k;});if(window.__croquis)window.__croquis.pick(k);});});
-    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=5";document.body.appendChild(s);}
+    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=6";document.body.appendChild(s);}
     function load(){if(load.d)return;load.d=1;if(window.THREE)return go();var t0=Date.now();(function wait(){if(window.THREE)return go();
       if(!document.querySelector('script[src*="three.min.js"]')){var t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";document.body.appendChild(t);}
       if(Date.now()-t0<15000)setTimeout(wait,200);})();}

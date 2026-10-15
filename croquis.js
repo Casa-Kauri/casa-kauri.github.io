@@ -95,7 +95,7 @@
     {p:P(203,528),y:10,t:"Mi Canasta",cls:""},
     {k:"modulo",p:P(590,835),y:10,t:EN?"Security booth":"Módulo de seguridad",cls:""},
     {p:P(-95,225),y:8,t:"Playa El Naranjo",cls:"beach"},
-    {k:"carretera",p:P(700,700),y:4,t:EN?"Highway to Vallarta":"Carretera a Vallarta",cls:"road"},
+    {k:"tepic",p:P(790,500),y:4,t:EN?"To Tepic and Guadalajara":"A Tepic y Guadalajara",cls:"road"},{k:"vallarta",p:P(450,1050),y:4,t:EN?"To Puerto Vallarta":"A Puerto Vallarta",cls:"road"},
     {p:P(395,742),y:3,t:"Higueras",cls:"road"},{p:P(530,660),y:3,t:"Chihuahua",cls:"road"},{p:P(245,450),y:3,t:"Capomo",cls:"road"},{p:P(330,540),y:3,t:"Huanacaxtle",cls:"road"}
   ];
   marks.forEach(function(m){m.el=document.createElement("span");m.el.className="cq-tag "+m.cls;m.el.textContent=m.t;stage.appendChild(m.el);
@@ -103,7 +103,8 @@
 
   /* recorridos */
   var routes={
-    auto:{tags:["Casa Kauri","Higueras","Chihuahua","carretera","modulo"],pts:[P(470,1020),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:70},
+    gdl:{tags:["Casa Kauri","Higueras","Chihuahua","tepic","modulo"],pts:[P(800,475),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:80},
+    auto:{tags:["Casa Kauri","Higueras","Chihuahua","vallarta","modulo"],pts:[P(450,1052),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:70},
     playa:{tags:["Casa Kauri","Higueras","Playa El Naranjo"],pts:[P(430,565),P(340,712),P(253,667),P(152,615),P(60,500),P(-40,440),P(-80,300),P(-95,225)],w:9,col:0xD9603B,speed:110},
     tienda:{tags:["Casa Kauri","Mi Canasta","Capomo","Huanacaxtle","Higueras"],pts:[P(430,565),P(379,650),P(195,543)],w:9,col:0x2E4A8C,speed:70}
   };
