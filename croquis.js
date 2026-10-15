@@ -30,12 +30,13 @@
     {n:"Huanacaxtle",p:NS(440,355,1040),w:7},
     {n:"casa",p:NS(537,386,1040),w:7},
     {n:"Chihuahua",p:NS(668,428,1040),w:7},
-    {n:"Higueras",p:poly([60,500,152,615,340,712,576,845,760,950]),w:8},
-    {n:"cruce",p:poly([195,543,379,650]),w:6}   /* la primera a la derecha bajando de la casa: derecho hasta Capomo (corrección de Dalí, 15 oct) */,
+    {n:"Higueras",p:poly([152,615,340,712,576,845,760,950]),w:8},
+    {n:"recta",p:poly([60,465,195,543,379,650]),w:7}   /* la primera a la derecha bajando de la casa: UNA sola recta que cruza Huanacaxtle y Capomo y sale hacia la playa.
+       Google Maps la parte en tramos con otro nombre, pero en la calle es recta (corrección de Dalí, 15 oct) */,
     {n:"Tule",p:poly([70,940,175,1020]),w:7},
     {n:"carretera",p:poly([827,430,576,845,397,1140]),w:16}
   ];
-  var dirt=poly([60,500,-40,440,-80,300,-95,225]);                 // terracería a la playa (cierra los 750 m)
+  var dirt=poly([60,465,-40,410,-80,290,-100,125]);                 // terracería a la playa (cierra los 750 m)
   var COAST=P(-140,0)[0],SAND=P(-104,0)[0];
 
   /* suelo, mar y arena */
@@ -94,7 +95,7 @@
     {p:P(414,566),y:20,t:"Casa Kauri",cls:"home"},
     {p:P(203,528),y:10,t:"Mi Canasta",cls:""},
     {k:"modulo",p:P(590,835),y:10,t:EN?"Security booth":"Módulo de seguridad",cls:""},
-    {p:P(-95,225),y:8,t:"Playa El Naranjo",cls:"beach"},
+    {p:P(-100,125),y:8,t:"Playa El Naranjo",cls:"beach"},
     {k:"tepic",p:P(790,500),y:4,t:EN?"To Tepic and Guadalajara":"A Tepic y Guadalajara",cls:"road"},{k:"vallarta",p:P(450,1050),y:4,t:EN?"To Puerto Vallarta":"A Puerto Vallarta",cls:"road"},
     {p:P(395,742),y:3,t:"Higueras",cls:"road"},{p:P(530,660),y:3,t:"Chihuahua",cls:"road"},{p:P(245,450),y:3,t:"Capomo",cls:"road"},{p:P(330,540),y:3,t:"Huanacaxtle",cls:"road"}
   ];
@@ -105,7 +106,7 @@
   var routes={
     gdl:{tags:["Casa Kauri","Higueras","Chihuahua","tepic","modulo"],pts:[P(800,475),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:80},
     auto:{tags:["Casa Kauri","Higueras","Chihuahua","vallarta","modulo"],pts:[P(450,1052),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:70},
-    playa:{tags:["Casa Kauri","Higueras","Playa El Naranjo"],pts:[P(430,565),P(340,712),P(253,667),P(152,615),P(60,500),P(-40,440),P(-80,300),P(-95,225)],w:9,col:0xD9603B,speed:110},
+    playa:{tags:["Casa Kauri","Playa El Naranjo","Mi Canasta","Capomo"],pts:[P(430,565),P(379,650),P(195,543),P(60,465),P(-40,410),P(-80,290),P(-100,125)],w:9,col:0xD9603B,speed:110},
     tienda:{tags:["Casa Kauri","Mi Canasta","Capomo","Huanacaxtle","Higueras"],pts:[P(430,565),P(379,650),P(195,543)],w:9,col:0x2E4A8C,speed:70}
   };
   function sample(pts){var o=[pts[0]],L2=0;for(var i=0;i<pts.length-1;i++){var a=pts[i],b=pts[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.round(l/2));for(var k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);L2+=l;}o.len=L2;return o;}

@@ -525,9 +525,9 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
             <li lang="es">En la siguiente calle da vuelta a la derecha. A unos 150 m, del lado izquierdo, está la casa: el portón está al frente y ahí te estacionas.</li><li lang="en">Turn right at the next street. About 150 m on, on your left, is the house: the gate is at the front and you park inside.</li>
           </ol>
           <ol class="cq-steps" data-r="playa" hidden>
-            <li lang="es">Sal por el portón y baja hasta Higueras.</li><li lang="en">Leave through the gate and walk down to Higueras.</li>
-            <li lang="es">Sigue Higueras hacia el mar hasta salir de la colonia.</li><li lang="en">Follow Higueras toward the sea until you leave the neighborhood.</li>
-            <li lang="es">Toma el camino de terracería entre el monte hasta Playa El Naranjo: 750 m en total, unos 10 minutos.</li><li lang="en">Take the dirt road through the brush to Playa El Naranjo: 750 m in all, about 10 minutes.</li>
+            <li lang="es">Sal por el portón, baja y da vuelta en la primera calle a la derecha.</li><li lang="en">Leave through the gate, walk down and take the first street on your right.</li>
+            <li lang="es">Síguela siempre derecho: cruzas Huanacaxtle y Capomo (ahí está Mi Canasta) y sales de la colonia.</li><li lang="en">Keep going straight: you cross Huanacaxtle and Capomo (Mi Canasta is there) and leave the neighborhood.</li>
+            <li lang="es">Sigue el camino de terracería entre el monte hasta Playa El Naranjo: 750 m en total, unos 10 minutos.</li><li lang="en">Follow the dirt road through the brush to Playa El Naranjo: 750 m in all, about 10 minutes.</li>
           </ol>
           <ol class="cq-steps" data-r="tienda" hidden>
             <li lang="es">Sal por el portón y baja por la calle de la casa.</li><li lang="en">Leave through the gate and walk down the house's street.</li>
@@ -986,7 +986,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   (function(){var bs=$$(".cq-routes button"),st=$$(".cq-steps");if(!bs.length)return;
     bs.forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-r");bs.forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
       st.forEach(function(o){o.hidden=o.getAttribute("data-r")!==k;});if(window.__croquis)window.__croquis.pick(k);});});
-    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=6";document.body.appendChild(s);}
+    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=7";document.body.appendChild(s);}
     function load(){if(load.d)return;load.d=1;if(window.THREE)return go();var t0=Date.now();(function wait(){if(window.THREE)return go();
       if(!document.querySelector('script[src*="three.min.js"]')){var t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";document.body.appendChild(t);}
       if(Date.now()-t0<15000)setTimeout(wait,200);})();}
