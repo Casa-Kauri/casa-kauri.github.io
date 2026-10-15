@@ -30,16 +30,16 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
      El CSS va dentro de la página a propósito, igual que en el resto del sitio. */
   :root{
     --ink:#394049;--head:#1F2F54;--accent:#3B528A;--gold:#E8C87A;--gold-ink:#7A5A12;
-    --bg:#FBFCFD;--surface:#FFFFFF;--soft:#F1F5F9;--line:#DCE2E8;--muted:#5A6472;
+    --bg:#FCFBF8;--surface:#FFFFFF;--soft:#F1F5F9;--sand:#F8F1E6;--line:#DCE2E8;--muted:#5A6472;
     --shadow:0 18px 40px -24px rgba(31,47,84,.35);--r:4px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){color-scheme:dark;--ink:#C9D3E1;--head:#EEF2F8;--accent:#9DB4E8;--gold:#E8C87A;--gold-ink:#E8C87A;
-      --bg:#0F1A2E;--surface:#16233B;--soft:#13203A;--line:#2A3B5A;--muted:#9DABBF;--shadow:none}
+      --bg:#0F1A2E;--surface:#16233B;--soft:#13203A;--sand:#17213A;--line:#2A3B5A;--muted:#9DABBF;--shadow:none}
   }
   @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) :is(.c3-spots button[aria-pressed="true"],.tabs button[aria-selected="true"],.ar-tabs button[aria-selected="true"]){background:#3B528A;border-color:#3B528A}}
   :root[data-theme="dark"]{color-scheme:dark;--ink:#C9D3E1;--head:#EEF2F8;--accent:#9DB4E8;--gold:#E8C87A;--gold-ink:#E8C87A;
-    --bg:#0F1A2E;--surface:#16233B;--soft:#13203A;--line:#2A3B5A;--muted:#9DABBF;--shadow:none}
+    --bg:#0F1A2E;--surface:#16233B;--soft:#13203A;--sand:#17213A;--line:#2A3B5A;--muted:#9DABBF;--shadow:none}
 
   /* idioma: cada texto existe en los dos, se muestra uno */
   html[data-l="es"] body [lang="en"],html[data-l="en"] body [lang="es"]{display:none!important}
@@ -124,7 +124,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   @media (max-width:860px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}.t-in,.t-out{grid-column:span 1}.t-host,.t-wifi,.t-addr{grid-column:span 2}.tile .v{font-size:30px}}
 
   /* ---------- cómo llegar (pestañas) ---------- */
-  .arrive{padding:84px 0;background:var(--soft)}
+  .arrive{padding:84px 0;background:var(--sand)}
   .arr-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px;align-items:start;margin-top:30px}
   .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
   .tabs button{display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border:1px solid var(--line);background:var(--surface);color:var(--head);font:600 14px/1 'Source Sans 3';cursor:pointer}
@@ -225,7 +225,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   @media (max-width:620px){.places{grid-template-columns:minmax(0,1fr)}.spot,.spot.big{grid-column:auto}.spot.big{min-height:260px}}
 
   /* ---------- emergencias ---------- */
-  .sos{padding:84px 0;background:var(--soft)}
+  .sos{padding:84px 0;background:var(--sand)}
   .sos-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:44px;align-items:start}
   .sos-list li{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 0;border-top:1px solid var(--line)}
   .sos-list li:last-child{border-bottom:1px solid var(--line)}
@@ -263,6 +263,64 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   .back .btn-dark{background:#1F2F54;color:#fff}
   .back .btn-dark:hover{background:#3B528A}
   @media (max-width:860px){.back-grid{grid-template-columns:minmax(0,1fr);gap:26px}.back-photo{order:-1}}
+
+  /* ---------- carta de bienvenida ---------- */
+  .letter{padding:64px 0 20px;background:var(--sand)}
+  .letter-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:0;align-items:stretch}
+  .letter-photo{min-height:380px;border-radius:var(--r) 0 0 var(--r);background:url("https://a0.muscache.com/im/pictures/hosting/Hosting-36241619/original/ea42af41-a6a3-46bc-8a79-6f497bd61e31.jpeg?im_w=960") center/cover no-repeat,#24406b}
+  .letter-body{background:var(--surface);border:1px solid var(--line);border-left:0;border-radius:0 var(--r) var(--r) 0;padding:clamp(28px,4vw,52px);box-shadow:var(--shadow)}
+  .letter-body p{font-size:17px;line-height:1.75;margin-bottom:14px}
+  .letter-body .hello{font:400 italic clamp(30px,3.6vw,40px)/1.15 'EB Garamond',serif;color:var(--head);margin-bottom:18px}
+  .letter-body .sign{font:400 italic 26px/1.2 'EB Garamond',serif;color:var(--gold-ink);margin:22px 0 0}
+  @media (max-width:860px){.letter-grid{grid-template-columns:minmax(0,1fr)}.letter-photo{min-height:220px;border-radius:var(--r) var(--r) 0 0}.letter-body{border-left:1px solid var(--line);border-top:0;border-radius:0 0 var(--r) var(--r)}}
+
+  /* ---------- hoy en Kauri ---------- */
+  .today{padding:20px 0 0;background:linear-gradient(180deg,var(--sand) 0%,var(--bg) 100%)}
+  .today-box{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px;align-items:stretch}
+  .sunset{position:relative;overflow:hidden;border-radius:var(--r);padding:24px;color:#fff;background:linear-gradient(160deg,#F2A65E 0%,#D9714A 45%,#5B3A62 100%);border:0}
+  .sunset .k{display:flex;align-items:center;gap:8px;font:600 12.5px/1 'Source Sans 3';letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.9)}
+  .sunset .big{font:400 58px/1 'EB Garamond',serif;margin:14px 0 8px;font-variant-numeric:tabular-nums}
+  .sunset p{font-size:15.5px;line-height:1.55;max-width:34ch;color:rgba(255,255,255,.95);position:relative;z-index:1}
+  .sun-arc{position:absolute;right:-40px;bottom:-110px;width:240px;height:240px;border:2px dashed rgba(255,255,255,.35);border-radius:50%}
+  .sun-arc i{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px;border-radius:50%;background:#FFE3A3;box-shadow:0 0 30px 10px rgba(255,214,140,.6);transform:rotate(var(--a,-60deg)) translateX(120px)}
+  .today-list{display:grid;gap:10px}
+  .today-list li{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+  .today-list .ph{font-size:26px;color:var(--gold-ink);flex:none;margin-top:2px}
+  .today-list b{display:block;color:var(--head);font-weight:600}
+  .today-list span{font-size:15px;line-height:1.55}
+  @media (max-width:860px){.today-box{grid-template-columns:minmax(0,1fr)}}
+
+  /* ---------- consejos de local ---------- */
+  .tips{padding:84px 0;background:var(--sand)}
+  .tip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:26px}
+  .tip-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;min-width:0}
+  .tip-card .ph{font-size:28px;color:var(--accent)}
+  .tip-card b{display:block;font:400 21px/1.25 'EB Garamond',serif;color:var(--head);margin:10px 0 6px}
+  .tip-card p{font-size:15px;line-height:1.6}
+  .flags{display:flex;gap:6px;margin-top:10px}
+  .flags i{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1 'Source Sans 3';font-style:normal;padding:6px 9px;border-radius:999px;color:#fff}
+  @media (max-width:860px){.tip-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:560px){.tip-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:22px -20px 0;padding:4px 20px 12px;scrollbar-width:none}.tip-grid::-webkit-scrollbar{display:none}.tip-card{flex:0 0 78%;scroll-snap-align:center}}
+
+  /* ---------- un día perfecto ---------- */
+  .day{padding:90px 0;background:linear-gradient(180deg,var(--bg) 0%,var(--sand) 100%)}
+  .day-line{position:relative;margin-top:30px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+  .day-line::before{content:"";position:absolute;left:0;right:0;top:27px;height:2px;background:linear-gradient(90deg,#F2C66B,#D9714A,#5B3A62)}
+  .moment{position:relative;padding-top:58px;min-width:0}
+  .moment::before{content:"";position:absolute;top:18px;left:0;width:20px;height:20px;border-radius:50%;background:var(--bg);border:3px solid var(--gold)}
+  .moment time{display:block;font:600 13px/1 'Source Sans 3';letter-spacing:.08em;color:var(--gold-ink);margin-bottom:6px}
+  .moment b{display:block;font:400 20px/1.25 'EB Garamond',serif;color:var(--head);margin-bottom:4px}
+  .moment p{font-size:14.5px;line-height:1.55}
+  @media (max-width:960px){.day-line{grid-template-columns:minmax(0,1fr);gap:0;padding-left:34px}.day-line::before{left:9px;right:auto;top:0;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,#F2C66B,#D9714A,#5B3A62)}.moment{padding:0 0 24px}.moment::before{left:-34px;top:0}}
+
+  /* ---------- lugares con foto y contacto ---------- */
+  .spot .ph-img{margin:-22px -22px 6px;aspect-ratio:16/10;background:var(--soft) center/cover no-repeat;border-radius:var(--r) var(--r) 0 0}
+  .spot .contact{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:10px}
+  .spot .contact a{display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border:1px solid var(--line);font:600 13px/1 'Source Sans 3';color:var(--head);text-decoration:none;background:var(--surface)}
+  .spot .contact a:hover{border-color:var(--head)}
+  .spot.big .contact a{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);color:#fff}
+  .credit{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .spot.big .credit{color:rgba(255,255,255,.75)}
 
   footer{padding:40px 0 110px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
   footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
@@ -311,6 +369,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 <main>
 <nav class="rail" aria-label="Secciones">
   <ul>
+    <li><a href="#hoy"><i class="ph ph-sun-horizon"></i><span lang="es">Hoy</span><span lang="en">Today</span></a></li>
     <li><a href="#esencial"><i class="ph ph-star"></i><span lang="es">Lo esencial</span><span lang="en">Essentials</span></a></li>
     <li><a href="#llegar"><i class="ph ph-car"></i><span lang="es">Cómo llegar</span><span lang="en">Getting here</span></a></li>
     <li><a href="#llaves"><i class="ph ph-key"></i><span lang="es">Llaves</span><span lang="en">Keys</span></a></li>
@@ -320,6 +379,36 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     <li><a href="#salida"><i class="ph ph-door-open"></i><span lang="es">Salida</span><span lang="en">Check-out</span></a></li>
   </ul>
 </nav>
+
+<!-- ===== Carta de bienvenida (el toque cálido: habla una persona, no un manual) ===== -->
+<section class="letter" id="bienvenida">
+  <div class="wrap letter-grid">
+    <div class="letter-photo card" role="img" aria-label="La alberca de Casa Kauri al atardecer"></div>
+    <div class="letter-body card">
+      <p class="hello"><span lang="es">Qué gusto que vengas.</span><span lang="en">We're so glad you're coming.</span></p>
+      <p lang="es">Casa Kauri la cuidamos en familia, y la preparamos para que desde que abras el portón la sientas tuya: la alberca tibia al final del día, la mesa larga para comer todos juntos, la terraza de arriba para el café de la mañana.</p>
+      <p lang="en">Casa Kauri is cared for by our family, and we get it ready so it feels like yours from the moment you open the gate: the warm pool at the end of the day, the long table where everyone eats together, the upstairs terrace for morning coffee.</p>
+      <p lang="es">Aquí reunimos todo lo que te va a servir, de las llaves al mejor lugar para ver el atardecer. Y si algo falta o algo no funciona, escríbeme: estamos cerca y respondemos rápido.</p>
+      <p lang="en">This guide has everything you'll need, from the keys to the best place to watch the sunset. And if something's missing or not working, message me: we're close by and reply fast.</p>
+      <p class="sign">Dali <span lang="es">y la familia Kauri</span><span lang="en">and the Kauri family</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Hoy en Kauri: se calcula solo con la fecha del teléfono ===== -->
+<section class="today" id="hoy" aria-live="polite">
+  <div class="wrap">
+    <div class="today-box">
+      <div class="sunset card">
+        <span class="k"><i class="ph ph-sun-horizon"></i><span lang="es">Atardecer de hoy</span><span lang="en">Today's sunset</span></span>
+        <div class="big" id="sun-time">--:--</div>
+        <p id="sun-tip"></p>
+        <div class="sun-arc" aria-hidden="true"><i id="sun-dot"></i></div>
+      </div>
+      <ul class="today-list" id="today-list"></ul>
+    </div>
+  </div>
+</section>
 
 <!-- ===== Lo esencial ===== -->
 <section class="essentials" id="esencial">
@@ -377,8 +466,8 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
         <div class="panel" id="p-auto" role="tabpanel">
           <p lang="es">Toma la carretera federal 200 hasta La Peñita. Ya en el pueblo, <b>entra a la colonia Paraíso Escondido por la calle La Higuera</b>, la que queda a la altura del módulo de seguridad, y sal por la misma.</p>
           <p lang="en">Take federal highway 200 to La Peñita. Once in town, <b>enter the Paraíso Escondido neighborhood by La Higuera street</b>, the one next to the security booth, and leave the same way.</p>
-          <p lang="es"><b>Estacionamiento:</b> adentro caben dos autos chicos o una camioneta. Afuera, en la calle y frente a la casa, también puedes estacionarte. Los dos son gratis.</p>
-          <p lang="en"><b>Parking:</b> two small cars or one SUV fit inside. You can also park on the street in front of the house. Both are free.</p>
+          <p lang="es"><b>Estacionamiento:</b> el portón está en la fachada y da a un jardín frente a la alberca; ahí, sobre las huellas de tabique, cabe sin problema una camioneta grande o un auto. Si vienen más autos, se quedan afuera, en la calle, gratis. A una cuadra está el módulo de seguridad de la colonia.</p>
+          <p lang="en"><b>Parking:</b> the gate is on the front of the house and opens onto a garden facing the pool; a large SUV or a car fits easily on the brick tracks there. Extra cars park on the street, free. The neighborhood security booth is one block away.</p>
           <div class="tip"><i class="ph ph-warning-circle"></i><p><span lang="es"><b>No sigas la ruta corta de Google Maps.</b> A veces manda por calles en peor estado. Por La Higuera llegas más cómodo.</span><span lang="en"><b>Don't follow Google Maps' shortcut.</b> It sometimes routes through rougher streets. La Higuera is the easy way in.</span></p></div>
         </div>
         <div class="panel" id="p-avion" role="tabpanel" hidden>
@@ -441,13 +530,13 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
         <button type="button" aria-pressed="false"><span lang="es">Recámaras</span><span lang="en">Bedrooms</span></button>
         <button type="button" aria-pressed="false"><span lang="es">Terraza de arriba</span><span lang="en">Upper terrace</span></button>
         <button type="button" aria-pressed="false"><span lang="es">Jardín y mascotas</span><span lang="en">Garden and pets</span></button>
-        <button type="button" aria-pressed="false"><span lang="es">Entrada y portón</span><span lang="en">Entrance and gate</span></button>
+        <button type="button" aria-pressed="false"><span lang="es">Portón y estacionamiento</span><span lang="en">Gate and parking</span></button>
       </div>
       <div class="c3-info" aria-live="polite"><b></b><p></p></div>
       <small class="c3-note"><span lang="es">Maqueta ilustrativa: la distribución es la real; la escala y los colores no.</span><span lang="en">Illustrative model: the layout is real; scale and colors are not.</span></small>
     </div>
-    <script type="application/json" id="c3-es">[["Alberca climatizada","Climatizada todo el año y con chapoteadero.\nDate un enjuague en la regadera antes de entrar y evita el bloqueador dentro del agua: tapa el filtro y enturbia la alberca.\nNo tiene reja: si vienen niños, siempre con un adulto cerca."],["Cocina y asador","Cocina semi equipada, comedor amplio y asador de ladrillo en la terraza de la planta baja.\nLa comida y las bebidas se disfrutan aquí, no junto a la alberca: así el agua se mantiene limpia."],["Recámaras de la planta alta","Cuatro recámaras con seis camas. Tres tienen minisplit y todas tienen cortinas blackout.\nApaga el aire cuando salgas de la recámara y mantén cerradas puertas y ventanas mientras esté encendido: enfría más rápido."],["Terraza de arriba","Vista a la montaña: el mejor lugar para el café de la mañana y para ver caer la tarde."],["Jardín cercado","Cercado en todo su perímetro: tus mascotas son bienvenidas ($300 por mascota, por estancia).\nTe pedimos recoger sus desechos, no subirlas a camas ni sillones y no dejarlas solas en la casa."],["Entrada y portón","Aquí está el locker con las llaves. El portón cierra con candado: ciérralo al entrar y al salir.\nAdentro caben dos autos chicos o una camioneta."]]</script>
-    <script type="application/json" id="c3-en">[["Heated pool","Heated all year, with a kids' wading area.\nPlease rinse off in the shower before getting in and keep sunscreen out of the water: it clogs the filter and clouds the pool.\nThere's no pool fence: kids always with an adult nearby."],["Kitchen and grill","Partly equipped kitchen, large dining table and a brick grill on the ground-floor terrace.\nFood and drinks are enjoyed here, not by the pool: that keeps the water clean."],["Upstairs bedrooms","Four bedrooms with six beds. Three have air conditioning and all have blackout curtains.\nTurn the A/C off when you leave the room and keep doors and windows shut while it runs: it cools faster."],["Upper terrace","Mountain view: the best spot for morning coffee and for watching the afternoon fade."],["Fenced garden","Fully fenced: pets are welcome ($300 MXN per pet, per stay).\nPlease pick up after them, keep them off beds and sofas, and don't leave them alone in the house."],["Entrance and gate","The key lockbox is here. The gate locks with a padlock: lock it when you come in and when you leave.\nTwo small cars or one SUV fit inside."]]</script>
+    <script type="application/json" id="c3-es">[["Alberca climatizada","Climatizada todo el año y con chapoteadero.\nDate un enjuague en la regadera antes de entrar y evita el bloqueador dentro del agua: tapa el filtro y enturbia la alberca.\nNo tiene reja: si vienen niños, siempre con un adulto cerca."],["Cocina y asador","Cocina semi equipada, comedor amplio y asador de ladrillo en la terraza de la planta baja.\nLa comida y las bebidas se disfrutan aquí, no junto a la alberca: así el agua se mantiene limpia."],["Recámaras de la planta alta","Cuatro recámaras con seis camas. Tres tienen minisplit y todas tienen cortinas blackout.\nApaga el aire cuando salgas de la recámara y mantén cerradas puertas y ventanas mientras esté encendido: enfría más rápido."],["Terraza de arriba","Vista a la montaña: el mejor lugar para el café de la mañana y para ver caer la tarde."],["Jardín cercado","Cercado en todo su perímetro: tus mascotas son bienvenidas ($300 por mascota, por estancia).\nTe pedimos recoger sus desechos, no subirlas a camas ni sillones y no dejarlas solas en la casa."],["Portón y estacionamiento","El portón está al frente, en la fachada. Entras a un jardín frente a la alberca donde se estaciona una camioneta grande o un auto, sobre las huellas de tabique.\nCierra el candado del portón al entrar y al salir. Hay una cámara exterior que solo ve el acceso desde la calle."]]</script>
+    <script type="application/json" id="c3-en">[["Heated pool","Heated all year, with a kids' wading area.\nPlease rinse off in the shower before getting in and keep sunscreen out of the water: it clogs the filter and clouds the pool.\nThere's no pool fence: kids always with an adult nearby."],["Kitchen and grill","Partly equipped kitchen, large dining table and a brick grill on the ground-floor terrace.\nFood and drinks are enjoyed here, not by the pool: that keeps the water clean."],["Upstairs bedrooms","Four bedrooms with six beds. Three have air conditioning and all have blackout curtains.\nTurn the A/C off when you leave the room and keep doors and windows shut while it runs: it cools faster."],["Upper terrace","Mountain view: the best spot for morning coffee and for watching the afternoon fade."],["Fenced garden","Fully fenced: pets are welcome ($300 MXN per pet, per stay).\nPlease pick up after them, keep them off beds and sofas, and don't leave them alone in the house."],["Gate and parking","The gate is at the front of the house. It opens onto a garden facing the pool where a large SUV or a car parks on the brick tracks.\nLock the gate padlock when you come in and when you leave. An outdoor camera covers only the street entrance."]]</script>
     <script type="application/json" id="c3-data"></script>
     <script>(function(){var l=document.documentElement.getAttribute("data-l")==="en"?"en":"es";document.getElementById("c3-data").textContent=document.getElementById("c3-"+l).textContent;})();</script>
     <div class="c3-stage"><canvas id="casa3d-cv" data-model="casa3d.js" role="img" aria-label="Maqueta 3D de Casa Kauri"></canvas></div>
@@ -460,7 +549,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     <h2><span lang="es">Pocas reglas, y cada una con razón</span><span lang="en">Few rules, each with a reason</span></h2>
     <p class="lede"><span lang="es">Toca cada tarjeta para ver por qué existe.</span><span lang="en">Tap each card to see why it exists.</span></p>
     <div class="flips">
-      <button class="flip" type="button" aria-pressed="false"><span class="fl-front"><i class="ph ph-moon-stars"></i><b lang="es">Volumen bajo desde las 11&nbsp;p.m.</b><b lang="en">Keep it down after 11&nbsp;p.m.</b><small lang="es">Toca para ver por qué</small><small lang="en">Tap to see why</small></span><span class="fl-back"><span lang="es">Es una colonia tranquila con vecinos que madrugan. Afuera la música se escucha mucho más de lo que parece adentro.</span><span lang="en">It's a quiet neighborhood with early-rising neighbors. Music carries outside much more than it seems from inside.</span></span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="fl-front"><i class="ph ph-moon-stars"></i><b lang="es">Volumen bajo de 10&nbsp;p.m. a 6&nbsp;a.m.</b><b lang="en">Quiet hours 10&nbsp;p.m. to 6&nbsp;a.m.</b><small lang="es">Toca para ver por qué</small><small lang="en">Tap to see why</small></span><span class="fl-back"><span lang="es">Es una colonia tranquila con vecinos que madrugan. Afuera la música se escucha mucho más de lo que parece adentro.</span><span lang="en">It's a quiet neighborhood with early-rising neighbors. Music carries outside much more than it seems from inside.</span></span></button>
       <button class="flip" type="button" aria-pressed="false"><span class="fl-front"><i class="ph ph-users-three"></i><b lang="es">Solo las personas de la reserva</b><b lang="en">Only the guests on the booking</b><small lang="es">Toca para ver por qué</small><small lang="en">Tap to see why</small></span><span class="fl-back"><span lang="es">Camas, toallas, agua caliente y seguro están calculados para tu grupo. ¿Se suma alguien? Avísanos antes y lo resolvemos.</span><span lang="en">Beds, towels, hot water and insurance are planned for your group. Someone joining? Tell us first and we'll sort it out.</span></span></button>
       <button class="flip" type="button" aria-pressed="false"><span class="fl-front"><i class="ph ph-shower"></i><b lang="es">Regadera antes de la alberca</b><b lang="en">Shower before the pool</b><small lang="es">Toca para ver por qué</small><small lang="en">Tap to see why</small></span><span class="fl-back"><span lang="es">La arena y el sudor ensucian el agua en horas. Un enjuague de 30 segundos la mantiene cristalina toda tu estancia.</span><span lang="en">Sand and sweat cloud the water within hours. A 30-second rinse keeps it crystal clear for your whole stay.</span></span></button>
       <button class="flip" type="button" aria-pressed="false"><span class="fl-front"><i class="ph ph-sun"></i><b lang="es">Sin bloqueador en la alberca</b><b lang="en">No sunscreen in the pool</b><small lang="es">Toca para ver por qué</small><small lang="en">Tap to see why</small></span><span class="fl-back"><span lang="es">El bloqueador deja una capa de grasa que tapa el filtro. Póntelo después de nadar o usa ropa con protección.</span><span lang="en">Sunscreen leaves an oily film that clogs the filter. Apply it after swimming or wear UV clothing.</span></span></button>
@@ -468,6 +557,23 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
       <button class="flip" type="button" aria-pressed="false"><span class="fl-front"><i class="ph ph-snowflake"></i><b lang="es">Aire apagado al salir</b><b lang="en">A/C off when you leave</b><small lang="es">Toca para ver por qué</small><small lang="en">Tap to see why</small></span><span class="fl-back"><span lang="es">Un minisplit encendido con la puerta abierta trabaja sin parar y se congela. Apagarlo al salir lo cuida para tu siguiente noche.</span><span lang="en">An A/C running with the door open never stops and ices up. Turning it off when you go out keeps it working for your next night.</span></span></button>
     </div>
     <p class="swipe-hint"><span lang="es">Desliza para ver más</span><span lang="en">Swipe to see more</span></p>
+  </div>
+</section>
+
+<!-- ===== Consejos de local ===== -->
+<section class="tips" id="consejos">
+  <div class="wrap">
+    <h2><span lang="es">Lo que te diría un vecino</span><span lang="en">What a neighbor would tell you</span></h2>
+    <p class="lede"><span lang="es">Pequeñas cosas que hacen la diferencia en la costa.</span><span lang="en">Small things that make a difference on the coast.</span></p>
+    <p class="swipe-hint"><span lang="es">Desliza para ver más</span><span lang="en">Swipe to see more</span></p>
+    <div class="tip-grid">
+      <div class="tip-card card"><i class="ph ph-money"></i><b lang="es">Trae efectivo</b><b lang="en">Bring cash</b><p lang="es">Lanchas, tianguis, puestos de playa y muchas fondas cobran solo en efectivo. En La Peñita hay cajeros.</p><p lang="en">Boats, the street market, beach stands and many small eateries take cash only. There are ATMs in La Peñita.</p></div>
+      <div class="tip-card card"><i class="ph ph-drop"></i><b lang="es">Agua purificada para tomar</b><b lang="en">Drink purified water</b><p lang="es">La de la llave sirve para todo menos para beber. En las tiendas venden garrafón y hielo.</p><p lang="en">Tap water is fine for everything except drinking. Stores sell big water jugs and ice.</p></div>
+      <div class="tip-card card"><i class="ph ph-bug"></i><b lang="es">Repelente al atardecer</b><b lang="en">Repellent at sunset</b><p lang="es">De junio a octubre es temporada de lluvias y al caer el sol salen los mosquitos. La casa tiene mosquiteros.</p><p lang="en">June to October is rainy season and mosquitoes come out at dusk. The house has mosquito screens.</p></div>
+      <div class="tip-card card"><i class="ph ph-flag"></i><b lang="es">Mira la bandera antes de nadar</b><b lang="en">Check the flag before swimming</b><p lang="es">En las playas con salvavidas:</p><p lang="en">On beaches with lifeguards:</p><div class="flags"><i style="background:#2E8B57"><span lang="es">Verde: adelante</span><span lang="en">Green: go</span></i><i style="background:#C99A06"><span lang="es">Amarilla: con cuidado</span><span lang="en">Yellow: caution</span></i><i style="background:#B3261E"><span lang="es">Roja: no nadar</span><span lang="en">Red: no swimming</span></i></div></div>
+      <div class="tip-card card"><i class="ph ph-sun"></i><b lang="es">El sol de mediodía pega fuerte</b><b lang="en">The midday sun is strong</b><p lang="es">De 12 a 4 de la tarde mejor alberca con sombra o siesta. Bloqueador biodegradable en el mar: cuida el coral de la isla.</p><p lang="en">From noon to 4 p.m., shaded pool time or a nap. Reef-safe sunscreen in the sea protects the island's coral.</p></div>
+      <div class="tip-card card"><i class="ph ph-storefront"></i><b lang="es">Los jueves hay tianguis</b><b lang="en">Thursday is market day</b><p lang="es">Cuatro cuadras de fruta, mariscos, artesanía y antojitos en La Peñita. Ve temprano y con bolsa.</p><p lang="en">Four blocks of fruit, seafood, crafts and snacks in La Peñita. Go early and bring a bag.</p></div>
+    </div>
   </div>
 </section>
 
@@ -643,6 +749,22 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   </div>
 </section>
 
+<!-- ===== Un día perfecto (la hora del atardecer se llena sola) ===== -->
+<section class="day" id="dia">
+  <div class="wrap">
+    <h2><span lang="es">Si solo tienes un día, haz esto</span><span lang="en">If you only have one day, do this</span></h2>
+    <p class="lede"><span lang="es">El plan que les recomendamos a quienes vienen por primera vez.</span><span lang="en">The plan we suggest to first-time guests.</span></p>
+    <ol class="day-line">
+      <li class="moment"><time>8:00</time><b lang="es">Café en la terraza de arriba</b><b lang="en">Coffee on the upper terrace</b><p lang="es">Con la vista a la montaña y la casa todavía en silencio.</p><p lang="en">Mountain view, house still quiet.</p></li>
+      <li class="moment"><time>10:00</time><b lang="es">Guayabitos e Isla del Coral</b><b lang="en">Guayabitos and Isla del Coral</b><p lang="es">Nada en agua tranquila o toma la lancha a la isla para hacer snorkel.</p><p lang="en">Swim in calm water or take the boat to the island to snorkel.</p></li>
+      <li class="moment"><time>14:00</time><b lang="es">Mariscos frente al mar</b><b lang="en">Seafood by the sea</b><p lang="es">Una palapa en Los Ayala o en Guayabitos, sin prisa.</p><p lang="en">A beach palapa in Los Ayala or Guayabitos, no rush.</p></li>
+      <li class="moment"><time>16:00</time><b lang="es">Alberca y siesta</b><b lang="en">Pool and nap</b><p lang="es">Lo mejor del día pasa en el patio.</p><p lang="en">The best part of the day happens in the courtyard.</p></li>
+      <li class="moment"><time class="sun-walk">17:10</time><b lang="es">Camina a El Naranjo</b><b lang="en">Walk to El Naranjo</b><p lang="es">750 m hasta la playa para llegar antes de que se meta el sol.</p><p lang="en">750 m to the beach, arriving before the sun goes down.</p></li>
+      <li class="moment"><time>20:00</time><b lang="es">Asador y sobremesa</b><b lang="en">Grill and long dinner</b><p lang="es">Foquitos encendidos, la mesa larga y nadie con prisa de irse.</p><p lang="en">String lights on, the long table, nobody in a hurry to leave.</p></li>
+    </ol>
+  </div>
+</section>
+
 <!-- ===== Emergencias ===== -->
 <section class="sos" id="ayuda">
   <div class="wrap sos-grid">
@@ -653,6 +775,8 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     <ul class="sos-list">
       <li><span><b lang="es">Emergencias</b><b lang="en">Emergencies</b><small lang="es">Policía, ambulancia y bomberos</small><small lang="en">Police, ambulance and fire</small></span><a class="call red" href="tel:911"><i class="ph ph-phone-call"></i>911</a></li>
       <li><span><b lang="es">Centro de Salud La Peñita</b><b lang="en">La Peñita Health Center</b><small>Nuño de Balboa 14, Miramar</small></span><a class="call" href="tel:+523272740150"><i class="ph ph-first-aid"></i>327 274 0150</a></li>
+      <li><span><b lang="es">Protección Civil y Bomberos</b><b lang="en">Civil Protection and Fire</b><small>La Peñita</small></span><a class="call" href="tel:+523272743578"><i class="ph ph-fire-extinguisher"></i>327 274 3578</a></li>
+      <li><span><b lang="es">Policía Estatal</b><b lang="en">State Police</b><small>La Peñita</small></span><a class="call" href="tel:+523272770488"><i class="ph ph-shield-check"></i>327 277 0488</a></li>
       <li><span><b lang="es">Ángeles Verdes</b><b lang="en">Ángeles Verdes (roadside help)</b><small lang="es">Asistencia en carretera, gratis</small><small lang="en">Free highway assistance</small></span><a class="call" href="tel:078"><i class="ph ph-car-profile"></i>078</a></li>
       <li><span><b lang="es">Tu anfitrión</b><b lang="en">Your host</b><small lang="es">Cualquier cosa de la casa</small><small lang="en">Anything about the house</small></span><a class="call" href="tel:+523111349845"><i class="ph ph-house"></i>311 134 9845</a></li>
     </ul>
@@ -733,6 +857,36 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   /* canal: ?c=d = huésped que reservó directo (ve el calendario); cualquier otro valor = Airbnb */
   if(new URLSearchParams(location.search).get("c")==="d"){$$(".via-direct").forEach(function(e){e.hidden=false});$$(".via-airbnb").forEach(function(e){e.hidden=true});}
 
+  /* Hoy en Kauri: atardecer calculado (fórmula de NOAA) para La Peñita, que vive en UTC-7 todo el año.
+     Se usa la hora de Nayarit aunque el teléfono esté en otra zona. Probado contra tablas publicadas (jun: 6:45 p.m.). */
+  (function(){
+    var LAT=21.04,LON=-105.24,TZ=-7,EN=L==="en",r=Math.PI/180;
+    var now=new Date(Date.now()+TZ*3600e3),y=now.getUTCFullYear(),mo=now.getUTCMonth(),d=now.getUTCDate(),wd=now.getUTCDay(),mins=now.getUTCHours()*60+now.getUTCMinutes();
+    var n=Math.round((Date.UTC(y,mo,d)-Date.UTC(y,0,0))/864e5),g=2*Math.PI/365*(n-1);
+    var eq=229.18*(.000075+.001868*Math.cos(g)-.032077*Math.sin(g)-.014615*Math.cos(2*g)-.040849*Math.sin(2*g));
+    var de=.006918-.399912*Math.cos(g)+.070257*Math.sin(g)-.006758*Math.cos(2*g)+.000907*Math.sin(2*g)-.002697*Math.cos(3*g)+.00148*Math.sin(3*g);
+    var ha=Math.acos(Math.cos(90.833*r)/(Math.cos(LAT*r)*Math.cos(de))-Math.tan(LAT*r)*Math.tan(de))/r;
+    var set=Math.round(720-4*(LON-ha)-eq+TZ*60),rise=Math.round(720-4*(LON+ha)-eq+TZ*60);
+    function hm(t){var h=Math.floor(t/60),m=("0"+(t%60)).slice(-2);return ((h%12)||12)+":"+m+(h<12?" a.m.":" p.m.");}
+    function h24(t){return Math.floor(t/60)+":"+("0"+(t%60)).slice(-2);}
+    var st=$("#sun-time");if(!st)return;st.textContent=hm(set);
+    var go=set-35,tip;
+    if(mins<go)tip=EN?"Leave the house at "+hm(go)+" and walk 750 m to El Naranjo to catch the golden light.":"Sal de la casa a las "+hm(go)+" y camina 750 m a El Naranjo para alcanzar la luz dorada.";
+    else if(mins<set)tip=EN?"It's happening now: El Naranjo is a 10-minute walk.":"Está pasando ahorita: El Naranjo está a 10 minutos caminando.";
+    else tip=EN?"The sun has set. Tomorrow it sets around "+hm(set)+": a good excuse for the grill and string lights tonight.":"Ya se metió el sol. Mañana será alrededor de las "+hm(set)+": buen pretexto para el asador y los foquitos esta noche.";
+    $("#sun-tip").textContent=tip;
+    var p=Math.max(0,Math.min(1,(mins-rise)/(set-rise)));$("#sun-dot").style.setProperty("--a",(-180+180*p)+"deg");
+    $$(".sun-walk").forEach(function(e){e.textContent=h24(go);});
+    var items=[],dz=(4-wd+7)%7;
+    if(wd===4)items.push(["ph-storefront",EN?"Market day":"Hoy hay tianguis",EN?"La Peñita's Thursday street market: fruit, seafood, crafts. Go early.":"El tianguis de los jueves en La Peñita: fruta, mariscos y artesanía. Ve temprano."]);
+    else items.push(["ph-storefront",EN?"Street market: "+(dz===1?"tomorrow":"in "+dz+" days"):"Tianguis: "+(dz===1?"mañana":"en "+dz+" días"),EN?"Every Thursday in La Peñita.":"Cada jueves en La Peñita."]);
+    if(mo===11||mo<=2)items.push(["ph-binoculars",EN?"Whale season":"Temporada de ballenas",EN?"Humpbacks are in the bay from December to March. Ask for a tour in Guayabitos.":"Las jorobadas están en la bahía de diciembre a marzo. Pregunta por el paseo en Guayabitos."]);
+    else if(mo===10)items.push(["ph-binoculars",EN?"Whales are coming":"Ya vienen las ballenas",EN?"Humpback season starts in December.":"La temporada de jorobadas empieza en diciembre."]);
+    if(mo>=5&&mo<=9)items.push(["ph-cloud-rain",EN?"Rainy season":"Temporada de lluvias",EN?"Afternoon showers are normal and short. Repellent at sunset.":"Las lluvias de la tarde son normales y cortas. Repelente al atardecer."]);
+    items.push(["ph-clock",EN?"Check-in 3:00 p.m. · Check-out 12:00 p.m.":"Llegada 3:00 p.m. · Salida 12:00 p.m.",EN?"Need a different time? Message us and we'll check.":"¿Necesitas otro horario? Escríbenos y lo revisamos."]);
+    $("#today-list").innerHTML=items.map(function(i){return '<li class="card"><i class="ph '+i[0]+'"></i><span><b>'+i[1]+'</b>'+i[2]+'</span></li>';}).join("");
+  })();
+
   /* saludo: ?n=Nombre (opcional) */
   var n=(new URLSearchParams(location.search).get("n")||"").replace(/[<>]/g,"").trim().slice(0,30);
   if(n){var hi=$(".hero .hi");hi.hidden=false;hi.textContent=(L==="en"?"Hi, ":"Hola, ")+n+". ";hi.style.display="block";hi.style.fontSize=".5em";hi.style.marginBottom=".25em";}
@@ -773,6 +927,6 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="kauri-motion.js?v=4"></script>
+<script src="kauri-motion.js?v=5"></script>
 </body>
 </html>

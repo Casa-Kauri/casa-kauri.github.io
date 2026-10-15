@@ -1,5 +1,6 @@
 /* Maqueta 3D de Casa Kauri (11 oct 2026). Copiada de las fotos: casa de patio con alberca larga al centro, ala de dos
    plantas con pórtico de columnas y pasillo-balcón, ala del fondo con terraza, jardín tropical, celosía y cochera.
+   v4 (14 oct 2026): portón y estacionamiento al frente, en el jardín de la fachada frente a la alberca.
    La escala y los colores son ilustrativos (lo dice la nota junto a la maqueta). Se carga solo cuando la sección se acerca.
    Lee el modo central de <head>: window.__motion (full | soft | off), __dpr, __adapt, __lowfx. */
 (function(){
@@ -79,21 +80,35 @@
   box(.7,.22,.45,M(0xD9D2C3),-2.5,.2,.6);box(.45,.22,.45,M(0xD9D2C3),-2.1,.2,1.3);  // sillones
   box(.55,.6,.45,brick,-3.0,.36,2.4);box(.45,.08,.35,dark,-3.0,.7,2.4);            // asador de ladrillo
 
-  /* cochera al frente del ala, con portón */
-  box(2.4,.03,2.4,M(0xB8B2A6),-2.8,.07,4.7);
-  box(2.4,.1,2.5,trim,-2.8,1.48,4.65);box(.16,1.4,.16,M(0xFBFAF7),-1.72,.72,5.8);
-  box(2.2,1.2,.06,slat,-2.8,.66,5.95);                                 // portón de madera oscura
+  /* v4 (14 oct 2026, corrección de Dalí): NO hay cochera al costado. La entrada es al frente: el portón está en el muro
+     de la fachada y da a un jardín frontal, frente a la alberca, donde se estaciona sobre huellas de tabique
+     (cabe una camioneta grande o un auto). Afuera, en la calle, se estacionan más. */
+  box(8.1,.08,3.5,grass,.02,.085,4.3);                                // jardín frontal
+  var GX=1.0;                                                         // eje del portón y del lugar de estacionamiento
+  for(var zt=2.85;zt<=5.85;zt+=.36){box(.34,.06,.3,paver,GX-.5,.13,zt);box(.34,.06,.3,paver,GX+.5,.13,zt);}   // huellas de tabique
+  (function(){var body=M(0xE9ECEF,{roughness:.35,metalness:.25}),tire=M(0x1E2124,{roughness:.9}),car=new T.Group();   // camioneta
+    var b1=new T.Mesh(new T.BoxGeometry(1.2,.5,2.85),body);b1.position.y=.52;car.add(b1);
+    var b2=new T.Mesh(new T.BoxGeometry(1.1,.42,1.85),body);b2.position.set(0,.98,.25);car.add(b2);
+    var gl=new T.Mesh(new T.BoxGeometry(1.12,.3,1.6),glassM);gl.position.set(0,1.0,.25);car.add(gl);
+    [[-.58,.95],[.58,.95],[-.58,-.95],[.58,-.95]].forEach(function(w){var c=new T.Mesh(new T.CylinderGeometry(.24,.24,.18,16),tire);c.rotation.z=Math.PI/2;c.position.set(w[0],.26,w[1]);car.add(c);});
+    car.position.set(GX,0,4.25);root.add(car);})();
+  /* muro de la fachada con el portón al centro del lugar de estacionamiento */
+  box(.22,1.5,.22,M(0xF5F2EC),GX-1.3,.75,6.08);box(.22,1.5,.22,M(0xF5F2EC),GX+1.3,.75,6.08);   // pilares del portón
+  var gate=M(0x2B2F33,{roughness:.5,metalness:.4});
+  box(2.4,.08,.05,gate,GX,1.3,6.1);box(2.4,.08,.05,gate,GX,.12,6.1);
+  for(var gb=-1.1;gb<=1.11;gb+=.2){box(.035,1.2,.035,gate,GX+gb,.71,6.1);}                    // portón de barrotes
+  box(.12,.14,.08,M(0xE8C87A,{metalness:.6,roughness:.3}),GX,.72,6.16);                       // candado
 
-  /* alberca larga al centro, con chapoteadero y fuente */
-  box(2.7,.14,7.4,M(0x8E9499,{roughness:.6}),1.3,.1,-.2);             // borde de piedra gris
-  var water=new T.Mesh(new T.PlaneGeometry(2.2,6.9,12,40),new T.MeshPhysicalMaterial({color:L(0x1AA9C4),roughness:.1,metalness:0,clearcoat:.6,clearcoatRoughness:.08,envMapIntensity:.55,emissive:L(0x0A6A80),emissiveIntensity:.45}));
-  water.rotation.x=-Math.PI/2;water.position.set(1.3,.18,-.2);root.add(water);
+  /* alberca larga al centro, con chapoteadero y fuente (se acortó al frente para dar lugar al jardín de estacionamiento) */
+  box(2.7,.14,6.2,M(0x8E9499,{roughness:.6}),1.3,.1,-.8);             // borde de piedra gris
+  var water=new T.Mesh(new T.PlaneGeometry(2.2,5.7,12,34),new T.MeshPhysicalMaterial({color:L(0x1AA9C4),roughness:.1,metalness:0,clearcoat:.6,clearcoatRoughness:.08,envMapIntensity:.55,emissive:L(0x0A6A80),emissiveIntensity:.45}));
+  water.rotation.x=-Math.PI/2;water.position.set(1.3,.18,-.8);root.add(water);
   var kid=new T.Mesh(new T.BoxGeometry(2.2,.03,.9),new T.MeshPhysicalMaterial({color:L(0x4FCBDA),roughness:.1,clearcoat:.5,envMapIntensity:.5,emissive:L(0x0F7484),emissiveIntensity:.35}));kid.position.set(1.3,.2,-3.15);root.add(kid);   // chapoteadero (escalón)
   var jet=new T.Mesh(new T.CylinderGeometry(.02,.05,.6,8),new T.MeshBasicMaterial({color:0xDFF6FA,transparent:true,opacity:.55}));jet.position.set(1.3,.5,-3.55);root.add(jet);   // fuente
 
   /* andador de losetas en el pasto, entre pórtico y alberca */
   box(1.2,.05,9.0,grass,-.6,.07,-.2);
-  for(var zp=-4.2;zp<=3.8;zp+=.75){box(.62,.06,.42,paver,-.6,.1,zp);}
+  for(var zp=-4.2;zp<=2.1;zp+=.75){box(.62,.06,.42,paver,-.6,.1,zp);}
   /* jardín tropical a la derecha: palmeras y plátanos */
   box(1.5,.08,10.2,grass,3.3,.08,.3);
   function palm(x,z,hgt,lean){
@@ -109,12 +124,12 @@
     var st=new T.Mesh(new T.CylinderGeometry(.06,.08,.9*s,8),M(0x6E8C4A));st.position.y=.45*s;g.add(st);
     g.position.set(x,0,z);g.scale.setScalar(s);root.add(g);return g;
   }
-  var tops=[palm(3.2,3.6,2.9,.3),palm(3.5,1.0,3.3,-.25),palm(3.1,-1.6,2.7,.2),palm(3.6,-3.6,3.1,-.3),palm(-.6,4.9,2.4,.25)];
+  var tops=[palm(3.2,3.6,2.9,.3),palm(3.5,1.0,3.3,-.25),palm(3.1,-1.6,2.7,.2),palm(3.6,-3.6,3.1,-.3),palm(-3.1,4.9,2.4,.25)];
   banana(3.0,2.4,1.1);banana(3.6,-.4,1.2);banana(3.0,-2.8,1.0);banana(3.4,4.6,1.0);
 
   /* celosía de madera oscura: muro derecho y frente */
   for(var i2=0;i2<7;i2++){box(.06,.11,12.2,slat,4.08,.25+i2*.24,0);}
-  for(var i3=0;i3<5;i3++){box(5.4,.11,.06,slat,1.35,.25+i3*.24,6.08);}
+  for(var i3=0;i3<5;i3++){box(3.65,.11,.06,slat,-2.22,.25+i3*.24,6.08);box(1.66,.11,.06,slat,3.25,.25+i3*.24,6.08);}   // la fachada deja el hueco del portón
 
   /* foquitos sobre el patio (de la terraza de arriba al frente) */
   var bulbM=new T.MeshBasicMaterial({color:0xFFE3A3});
@@ -125,8 +140,8 @@
   root.traverse(function(o){if(o.isMesh&&o!==base&&o!==lawn&&o!==sh&&o.material!==bulbM){o.castShadow=SH;o.receiveShadow=SH;}});
   base.receiveShadow=lawn.receiveShadow=SH;
 
-  /* marcadores (orden = botones): alberca, pórtico y asador, recámaras de arriba, terraza de arriba, jardín, cochera */
-  var spots=[[1.3,.45,-.2],[-2.4,.95,.4],[-3.0,2.45,-1.5],[1.4,2.05,-4.8],[3.3,.7,1.2],[-2.8,.5,4.7]];
+  /* marcadores (orden = botones): alberca, pórtico y asador, recámaras de arriba, terraza de arriba, jardín, portón y estacionamiento al frente */
+  var spots=[[1.3,.45,-.8],[-2.4,.95,.4],[-3.0,2.45,-1.5],[1.4,2.05,-4.8],[3.3,.7,1.2],[GX,1.45,4.4]];
   var markM=new T.MeshBasicMaterial({color:0xE8C87A}),mark=new T.Mesh(new T.SphereGeometry(.13,18,14),markM);root.add(mark);
   var halo=new T.Mesh(new T.RingGeometry(.2,.3,32),new T.MeshBasicMaterial({color:0xE8C87A,transparent:true,opacity:.8,side:T.DoubleSide}));root.add(halo);
 
