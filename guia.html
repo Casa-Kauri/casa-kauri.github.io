@@ -532,7 +532,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
           <ol class="cq-steps" data-r="tienda" hidden>
             <li lang="es">Sal por el portón y baja por la calle de la casa.</li><li lang="en">Leave through the gate and walk down the house's street.</li>
             <li lang="es">Da vuelta en la primera calle a la derecha y síguela derecho, cruzando Huanacaxtle.</li><li lang="en">Take the first street on your right and follow it straight, across Huanacaxtle.</li>
-            <li lang="es">Al llegar a Capomo está Mi Canasta: hielo, bebidas, botanas y abarrotes.</li><li lang="en">Mi Canasta is right where it meets Capomo: ice, drinks, snacks and groceries.</li>
+            <li lang="es">En Capomo, una pequeña curva a la derecha y luego luego está Mi Canasta: hielo, bebidas, botanas y abarrotes.</li><li lang="en">At Capomo, a slight bend to the right and Mi Canasta is right there: ice, drinks, snacks and groceries.</li>
           </ol>
           <p class="map-cap"><span lang="es">Croquis ilustrativo: las calles y el recorrido son los reales, las casas no. Gíralo con el dedo.</span><span lang="en">Illustrative map: streets and routes are real, the houses aren't. Spin it with your finger.</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Para%C3%ADso+Escondido%2C+La+Pe%C3%B1ita+de+Jaltemba%2C+Nayarit" target="_blank" rel="noopener"><span lang="es">Abrir la colonia en Google Maps</span><span lang="en">Open the area in Google Maps</span></a></p>
         </div>      </div>
@@ -986,7 +986,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   (function(){var bs=$$(".cq-routes button"),st=$$(".cq-steps");if(!bs.length)return;
     bs.forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-r");bs.forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
       st.forEach(function(o){o.hidden=o.getAttribute("data-r")!==k;});if(window.__croquis)window.__croquis.pick(k);});});
-    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=7";document.body.appendChild(s);}
+    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=8";document.body.appendChild(s);}
     function load(){if(load.d)return;load.d=1;if(window.THREE)return go();var t0=Date.now();(function wait(){if(window.THREE)return go();
       if(!document.querySelector('script[src*="three.min.js"]')){var t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";document.body.appendChild(t);}
       if(Date.now()-t0<15000)setTimeout(wait,200);})();}
