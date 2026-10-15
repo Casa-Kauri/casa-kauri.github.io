@@ -31,7 +31,7 @@
     {n:"casa",p:NS(537,386,1040),w:7},
     {n:"Chihuahua",p:NS(668,428,1040),w:7},
     {n:"Higueras",p:poly([60,500,152,615,340,712,576,845,760,950]),w:8},
-    {n:"cruce",p:poly([293,600,379,650]),w:6},
+    {n:"cruce",p:poly([195,543,379,650]),w:6}   /* la primera a la derecha bajando de la casa: derecho hasta Capomo (corrección de Dalí, 15 oct) */,
     {n:"Tule",p:poly([70,940,175,1020]),w:7},
     {n:"carretera",p:poly([827,430,576,845,397,1140]),w:16}
   ];
@@ -92,7 +92,7 @@
   var stage=cv.parentNode,EN=document.documentElement.getAttribute("data-l")==="en";
   var marks=[
     {p:P(414,566),y:20,t:"Casa Kauri",cls:"home"},
-    {p:P(205,500),y:10,t:"Mi Canasta",cls:""},
+    {p:P(203,528),y:10,t:"Mi Canasta",cls:""},
     {k:"modulo",p:P(590,835),y:10,t:EN?"Security booth":"Módulo de seguridad",cls:""},
     {p:P(-95,225),y:8,t:"Playa El Naranjo",cls:"beach"},
     {k:"carretera",p:P(700,700),y:4,t:EN?"Highway to Vallarta":"Carretera a Vallarta",cls:"road"},
@@ -105,7 +105,7 @@
   var routes={
     auto:{tags:["Casa Kauri","Higueras","Chihuahua","carretera","modulo"],pts:[P(470,1020),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:70},
     playa:{tags:["Casa Kauri","Higueras","Playa El Naranjo"],pts:[P(430,565),P(340,712),P(253,667),P(152,615),P(60,500),P(-40,440),P(-80,300),P(-95,225)],w:9,col:0xD9603B,speed:110},
-    tienda:{tags:["Casa Kauri","Mi Canasta","Capomo","Huanacaxtle","Higueras"],pts:[P(430,565),P(379,650),P(293,600),P(253,667),P(152,615),P(218,505)],w:9,col:0x2E4A8C,speed:70}
+    tienda:{tags:["Casa Kauri","Mi Canasta","Capomo","Huanacaxtle","Higueras"],pts:[P(430,565),P(379,650),P(195,543)],w:9,col:0x2E4A8C,speed:70}
   };
   function sample(pts){var o=[pts[0]],L2=0;for(var i=0;i<pts.length-1;i++){var a=pts[i],b=pts[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.round(l/2));for(var k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);L2+=l;}o.len=L2;return o;}
   Object.keys(routes).forEach(function(k){var R=routes[k];R.s=sample(R.pts);R.mesh=ribbon(R.s,R.w,new T.MeshBasicMaterial({color:R.col,side:T.DoubleSide,toneMapped:false}),.6);R.mesh.visible=false;
