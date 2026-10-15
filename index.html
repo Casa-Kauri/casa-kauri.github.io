@@ -738,6 +738,16 @@
     html:not([data-theme="light"]) :is(.qb-f span,.qb-clear,.qb-cal,.qb-close){color:var(--d-ink2)}
     html:not([data-theme="light"]) :is(.qb-g button,.qb-nav button){background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
   }
+  /* reestructura de conversión (15 oct 2026) */
+  .amenities:not(.all) .am-group li:nth-child(n+5){display:none}
+  .am-more{display:block;margin:34px auto 0;font:600 14px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#1F2F54;background:#fff;border:1px solid #1F2F54;padding:14px 22px;cursor:pointer}
+  .am-more:hover{background:#1F2F54;color:#fff}
+  .amenities.all .am-more{display:none}
+  .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-top:18px}
+  .trust li{display:flex;align-items:center;gap:8px;text-align:left;font:600 14px/1.35 'Source Sans 3',sans-serif;color:#1F2F54}
+  .trust .ph{font-size:20px;color:#3B528A}
+  @media (prefers-color-scheme: dark){html:not([data-theme="light"]) .trust li{color:var(--d-head)}html:not([data-theme="light"]) .trust .ph{color:var(--d-accent)}html:not([data-theme="light"]) .am-more{background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}}
+  @media (max-width:700px){.trust{flex-direction:column;align-items:flex-start;max-width:340px;margin:16px auto 0}}
 </style>
 </head>
 <body>
@@ -849,41 +859,91 @@
   </div>
 </section>
 
-<!-- ===== Feature cards ===== -->
-<section class="cards">
-  <div class="wrap">
-    <div class="grid">
-      <article class="card" style="background-image:url('alberca.jpg')">
-        <div class="card-body">
-          <h4>Alberca Climatizada</h4>
-          <p>Disponible todo el año y a temperatura agradable. El corazón de la casa: espacio amplio para nadar, chapoteadero para los niños y sombra diseñada para toda la tarde.</p>
-          <a class="link-arrow" href="#amenidades">Ver amenidades</a>
-        </div>
-      </article>
-      <article class="card" style="background-image:url('playa.jpg')">
-        <div class="card-body">
-          <h4>Playa &amp; Pueblo</h4>
-          <p>A 750 m de una playa semivirgen, a 5 minutos de La Peñita de Jaltemba y a 10 de Rincón de Guayabitos. Naturaleza, pesca y color a un paso.</p>
-          <a class="link-arrow" href="#ubicacion">Ver ubicación</a>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
+<!-- Reestructura de conversión (15 oct 2026): la prueba social sube justo después de las fotos -->
+<section class="k-statement"><p>No lo decimos nosotros. Lo dicen quienes ya <em>vinieron</em>.</p></section>
 
-<!-- ===== Spaces (dark) ===== -->
-<section class="spaces">
-  <div class="grid">
-    <div class="content">
-            <h2>Dos plantas para convivir</h2>
-      <p class="intro-txt">Cada espacio está pensado para que todos estén juntos, ya sea nadando, cocinando o descansando bajo la sombra.</p>
-      <ul class="rest-list">
-        <li><i class="ico ph ph-swimming-pool" aria-hidden="true"></i><span class="txt"><strong>Planta baja</strong><span>Terraza, sala, cocina semi equipada, comedor amplio, asador de ladrillo, alberca con chapoteadero y dos baños.</span></span></li>
-        <li><i class="ico ph ph-bed" aria-hidden="true"></i><span class="txt"><strong>Planta alta</strong><span>Cuatro recámaras (tres con minisplit) y una terraza con vista a la montaña.</span></span></li>
-        <li><i class="ico ph ph-fire" aria-hidden="true"></i><span class="txt"><strong>Terraza &amp; asador</strong><span>El punto de reunión: prepara un ceviche, enciende la parrilla y disfruta al aire libre.</span></span></li>
-      </ul>
+<!-- ===== Testimonios ===== -->
+<section class="reviews" id="opiniones">
+  <div class="wrap">
+    <div class="reviews-head">
+      <span class="section-label" style="text-align:center;">Opiniones reales</span>
+      <div class="rating-head">
+        <span class="score">4.73</span>
+        <span class="stars">★★★★★</span>
+        <span class="count">· 150 evaluaciones en Airbnb</span>
+      </div>
+      <h2>Lo que dicen nuestros huéspedes</h2>
     </div>
-    <div class="photo" role="img" aria-label="Áreas comunes, comedor, jardines y alberca de Casa Kauri"></div>
+    <div class="reviews-carousel carousel-wrap">
+    <button class="rev-arrow prev" type="button" aria-label="Ver reseñas anteriores">‹</button>
+    <div class="reviews-grid carousel-track">
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Excelente atención, siempre atentos a cualquier duda y muy amables. La casa es justo lo que está en las fotografías: muy limpio y ordenado todo. Sin duda volvería a hospedarme.</p>
+        <div class="rc-meta"><div class="rc-avatar">G</div><div class="rc-who"><strong>Gisela</strong><span>Viaje grupal · Hace 3 semanas</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">La casa de Ismael tiene excelente ubicación, está muy bien equipada y realmente te invita a relajarte y disfrutar. Nos sentimos como en casa. La playa que menciona sí es virgen: la tendrán prácticamente para ustedes solos. Definitivamente lo recomiendo y volveremos.</p>
+        <div class="rc-meta"><div class="rc-avatar">C</div><div class="rc-who"><strong>Carlos Alberto</strong><span>Viaje grupal · Julio 2025</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Muy bonita casa privada. Gran área de piscina para divertirse y jugar; mis chicas la disfrutaron muchísimo. La cocina está equipada con los utensilios y cubiertos necesarios. En general, un 9/10 en cuanto a nuestra estadía.</p>
+        <div class="rc-meta"><div class="rc-avatar">V</div><div class="rc-who"><strong>Vicman</strong><span>Whittier, California · Julio 2025</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Gran espacio para pasar tiempo tranquilo con la familia, bonita piscina y sala de estar muy espaciosa. Las habitaciones eran cómodas y la casa se sentía muy segura.</p>
+        <div class="rc-meta"><div class="rc-avatar">P</div><div class="rc-who"><strong>Patty</strong><span>Lakin, Kansas · Enero 2026</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Lugar muy agradable y tranquilo. El anfitrión fue extremadamente amable y complaciente. Definitivamente me hospedaré aquí de nuevo. Recomiendo mucho hospedarse aquí.</p>
+        <div class="rc-meta"><div class="rc-avatar">J</div><div class="rc-who"><strong>Jonathan</strong><span>Moreno Valley, California · Abril 2026</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">La estancia con Ismael fue excelente, es una persona muy amable y empática. Tiene una casa hermosa y siempre estuvo al pendiente. ¡Súper recomendada la estancia!</p>
+        <div class="rc-meta"><div class="rc-avatar">C</div><div class="rc-who"><strong>Citlalli</strong><span>Zapopan, México · Febrero 2026</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Todo fue como se describía, excelente. Disfrutamos mucho la alberca, mis nietos encantados. Volvería de nuevo 👍</p>
+        <div class="rc-meta"><div class="rc-avatar">E</div><div class="rc-who"><strong>Elizabeth</strong><span>Tijuana, México · Diciembre 2025</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Las instalaciones cubren todas las expectativas. Las fotos corresponden al lugar en su totalidad. ¡Un lugar para regresar y recomendar ampliamente!</p>
+        <div class="rc-meta"><div class="rc-avatar">M</div><div class="rc-who"><strong>Miguel</strong><span>Guadalajara, México · Mayo 2026</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Estancia muy amena. La zona cuenta con mucha tranquilidad, plazas cerca y accesibles. Sin duda volvería a hospedarme varias veces.</p>
+        <div class="rc-meta"><div class="rc-avatar">J</div><div class="rc-who"><strong>Jorge Ortiz</strong><span>Guadalajara, México · Abril 2026</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Ismael es un buen anfitrión, muy complaciente. El lugar está convenientemente ubicado cerca de playas agradables. Disfrutamos de nuestra estancia.</p>
+        <div class="rc-meta"><div class="rc-avatar">M</div><div class="rc-who"><strong>Maria</strong><span>Lombard, Illinois · Febrero 2026</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">La casa muy cómoda, acorde a las fotos publicadas. Siempre Ismael estuvo atento a lo que se requería. Sin duda regresaremos.</p>
+        <div class="rc-meta"><div class="rc-avatar">L</div><div class="rc-who"><strong>Laura</strong><span>Guadalajara, México · Septiembre 2025</span></div></div>
+      </article>
+      <article class="review-card">
+        <div class="rc-stars">★★★★★</div>
+        <p class="rc-text">Una casa muy agradable, suficiente espacio y todo lo necesario para cocinar y pasarla bien con la familia.</p>
+        <div class="rc-meta"><div class="rc-avatar">N</div><div class="rc-who"><strong>Nestor</strong><span>Guadalajara, México · Noviembre 2025</span></div></div>
+      </article>
+    </div>
+    <button class="rev-arrow next" type="button" aria-label="Ver más reseñas">›</button>
+    </div>
+    <p class="swipe-hint">Desliza para ver más reseñas →</p>
+    <div style="text-align:center;">
+      <a class="btn-primary" href="https://www.airbnb.mx/rooms/36241619/reviews" target="_blank" rel="noopener">Ver las 150 evaluaciones en Airbnb</a>
+    </div>
   </div>
 </section>
 
@@ -980,6 +1040,7 @@
         </ul>
       </div>
     </div>
+    <button type="button" class="am-more">Ver las más de 50 comodidades</button>
   </div>
 </section>
 
@@ -1018,91 +1079,6 @@
   </div>
 </section>
 
-<!-- ===== Testimonios ===== -->
-<section class="reviews" id="opiniones">
-  <div class="wrap">
-    <div class="reviews-head">
-      <span class="section-label" style="text-align:center;">Opiniones reales</span>
-      <div class="rating-head">
-        <span class="score">4.73</span>
-        <span class="stars">★★★★★</span>
-        <span class="count">· 150 evaluaciones en Airbnb</span>
-      </div>
-      <h2>Lo que dicen nuestros huéspedes</h2>
-    </div>
-    <div class="reviews-carousel carousel-wrap">
-    <button class="rev-arrow prev" type="button" aria-label="Ver reseñas anteriores">‹</button>
-    <div class="reviews-grid carousel-track">
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Excelente atención, siempre atentos a cualquier duda y muy amables. La casa es justo lo que está en las fotografías: muy limpio y ordenado todo. Sin duda volvería a hospedarme.</p>
-        <div class="rc-meta"><div class="rc-avatar">G</div><div class="rc-who"><strong>Gisela</strong><span>Viaje grupal · Hace 3 semanas</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">La casa de Ismael tiene excelente ubicación, está muy bien equipada y realmente te invita a relajarte y disfrutar. Nos sentimos como en casa. La playa que menciona sí es virgen: la tendrán prácticamente para ustedes solos. Definitivamente lo recomiendo y volveremos.</p>
-        <div class="rc-meta"><div class="rc-avatar">C</div><div class="rc-who"><strong>Carlos Alberto</strong><span>Viaje grupal · Julio 2025</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Muy bonita casa privada. Gran área de piscina para divertirse y jugar; mis chicas la disfrutaron muchísimo. La cocina está equipada con los utensilios y cubiertos necesarios. En general, un 9/10 en cuanto a nuestra estadía.</p>
-        <div class="rc-meta"><div class="rc-avatar">V</div><div class="rc-who"><strong>Vicman</strong><span>Whittier, California · Julio 2025</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Gran espacio para pasar tiempo tranquilo con la familia, bonita piscina y sala de estar muy espaciosa. Las habitaciones eran cómodas y la casa se sentía muy segura.</p>
-        <div class="rc-meta"><div class="rc-avatar">P</div><div class="rc-who"><strong>Patty</strong><span>Lakin, Kansas · Enero 2026</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Lugar muy agradable y tranquilo. El anfitrión fue extremadamente amable y complaciente. Definitivamente me hospedaré aquí de nuevo. Recomiendo mucho hospedarse aquí.</p>
-        <div class="rc-meta"><div class="rc-avatar">J</div><div class="rc-who"><strong>Jonathan</strong><span>Moreno Valley, California · Abril 2026</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">La estancia con Ismael fue excelente, es una persona muy amable y empática. Tiene una casa hermosa y siempre estuvo al pendiente. ¡Súper recomendada la estancia!</p>
-        <div class="rc-meta"><div class="rc-avatar">C</div><div class="rc-who"><strong>Citlalli</strong><span>Zapopan, México · Febrero 2026</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Todo fue como se describía, excelente. Disfrutamos mucho la alberca, mis nietos encantados. Volvería de nuevo 👍</p>
-        <div class="rc-meta"><div class="rc-avatar">E</div><div class="rc-who"><strong>Elizabeth</strong><span>Tijuana, México · Diciembre 2025</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Las instalaciones cubren todas las expectativas. Las fotos corresponden al lugar en su totalidad. ¡Un lugar para regresar y recomendar ampliamente!</p>
-        <div class="rc-meta"><div class="rc-avatar">M</div><div class="rc-who"><strong>Miguel</strong><span>Guadalajara, México · Mayo 2026</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Estancia muy amena. La zona cuenta con mucha tranquilidad, plazas cerca y accesibles. Sin duda volvería a hospedarme varias veces.</p>
-        <div class="rc-meta"><div class="rc-avatar">J</div><div class="rc-who"><strong>Jorge Ortiz</strong><span>Guadalajara, México · Abril 2026</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Ismael es un buen anfitrión, muy complaciente. El lugar está convenientemente ubicado cerca de playas agradables. Disfrutamos de nuestra estancia.</p>
-        <div class="rc-meta"><div class="rc-avatar">M</div><div class="rc-who"><strong>Maria</strong><span>Lombard, Illinois · Febrero 2026</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">La casa muy cómoda, acorde a las fotos publicadas. Siempre Ismael estuvo atento a lo que se requería. Sin duda regresaremos.</p>
-        <div class="rc-meta"><div class="rc-avatar">L</div><div class="rc-who"><strong>Laura</strong><span>Guadalajara, México · Septiembre 2025</span></div></div>
-      </article>
-      <article class="review-card">
-        <div class="rc-stars">★★★★★</div>
-        <p class="rc-text">Una casa muy agradable, suficiente espacio y todo lo necesario para cocinar y pasarla bien con la familia.</p>
-        <div class="rc-meta"><div class="rc-avatar">N</div><div class="rc-who"><strong>Nestor</strong><span>Guadalajara, México · Noviembre 2025</span></div></div>
-      </article>
-    </div>
-    <button class="rev-arrow next" type="button" aria-label="Ver más reseñas">›</button>
-    </div>
-    <p class="swipe-hint">Desliza para ver más reseñas →</p>
-    <div style="text-align:center;">
-      <a class="btn-primary" href="https://www.airbnb.mx/rooms/36241619/reviews" target="_blank" rel="noopener">Ver las 150 evaluaciones en Airbnb</a>
-    </div>
-  </div>
-</section>
-
 <!-- ===== Info / Reglas (FAQ) ===== -->
 <section class="reviews faqsec">
   <div class="wrap">
@@ -1137,12 +1113,36 @@
   </div>
 </section>
 
+<!-- ===== Gather (full-bleed) ===== -->
+<section class="gather">
+    <h2>Reúnete con quienes más quieres</h2>
+  <p>Ya sea nadando, en el chapoteadero con los niños o compartiendo una parrillada al atardecer, Casa Kauri está hecha para pasar la tarde relajándote y refrescándote en familia.</p>
+  <a class="btn-outline" href="#disponibilidad">Reservar</a>
+</section>
+
+<!-- ===== Cómo reservar ===== -->
+<section class="plan3">
+  <div class="wrap">
+    <h2>Reservar es así de simple</h2>
+    <ol class="steps3">
+      <li class="step3"><b>Elige tus fechas</b><p>En el <a href="#disponibilidad" style="text-decoration:underline">calendario de abajo</a>, en Airbnb o por WhatsApp.</p></li>
+      <li class="step3"><b>Recibe tu confirmación</b><p>Con la dirección, la clave de llegada y la guía de la zona.</p></li>
+      <li class="step3"><b>Llega a tu ritmo</b><p>Desde las 3 p.m., con candado de clave. Salida antes de las 11 a.m.</p></li>
+    </ol>
+  </div>
+</section>
+
 <!-- ===== Calendario ===== -->
 <section class="cal" id="disponibilidad" data-prop="casa" data-max="10" data-wa="525628544253" data-nombre="Casa Kauri">
   <div class="wrap">
     <div class="cal-head">
       <h2>Elige tus fechas</h2>
       <p>Los días tachados ya están ocupados. Elige llegada y salida, mira tu precio al momento y aparta con el 50 %.</p>
+      <ul class="trust">
+        <li><i class="ph ph-piggy-bank" aria-hidden="true"></i><span>Directo sale más barato que en Airbnb: sin su comisión de servicio</span></li>
+        <li><i class="ph ph-shield-check" aria-hidden="true"></i><span>Pago seguro con Mercado Pago: tarjeta, OXXO o transferencia</span></li>
+        <li><i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i><span>Cancelación sin costo hasta 31 días antes</span></li>
+      </ul>
     </div>
     <div class="cal-box">
       <div class="cal-cal">
@@ -1162,27 +1162,6 @@
     </div>
   </div>
 </section>
-
-<!-- ===== Cómo reservar ===== -->
-<section class="plan3">
-  <div class="wrap">
-    <h2>Reservar es así de simple</h2>
-    <ol class="steps3">
-      <li class="step3"><b>Elige tus fechas</b><p>En el <a href="#disponibilidad" style="text-decoration:underline">calendario de arriba</a>, en Airbnb o por WhatsApp.</p></li>
-      <li class="step3"><b>Recibe tu confirmación</b><p>Con la dirección, la clave de llegada y la guía de la zona.</p></li>
-      <li class="step3"><b>Llega a tu ritmo</b><p>Desde las 3 p.m., con candado de clave. Salida antes de las 11 a.m.</p></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ===== Gather (full-bleed) ===== -->
-<section class="gather">
-    <h2>Reúnete con quienes más quieres</h2>
-  <p>Ya sea nadando, en el chapoteadero con los niños o compartiendo una parrillada al atardecer, Casa Kauri está hecha para pasar la tarde relajándote y refrescándote en familia.</p>
-  <a class="btn-outline" href="#disponibilidad">Reservar</a>
-</section>
-
-<section class="k-statement"><p>No lo decimos nosotros. Lo dicen quienes ya <em>vinieron</em>.</p></section>
 
 <!-- ===== El otro alojamiento ===== -->
 <section class="sister">
@@ -1270,6 +1249,9 @@
 </a>
 
 <script>
+  var amMore=document.querySelector('.am-more');
+  if (amMore) amMore.addEventListener('click', function () { amMore.closest('.amenities').classList.add('all'); });
+
   document.querySelectorAll('.faq-q').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var item = btn.closest('.faq-item');
@@ -1316,7 +1298,7 @@
     });
   }
 </script>
-<script src="kauri-i18n.js?v=1"></script>
+<script src="kauri-i18n.js?v=2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="kauri-motion.js?v=5"></script>
