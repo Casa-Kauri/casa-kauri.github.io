@@ -13,9 +13,11 @@
   /* cupón de una liga privada (?cupon=CODIGO): se recuerda mientras navega el sitio y se aplica al precio y al apartar (12 oct 2026) */
   var CUP=(new URLSearchParams(location.search).get("cupon")||"").trim().toUpperCase();
   try{if(CUP)sessionStorage.setItem("kauriCupon",CUP);else CUP=sessionStorage.getItem("kauriCupon")||"";}catch(e){}
-  var MES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-  var MESC=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
-  var DIA=["L","M","M","J","V","S","D"];
+  /* inglés (15 oct 2026): lo activa kauri-i18n.js poniendo <html lang="en"> antes de que corra este archivo */
+  var EN=document.documentElement.lang==="en";function T(a,b){return EN?b:a;}
+  var MES=EN?["January","February","March","April","May","June","July","August","September","October","November","December"]:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var MESC=EN?["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]:["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  var DIA=EN?["M","T","W","T","F","S","S"]:["L","M","M","J","V","S","D"];
   var busy={},synced=false,today=new Date();today.setHours(0,0,0,0);
   var last=new Date(today);last.setMonth(last.getMonth()+14);
   var S={a:null,b:null,hov:null,guests:Math.min(4,max)};
@@ -27,15 +29,16 @@
   function nights(x,y){return Math.round((y-x)/864e5);}
   function freeBetween(x,y){for(var d=new Date(x);d<y;d=add(d,1))if(busy[k(d)])return false;return true;}
   function mobile(){return matchMedia("(max-width: 700px)").matches;}
-  function fmt(d,yr){return d.getDate()+" de "+MES[d.getMonth()]+(yr?" de "+d.getFullYear():"");}
+  function fmt(d,yr){return EN?MES[d.getMonth()]+" "+d.getDate()+(yr?", "+d.getFullYear():""):d.getDate()+" de "+MES[d.getMonth()]+(yr?" de "+d.getFullYear():"");}
   function short(d){return d.getDate()+" "+MESC[d.getMonth()];}
   function pd(s){var p=s.split("-");return new Date(+p[0],p[1]-1,+p[2]);}
-  function people(){return S.guests+(S.guests===1?" persona":" personas");}
+  function people(){return S.guests+(S.guests===1?T(" persona"," guest"):T(" personas"," guests"));}
   function resURL(){return "apartar.html?p="+prop+"&in="+k(S.a)+"&out="+k(S.b)+"&g="+S.guests+(CUP?"&cupon="+encodeURIComponent(CUP):"");}
   function precio(){return (window.kauriPrecio&&S.a&&S.b)?window.kauriPrecio(prop,S.a,S.b,0,{busy:synced?busy:null,cupon:CUP},S.guests):null;}
-  function precioHTML(P){if(!P)return "";return ' · Total <b>'+kauriMoneda(P.total)+'</b>'+(P.especial&&P.ancla?' <span class="qb-esp">Precio especial</span>':'');}
+  function precioHTML(P){if(!P)return "";return ' · Total <b>'+kauriMoneda(P.total)+'</b>'+(P.especial&&P.ancla?' <span class="qb-esp">'+T("Precio especial","Special price")+'</span>':'');}
   function waURL(){
-    var m=(S.a&&S.b)?"Hola, vi la página de "+nombre+". ¿Está disponible del "+fmt(S.a)+" al "+fmt(S.b,true)+" ("+nights(S.a,S.b)+" noches) para "+people()+"?"
+    var m=EN?((S.a&&S.b)?"Hi, I saw the "+nombre+" website. Is it available from "+fmt(S.a)+" to "+fmt(S.b,true)+" ("+nights(S.a,S.b)+" nights) for "+people()+"?":"Hi, I saw the "+nombre+" website and I'd like to ask about dates.")
+         :(S.a&&S.b)?"Hola, vi la página de "+nombre+". ¿Está disponible del "+fmt(S.a)+" al "+fmt(S.b,true)+" ("+nights(S.a,S.b)+" noches) para "+people()+"?"
                    :"Hola, vi la página de "+nombre+" y quiero consultar fechas.";
     return "https://wa.me/"+wa+"?text="+encodeURIComponent(m);
   }
@@ -57,7 +60,7 @@
         var tooShort=S.a&&!S.b&&d>S.a&&nights(S.a,d)<MIN&&!isBusy;
         if(tooShort)cls.push("short");
         var dis=past||(isBusy&&!canEnd);
-        html+='<button type="button" class="'+cls.join(" ")+'" data-k="'+key+'"'+(dis?" disabled":"")+(isBusy?' title="Ocupado"':tooShort?' title="Mínimo 2 noches"':"")+' aria-label="'+fmt(d,true)+(isBusy?", ocupado":"")+'" aria-pressed="'+(cls.indexOf("sel")>-1)+'">'+dd+"</button>";
+        html+='<button type="button" class="'+cls.join(" ")+'" data-k="'+key+'"'+(dis?" disabled":"")+(isBusy?' title="'+T("Ocupado","Booked")+'"':tooShort?' title="'+T("Mínimo 2 noches","2-night minimum")+'"':"")+' aria-label="'+fmt(d,true)+(isBusy?T(", ocupado",", booked"):"")+'" aria-pressed="'+(cls.indexOf("sel")>-1)+'">'+dd+"</button>";
       }
       html+="</div></div>";
     }
@@ -65,7 +68,7 @@
   }
   function pick(d){
     if(!S.a||S.b||d<=S.a){if(busy[k(d)])return;S.a=d;S.b=null;}
-    else if(nights(S.a,d)<MIN){flash("Mínimo 2 noches");return;}
+    else if(nights(S.a,d)<MIN){flash(T("Mínimo 2 noches","2-night minimum"));return;}
     else if(freeBetween(S.a,d))S.b=d;
     else{S.a=busy[k(d)]?null:d;S.b=null;}
     S.hov=null;renderAll();
@@ -120,9 +123,9 @@
     closePop();
     var n=nights(S.a,S.b),ok=freeBetween(S.a,S.b);
     res.hidden=false;
-    res.innerHTML=(synced?(ok?'<span class="qb-ok"><i class="ph ph-check-circle" aria-hidden="true"></i> Libre</span>':'<span class="qb-no">Ocupado</span>'):'<span class="qb-ok"><i class="ph ph-calendar-check" aria-hidden="true"></i> Te confirmamos al momento</span>')+
-      '<span class="qb-what"><b>'+fmt(S.a)+' al '+fmt(S.b)+'</b> · '+n+' noches · '+people()+precioHTML(precio())+'</span>'+
-      '<span class="qb-acts"><a class="btn-primary" href="'+resURL()+'">Reservar</a><a class="qb-cal" href="'+waURL()+'" target="_blank" rel="noopener">o pregúntanos por WhatsApp</a></span>';
+    res.innerHTML=(synced?(ok?'<span class="qb-ok"><i class="ph ph-check-circle" aria-hidden="true"></i> '+T("Libre","Available")+'</span>':'<span class="qb-no">'+T("Ocupado","Booked")+'</span>'):'<span class="qb-ok"><i class="ph ph-calendar-check" aria-hidden="true"></i> '+T("Te confirmamos al momento","We'll confirm right away")+'</span>')+
+      '<span class="qb-what"><b>'+fmt(S.a)+T(' al ',' to ')+fmt(S.b)+'</b> · '+n+T(' noches · ',' nights · ')+people()+precioHTML(precio())+'</span>'+
+      '<span class="qb-acts"><a class="btn-primary" href="'+resURL()+'">'+T("Reservar","Book")+'</a><a class="qb-cal" href="'+waURL()+'" target="_blank" rel="noopener">'+T("o pregúntanos por WhatsApp","or ask us on WhatsApp")+'</a></span>';
     if(anim)gsap.fromTo(res,{y:10,opacity:0},{y:0,opacity:1,duration:.45,ease:"power3.out"});
   }
 
@@ -132,17 +135,17 @@
       grid.innerHTML=monthsHTML(mainView,mobile()?1:2);
       prev.disabled=mainView<=new Date(today.getFullYear(),today.getMonth(),1);
       gn.textContent=S.guests;
-      if(S.a&&S.b){sum.innerHTML="<b>"+fmt(S.a)+" al "+fmt(S.b)+"</b> · "+nights(S.a,S.b)+" noches · "+people()+precioHTML(precio());go.classList.remove("off");go.href=resURL();}
-      else{sum.textContent=S.a?"Ahora elige el día de salida (mínimo 2 noches).":"Elige el día de llegada.";go.classList.add("off");go.href="#disponibilidad";}
+      if(S.a&&S.b){sum.innerHTML="<b>"+fmt(S.a)+T(" al "," to ")+fmt(S.b)+"</b> · "+nights(S.a,S.b)+T(" noches · "," nights · ")+people()+precioHTML(precio());go.classList.remove("off");go.href=resURL();}
+      else{sum.textContent=S.a?T("Ahora elige el día de salida (mínimo 2 noches).","Now pick your check-out day (2-night minimum)."):T("Elige el día de llegada.","Pick your check-in day.");go.classList.add("off");go.href="#disponibilidad";}
       var cw=sec.querySelector(".cal-wa");if(cw)cw.href=waURL();
     }
     if(qb){
-      fIn.textContent=S.a?short(S.a):"Agregar fecha";fOut.textContent=S.b?short(S.b):"Agregar fecha";
+      fIn.textContent=S.a?short(S.a):T("Agregar fecha","Add date");fOut.textContent=S.b?short(S.b):T("Agregar fecha","Add date");
       qb.querySelector(".qb-in").classList.toggle("set",!!S.a);qb.querySelector(".qb-out").classList.toggle("set",!!S.b);
       qgn.textContent=S.guests;
       if(!pop.hidden){
         popGrid.innerHTML=monthsHTML(popView,mobile()?1:2);
-        popT.textContent=!S.a?"Elige tu llegada":!S.b?"Ahora tu salida (mínimo 2 noches)":fmt(S.a)+" al "+fmt(S.b)+" · "+nights(S.a,S.b)+" noches";
+        popT.textContent=!S.a?T("Elige tu llegada","Pick your check-in"):!S.b?T("Ahora tu salida (mínimo 2 noches)","Now your check-out (2-night minimum)"):fmt(S.a)+T(" al "," to ")+fmt(S.b)+" · "+nights(S.a,S.b)+T(" noches"," nights");
         qb.querySelector(".qb-prev").disabled=popView<=new Date(today.getFullYear(),today.getMonth(),1);
       }
       if(!res.hidden&&!(S.a&&S.b))res.hidden=true;
@@ -156,7 +159,7 @@
     var d=new Date(today);while(d.getDay()!==5)d=add(d,1);
     for(var i=0;i<26;i++,d=add(d,7)){
       if(!busy[k(d)]&&!busy[k(add(d,1))]){var fri=new Date(d),sun=add(d,2);
-        el.querySelector(".nf-d").textContent="viernes "+fri.getDate()+(fri.getMonth()!==sun.getMonth()?" de "+MES[fri.getMonth()]:"")+" al domingo "+sun.getDate()+" de "+MES[sun.getMonth()];
+        el.querySelector(".nf-d").textContent=EN?"Friday, "+MESC[fri.getMonth()]+" "+fri.getDate()+" to Sunday, "+MESC[sun.getMonth()]+" "+sun.getDate():"viernes "+fri.getDate()+(fri.getMonth()!==sun.getMonth()?" de "+MES[fri.getMonth()]:"")+" al domingo "+sun.getDate()+" de "+MES[sun.getMonth()];
         el.hidden=false;
         el.onclick=function(){S.a=fri;S.b=sun;mainView=new Date(fri.getFullYear(),fri.getMonth(),1);renderAll();};
         return;}
@@ -166,8 +169,8 @@
   function apply(data){
     busy={};((data&&data[prop])||[]).forEach(function(x){for(var d=pd(x[0]),e=pd(x[1]);d<e;d=add(d,1))busy[k(d)]=1;});
     synced=!!(data&&data.sincronizado&&data.sincronizado[prop]);
-    if(st){if(synced&&data.actualizado){st.textContent="Sincronizado con Airbnb · último cambio el "+fmt(new Date(data.actualizado))+". Te confirmamos al momento por WhatsApp.";st.classList.add("ok");}
-      else st.textContent="Calendario en conexión con Airbnb: elige tus fechas y te confirmamos la disponibilidad al momento por WhatsApp.";}
+    if(st){if(synced&&data.actualizado){st.textContent=T("Sincronizado con Airbnb · último cambio el ","Synced with Airbnb · last change on ")+fmt(new Date(data.actualizado))+T(". Te confirmamos al momento por WhatsApp.",". We confirm right away on WhatsApp.");st.classList.add("ok");}
+      else st.textContent=T("Calendario en conexión con Airbnb: elige tus fechas y te confirmamos la disponibilidad al momento por WhatsApp.","Calendar connected to Airbnb: pick your dates and we'll confirm availability right away on WhatsApp.");}
     nextFree();renderAll();
   }
   addEventListener("resize",function(){clearTimeout(renderAll.t);renderAll.t=setTimeout(renderAll,150);});
