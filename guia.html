@@ -211,8 +211,9 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   .ar-tabs button[aria-selected="true"]{background:#1F2F54;border-color:#1F2F54;color:#fff}
   .places{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
   .spot{grid-column:span 4;display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;min-width:0}
-  .spot.big{grid-column:span 8;background:linear-gradient(180deg,rgba(14,23,46,.15),rgba(14,23,46,.85)),var(--img) center/cover no-repeat,#24406b;color:#fff;border:0;justify-content:flex-end;min-height:300px}
+  .spot.big{grid-column:span 8;background:linear-gradient(180deg,rgba(14,23,46,.35),rgba(14,23,46,.9)),var(--img) center/cover no-repeat,#24406b;color:#fff;border:0;justify-content:flex-end;min-height:300px}
   .spot.big h3,.spot.big .meta{color:#fff}
+  .spot.big .meta{margin-top:auto}.spot.big .contact{margin-top:0}
   .spot.big p{color:rgba(255,255,255,.92)}
   .spot .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font:600 12.5px/1.3 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;color:var(--gold-ink)}
   .spot.big .meta{color:var(--gold)}
@@ -590,162 +591,214 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     </div>
 
     <div class="panel places" id="a-playas" role="tabpanel">
-      <article class="spot big card" style="--img:url('playa.jpg')">
-        <div class="meta"><span>750 m · <span lang="es">caminando</span><span lang="en">walk</span></span><span lang="es">Atardecer</span><span lang="en">Sunset</span></div>
+      <article class="spot card big" style="--img:url('playa.jpg')">
+        <div class="meta"><span><span lang="es">750 m · caminando</span><span lang="en">750 m · walk</span></span><span><span lang="es">Atardecer</span><span lang="en">Sunset</span></span></div>
         <h3>Playa El Naranjo</h3>
         <p lang="es">La más cercana: semivirgen, tranquila y con los mejores atardeceres. Es para caminar y estar, <b>no para nadar</b>: la orilla tiene mucha pendiente.</p>
         <p lang="en">The closest one: nearly untouched, quiet, with the best sunsets. It's for walking and relaxing, <b>not swimming</b>: the shore drops off steeply.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Playa+El+Naranjo+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Cómo llegar</span><span lang="en">Directions</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Playa+El+Naranjo%2C+La+Pe%C3%B1ita+de+Jaltemba%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>10 min · <span lang="es">en auto</span><span lang="en">drive</span></span></div>
+        <div class="ph-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Playa_de_Guayabitos_desde_un_dron_19.jpg/1280px-Playa_de_Guayabitos_desde_un_dron_19.jpg')" role="img" aria-label="Rincón de Guayabitos"></div>
+        <div class="meta"><span><span lang="es">10 min · en auto</span><span lang="en">10 min · drive</span></span></div>
         <h3>Rincón de Guayabitos</h3>
         <p lang="es">La playa para nadar: dos kilómetros de oleaje muy tranquilo, ideal para niños. Palapas, comida y lanchas a Isla del Coral.</p>
         <p lang="en">The swimming beach: two kilometers of very calm water, great for kids. Beach restaurants and boats to Isla del Coral.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Playa+Rinc%C3%B3n+de+Guayabitos" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Playa+Rinc%C3%B3n+de+Guayabitos%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+        <p class="credit"><span lang="es">Foto: Luisalvaz, Wikimedia Commons (CC0)</span><span lang="en">Photo: Luisalvaz, Wikimedia Commons (CC0)</span></p>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Caminata de 50 min</span><span lang="en">50 min hike</span></div>
-        <h3>Mirador y Playa del Toro</h3>
-        <p lang="es">Desde Los Ayala, por las playas Frideras y Frideritas. Primero el mirador, luego la playa escondida. Lleva tenis y agua.</p>
-        <p lang="en">From Los Ayala, past Frideras and Frideritas beaches. Viewpoint first, then the hidden beach. Bring sneakers and water.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Mirador+del+Toro+Los+Ayala+Nayarit" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="meta"><span><span lang="es">Caminata de 50 min</span><span lang="en">50 min hike</span></span></div>
+        <h3><span lang="es">Mirador y Playa del Toro</span><span lang="en">Mirador and Playa del Toro</span></h3>
+        <p lang="es">Sale del final de la playa de Los Ayala, a la izquierda, y pasa por Frideras y Frideritas. Primero el mirador, luego la playa escondida. Tenis, agua y cuidado en las rocas.</p>
+        <p lang="en">Starts at the left end of Los Ayala beach and passes Frideras and Frideritas. Viewpoint first, then the hidden beach. Sneakers, water and care on the rocks.</p>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Mirador+del+Toro%2C+Los+Ayala%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>30 min · <span lang="es">en auto</span><span lang="en">drive</span></span></div>
+        <div class="ph-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Atardecer_en_la_Playa_San_Pancho%2C_Nayarit_36.jpg/1280px-Atardecer_en_la_Playa_San_Pancho%2C_Nayarit_36.jpg')" role="img" aria-label="San Pancho"></div>
+        <div class="meta"><span><span lang="es">30 min · en auto</span><span lang="en">30 min · drive</span></span></div>
         <h3>San Pancho</h3>
         <p lang="es">Pueblo bohemio con surf, cafés y artistas. Ideal para pasar la tarde y quedarse al atardecer.</p>
         <p lang="en">Laid-back town with surf, cafés and artists. Perfect for an afternoon that ends at sunset.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Playa+San+Pancho+Nayarit" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Playa+San+Pancho%2C+San+Francisco%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+        <p class="credit"><span lang="es">Foto: Luisalvaz, Wikimedia Commons (CC BY-SA 4.0)</span><span lang="en">Photo: Luisalvaz, Wikimedia Commons (CC BY-SA 4.0)</span></p>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Excursión</span><span lang="en">Day trip</span></div>
+        <div class="ph-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/5/5f/Playa_de_Litib%C3%BA.jpg')" role="img" aria-label="Playa Litibú"></div>
+        <div class="meta"><span><span lang="es">Excursión</span><span lang="en">Day trip</span></span></div>
         <h3>Playa Litibú</h3>
         <p lang="es">Larga, casi vacía y con agua turquesa. Para quien busca silencio.</p>
         <p lang="en">Long, nearly empty, turquoise water. For those after quiet.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Playa+Litib%C3%BA+Nayarit" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Playa+Litib%C3%BA%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+        <p class="credit"><span lang="es">Foto: Sapafer, Wikimedia Commons (CC BY-SA 4.0)</span><span lang="en">Photo: Sapafer, Wikimedia Commons (CC BY-SA 4.0)</span></p>
       </article>
     </div>
 
     <div class="panel places" id="a-comer" role="tabpanel" hidden>
-      <article class="spot big card" style="--img:url('https://a0.muscache.com/im/pictures/miso/Hosting-36241619/original/4f224ffd-1c9e-4aa5-9713-b28db0f22047.jpeg?im_w=1200')">
-        <div class="meta"><span>Los Ayala</span><span lang="es">Mariscos frente al mar</span><span lang="en">Seafood on the beach</span></div>
+      <article class="spot card">
+        <div class="meta"><span>Los Ayala</span><span><span lang="es">Mariscos frente al mar</span><span lang="en">Seafood on the beach</span></span></div>
         <h3>Pineda</h3>
         <p lang="es">Una gran palapa al extremo sur de la bahía. La familia Pineda cocina mariscos aquí desde 1985, con vista a la orilla.</p>
         <p lang="en">A large palapa at the south end of the bay. The Pineda family has cooked seafood here since 1985, right by the water.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Restaurante+Pineda+Los+Ayala+Nayarit" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Diario de 11:00 a 19:00</span><span lang="en">Daily 11 a.m. to 7 p.m.</span></p>
+        <div class="contact"><a href="https://wa.me/523221350013" target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo"></i>WhatsApp</a><a href="https://www.instagram.com/restaurantepinedamx" target="_blank" rel="noopener"><i class="ph ph-instagram-logo"></i>Instagram</a><a href="https://restaurantepineda.mx" target="_blank" rel="noopener"><i class="ph ph-globe"></i>Web</a><a href="https://www.google.com/maps/search/?api=1&query=Restaurante+Pineda%2C+Carretera+a+Los+Ayala+km+5%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>La Peñita</span><span lang="es">Mexicana contemporánea</span><span lang="en">Modern Mexican</span></div>
-        <h3>Casa Rosseta</h3>
-        <p lang="es">Pescados y mariscos en un ambiente relajado. Buena para una cena de grupo.</p>
-        <p lang="en">Fish and seafood in a relaxed setting. Good for a group dinner.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Casa+Rosseta+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="meta"><span>La Peñita</span><span><span lang="es">El mejor desayuno</span><span lang="en">Best breakfast</span></span></div>
+        <h3>Koral</h3>
+        <p lang="es">Brunch frente al mar los fines de semana y cena con atardecer. Cocina mexicana e internacional.</p>
+        <p lang="en">Beachfront weekend brunch and sunset dinners. Mexican and international food.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Brunch vie a dom 8:00 a 13:00 · cena mié a dom 16:00 a 22:00</span><span lang="en">Brunch Fri to Sun 8 a.m. to 1 p.m. · dinner Wed to Sun 4 to 10 p.m.</span></p>
+        <div class="contact"><a href="tel:+523221684830"><i class="ph ph-phone"></i>322 168 4830</a><a href="https://www.instagram.com/koral_restaurante" target="_blank" rel="noopener"><i class="ph ph-instagram-logo"></i>Instagram</a><a href="https://www.koralrestaurant.com" target="_blank" rel="noopener"><i class="ph ph-globe"></i>Web</a><a href="https://www.google.com/maps/search/?api=1&query=Koral+Restaurant%2C+Esteban+Baca+Calder%C3%B3n+8%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>La Peñita</span><span lang="es">Cocina mexicana</span><span lang="en">Mexican food</span></div>
+        <div class="meta"><span>La Peñita</span><span><span lang="es">Cocina casera</span><span lang="en">Home cooking</span></span></div>
         <h3>La Casita de Irma</h3>
-        <p lang="es">Comida casera a buen precio y muy buen servicio.</p>
-        <p lang="en">Home-style cooking, fair prices, great service.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=La+Casita+de+Irma+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <p lang="es">Desayuno, comida y cena caseros a buen precio. Famosa por sus chiles rellenos.</p>
+        <p lang="en">Home-style breakfast, lunch and dinner at fair prices. Famous for its chiles rellenos.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Diario de 7:00 a 21:30</span><span lang="en">Daily 7 a.m. to 9:30 p.m.</span></p>
+        <div class="contact"><a href="tel:+523272740724"><i class="ph ph-phone"></i>327 274 0724</a><a href="https://www.google.com/maps/search/?api=1&query=La+Casita+de+Irma%2C+Bah%C3%ADa+de+Manzanillo+Sur+4%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>La Peñita</span><span lang="es">Pollo y fajitas</span><span lang="en">Chicken and fajitas</span></div>
+        <div class="meta"><span>La Peñita</span><span><span lang="es">Desayunos</span><span lang="en">Breakfast</span></span></div>
         <h3>El Pollito</h3>
-        <p lang="es">Famoso por su pollo, sus chiles y fajitas generosas.</p>
-        <p lang="en">Known for its chicken, chiles and generous fajitas.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=El+Pollito+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <p lang="es">Clásico de la avenida Emiliano Zapata, sobre todo para desayunar. Pollo, chiles y fajitas generosas.</p>
+        <p lang="en">A classic on Emiliano Zapata avenue, especially for breakfast. Chicken, chiles and generous fajitas.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Diario de 7:00 a 20:30</span><span lang="en">Daily 7 a.m. to 8:30 p.m.</span></p>
+        <div class="contact"><a href="tel:+523272740545"><i class="ph ph-phone"></i>327 274 0545</a><a href="https://www.google.com/maps/search/?api=1&query=El+Pollito%2C+Emiliano+Zapata+30%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>La Peñita</span><span lang="es">Pizza y pasta</span><span lang="en">Pizza and pasta</span></div>
+        <div class="meta"><span>La Peñita</span><span><span lang="es">Mariscos estilo cajún</span><span lang="en">Cajun seafood boil</span></span></div>
+        <h3>Rey Cajun</h3>
+        <p lang="es">Mariscos al estilo de Luisiana, para compartir en grupo y con las manos.</p>
+        <p lang="en">Louisiana-style seafood boil, made for sharing with the group.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Vie a dom 13:00 a 22:00 · lun a mié 13:00 a 20:00 · jueves cerrado</span><span lang="en">Fri to Sun 1 to 10 p.m. · Mon to Wed 1 to 8 p.m. · closed Thu</span></p>
+        <div class="contact"><a href="tel:+523271130078"><i class="ph ph-phone"></i>327 113 0078</a><a href="https://www.google.com/maps/search/?api=1&query=Rey+Cajun%2C+Esteban+Baca+Calder%C3%B3n%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+      </article>
+      <article class="spot card">
+        <div class="meta"><span>La Peñita</span><span><span lang="es">Pizza a la leña</span><span lang="en">Wood-fired pizza</span></span></div>
         <h3>La Vitola</h3>
-        <p lang="es">Pizzas y pastas al horno, precios moderados y buena vista.</p>
-        <p lang="en">Oven-baked pizza and pasta, fair prices and a nice view.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=La+Vitola+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <p lang="es">Italiana: pizza a la leña, pastas, salmón y cortes.</p>
+        <p lang="en">Italian: wood-fired pizza, pasta, salmon and steaks.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Lun a sáb 15:00 a 23:00</span><span lang="en">Mon to Sat 3 to 11 p.m.</span></p>
+        <div class="contact"><a href="tel:+523271070579"><i class="ph ph-phone"></i>327 107 0579</a><a href="https://www.google.com/maps/search/?api=1&query=La+Vitola%2C+Emiliano+Zapata+74%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>La Peñita</span><span lang="es">De noche</span><span lang="en">Evenings</span></div>
-        <h3><span lang="es">Taquería Esmeralda y Cenaduría Avenida</span><span lang="en">Taquería Esmeralda and Cenaduría Avenida</span></h3>
-        <p lang="es">Tacos para el antojo de la noche y un pozole que alegra el corazón, sobre la avenida Emiliano Zapata.</p>
-        <p lang="en">Late-night tacos and a soul-warming pozole, both on Emiliano Zapata avenue.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Taquer%C3%ADa+Esmeralda+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="meta"><span>La Peñita</span><span><span lang="es">Tacos de noche</span><span lang="en">Late-night tacos</span></span></div>
+        <h3>Taquería Esmeralda</h3>
+        <p lang="es">Para el antojo de la noche, a cuadra y media del malecón.</p>
+        <p lang="en">For late-night cravings, a block and a half from the boardwalk.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Mié a dom 16:00 a 23:30</span><span lang="en">Wed to Sun 4 to 11:30 p.m.</span></p>
+        <div class="contact"><a href="tel:+523326847573"><i class="ph ph-phone"></i>332 684 7573</a><a href="https://www.google.com/maps/search/?api=1&query=Taquer%C3%ADa+Esmeralda%2C+Emiliano+Zapata+30A%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+      </article>
+      <article class="spot card">
+        <div class="meta"><span>La Peñita</span><span><span lang="es">Antojitos</span><span lang="en">Mexican snacks</span></span></div>
+        <h3>Cenaduría Avenida</h3>
+        <p lang="es">Pozole, tostadas, enchiladas y sopes por la noche. Un pozole que alegra el corazón.</p>
+        <p lang="en">Pozole, tostadas, enchiladas and sopes at night. Soul-warming pozole.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">17:30 a 23:00 · miércoles cerrado</span><span lang="en">5:30 to 11 p.m. · closed Wed</span></p>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Cenadur%C3%ADa+Avenida%2C+Bah%C3%ADa+de+Guaymas+Norte+13%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+      </article>
+      <article class="spot card">
+        <div class="meta"><span>Guayabitos</span><span><span lang="es">Mariscos</span><span lang="en">Seafood</span></span></div>
+        <h3>Juan's Place</h3>
+        <p lang="es">Mariscos y comida mexicana después de la playa en Guayabitos.</p>
+        <p lang="en">Seafood and Mexican food after the beach in Guayabitos.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Diario de 11:00 a 18:00</span><span lang="en">Daily 11 a.m. to 6 p.m.</span></p>
+        <div class="contact"><a href="tel:+523221586209"><i class="ph ph-phone"></i>322 158 6209</a><a href="https://www.instagram.com/juan.s.place" target="_blank" rel="noopener"><i class="ph ph-instagram-logo"></i>Instagram</a><a href="https://www.google.com/maps/search/?api=1&query=Juan%27s+Place%2C+Cedros+6%2C+Rinc%C3%B3n+de+Guayabitos" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
     </div>
 
     <div class="panel places" id="a-hacer" role="tabpanel" hidden>
-      <article class="spot big card" style="--img:url('https://a0.muscache.com/im/pictures/miso/Hosting-36241619/original/a51c6750-9030-4f99-95c8-69fda7e7b7b9.jpeg?im_w=1200')">
-        <div class="meta"><span lang="es">Diciembre a marzo</span><span lang="en">December to March</span></div>
+      <article class="spot card big" style="--img:url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Humpback_whale_-_Ballena_jorobada_%28Megaptera_novaeangliae%29.jpg/1280px-Humpback_whale_-_Ballena_jorobada_%28Megaptera_novaeangliae%29.jpg')">
+        <div class="meta"><span><span lang="es">Diciembre a marzo</span><span lang="en">December to March</span></span></div>
         <h3><span lang="es">Avistamiento de ballenas</span><span lang="en">Whale watching</span></h3>
-        <p lang="es">Cada invierno las ballenas jorobadas llegan desde Alaska a reproducirse en estas aguas. Los paseos salen de Guayabitos y La Peñita.</p>
-        <p lang="en">Every winter humpback whales arrive from Alaska to breed in these waters. Tours leave from Guayabitos and La Peñita.</p>
+        <p lang="es">Cada invierno las jorobadas llegan desde Alaska a reproducirse en estas aguas. Nayarit Adventures sale de Guayabitos a las 10:00 con ballenas y snorkel en Isla del Coral (mínimo 4 personas).</p>
+        <p lang="en">Every winter humpbacks arrive from Alaska to breed in these waters. Nayarit Adventures leaves Guayabitos at 10 a.m. with whales plus snorkeling at Isla del Coral (4 people minimum).</p>
+        <div class="contact"><a href="https://wa.me/523111360137" target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo"></i>WhatsApp</a><a href="tel:+523112180808"><i class="ph ph-phone"></i>311 218 0808</a><a href="https://www.facebook.com/Tours.Nayarit.Adventures/" target="_blank" rel="noopener"><i class="ph ph-facebook-logo"></i>Facebook</a></div>
+        <p class="credit"><span lang="es">Foto: Fernando Flores, Wikimedia Commons (CC BY-SA 2.0)</span><span lang="en">Photo: Fernando Flores, Wikimedia Commons (CC BY-SA 2.0)</span></p>
       </article>
       <article class="spot card">
-        <div class="meta"><span>15 min · <span lang="es">en lancha</span><span lang="en">by boat</span></span></div>
+        <div class="ph-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Isla_Cerotero_e_Isla_del_Coral_desde_un_dron.jpg/1280px-Isla_Cerotero_e_Isla_del_Coral_desde_un_dron.jpg')" role="img" aria-label="Isla del Coral"></div>
+        <div class="meta"><span><span lang="es">15 min · en lancha</span><span lang="en">15 min · by boat</span></span></div>
         <h3>Isla del Coral</h3>
-        <p lang="es">Reserva natural frente a Guayabitos, con agua clara para snorkel. Las lanchas salen de la playa durante la mañana.</p>
-        <p lang="en">Nature reserve off Guayabitos with clear water for snorkeling. Boats leave from the beach in the morning.</p>
+        <p lang="es">Reserva natural frente a Guayabitos, con agua clara para snorkel. Las lanchas salen de la playa por la mañana; lleva efectivo.</p>
+        <p lang="en">Nature reserve off Guayabitos with clear water for snorkeling. Boats leave from the beach in the morning; bring cash.</p>
+        <div class="contact"><a href="https://wa.me/523111349845?text=Hola%2C%20%C2%BFme%20pasas%20el%20contacto%20de%20su%20lanchero%20de%20confianza%20para%20ir%20a%20Isla%20del%20Coral%3F" target="_blank" rel="noopener"><i class="ph ph-chat-circle-dots"></i><span lang="es">Pídenos el contacto</span><span lang="en">Ask us for the contact</span></a><a href="https://www.google.com/maps/search/?api=1&query=Isla+del+Coral%2C+Rinc%C3%B3n+de+Guayabitos%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+        <p class="credit"><span lang="es">Foto: Luisalvaz, Wikimedia Commons (CC0)</span><span lang="en">Photo: Luisalvaz, Wikimedia Commons (CC0)</span></p>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Jueves</span><span lang="en">Thursdays</span></div>
+        <div class="meta"><span><span lang="es">Jueves</span><span lang="en">Thursdays</span></span></div>
         <h3><span lang="es">Tianguis de La Peñita</span><span lang="en">La Peñita street market</span></h3>
-        <p lang="es">Cuatro cuadras de fruta, mariscos frescos, artesanía y antojitos. Ve temprano.</p>
-        <p lang="en">Four blocks of fruit, fresh seafood, crafts and snacks. Go early.</p>
+        <p lang="es">Cuatro cuadras de fruta, mariscos frescos, artesanía y antojitos. Todo el año, y mucho más grande de noviembre a marzo.</p>
+        <p lang="en">Four blocks of fruit, fresh seafood, crafts and snacks. Year-round, and much bigger November to March.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Jueves, de 8:00 a 13:00 aprox.</span><span lang="en">Thursdays, about 8 a.m. to 1 p.m.</span></p>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Tianguis+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Medio día o día completo</span><span lang="en">Half or full day</span></div>
+        <div class="meta"><span><span lang="es">Medio día o día completo</span><span lang="en">Half or full day</span></span></div>
         <h3><span lang="es">Pesca deportiva</span><span lang="en">Sport fishing</span></h3>
-        <p lang="es">Pez vela, dorado, pez gallo y, con suerte, atún o marlín.</p>
-        <p lang="en">Sailfish, mahi-mahi, roosterfish and, with luck, tuna or marlin.</p>
+        <p lang="es">Pez vela, dorado, pez gallo y, con suerte, atún o marlín. Tenemos lanchero de confianza.</p>
+        <p lang="en">Sailfish, mahi-mahi, roosterfish and, with luck, tuna or marlin. We have a trusted boat captain.</p>
+        <div class="contact"><a href="https://wa.me/523111349845?text=Hola%2C%20%C2%BFme%20pasas%20el%20contacto%20de%20su%20lanchero%20para%20pesca%20deportiva%3F" target="_blank" rel="noopener"><i class="ph ph-chat-circle-dots"></i><span lang="es">Pídenos el contacto</span><span lang="en">Ask us for the contact</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Para el grupo</span><span lang="en">Group fun</span></div>
+        <div class="meta"><span><span lang="es">Para el grupo</span><span lang="en">Group fun</span></span></div>
         <h3><span lang="es">Banana, kayak y surf</span><span lang="en">Banana boat, kayak, surf</span></h3>
-        <p lang="es">En Guayabitos rentan banana y kayak; para surf, San Pancho tiene escuelas.</p>
-        <p lang="en">Guayabitos rents banana boats and kayaks; for surfing, San Pancho has schools.</p>
+        <p lang="es">En la playa de Guayabitos rentan banana y kayak; para surf, San Pancho tiene escuelas.</p>
+        <p lang="en">Guayabitos beach rents banana boats and kayaks; for surfing, San Pancho has schools.</p>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Rinc%C3%B3n+de+Guayabitos%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Excursión</span><span lang="en">Day trip</span></div>
+        <div class="meta"><span><span lang="es">1 h · en auto</span><span lang="en">1 h · drive</span></span></div>
         <h3><span lang="es">Aguas termales de Nuevo Ixtlán</span><span lang="en">Nuevo Ixtlán hot springs</span></h3>
-        <p lang="es">Piletas de agua caliente natural entre rocas, con áreas verdes, regaderas y paseos a caballo.</p>
-        <p lang="en">Natural hot-spring pools among rocks, with lawns, showers and horseback rides.</p>
+        <p lang="es">Piletas de agua caliente natural bajo los árboles, en la sierra. Se sale por el crucero de Altavista y son unos 17 km de terracería: con lluvia (junio a octubre) el camino se complica.</p>
+        <p lang="en">Natural hot-spring pools under the trees in the hills. Turn off at the Altavista junction for about 17 km of dirt road: tricky when it rains (June to October).</p>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Aguas+Termales+Nuevo+Ixtl%C3%A1n%2C+Compostela%2C+Nayarit" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
     </div>
 
     <div class="panel places" id="a-serv" role="tabpanel" hidden>
       <article class="spot card">
-        <div class="meta"><span lang="es">Camino a la playa</span><span lang="en">On the way to the beach</span></div>
+        <div class="meta"><span><span lang="es">Camino a la playa</span><span lang="en">On the way to the beach</span></span></div>
         <h3><span lang="es">Tienda Mi Canasta</span><span lang="en">Mi Canasta store</span></h3>
         <p lang="es">Lo básico a pie: hielo, bebidas, botanas y abarrotes.</p>
         <p lang="en">Basics within walking distance: ice, drinks, snacks and groceries.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Mi+Canasta+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="contact"><a href="https://www.google.com/maps/search/?api=1&query=Mi+Canasta%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Servicio a domicilio</span><span lang="en">Home delivery</span></div>
+        <div class="meta"><span><span lang="es">A domicilio</span><span lang="en">Home delivery</span></span></div>
         <h3>La Tienda Grande</h3>
-        <p lang="es">Abarrotes con entrega a la casa. Pídenos el contacto por mensaje.</p>
-        <p lang="en">Groceries delivered to the house. Message us for the contact.</p>
+        <p lang="es">Abarrotes con entrega a la casa.</p>
+        <p lang="en">Groceries delivered to the house.</p>
+        <div class="contact"><a href="https://wa.me/523111349845?text=Hola%2C%20%C2%BFme%20pasas%20el%20contacto%20de%20La%20Tienda%20Grande%20para%20pedir%20a%20domicilio%3F" target="_blank" rel="noopener"><i class="ph ph-chat-circle-dots"></i><span lang="es">Pídenos el contacto</span><span lang="en">Ask us for the contact</span></a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span lang="es">Lanchas</span><span lang="en">Boats</span></div>
-        <h3>Enrique Tours</h3>
-        <p lang="es">Pesca deportiva, renta de lancha y traslados a Isla del Coral. Pídenos el contacto.</p>
-        <p lang="en">Sport fishing, boat rental and trips to Isla del Coral. Message us for the contact.</p>
-      </article>
-      <article class="spot card">
-        <div class="meta"><span lang="es">Las 24 horas en temporada</span><span lang="en">Local taxi</span></div>
+        <div class="meta"><span><span lang="es">24 horas</span><span lang="en">24 hours</span></span></div>
         <h3><span lang="es">Taxi turístico</span><span lang="en">Tourist taxi</span></h3>
-        <p lang="es">Llámales y da la dirección de tu mensaje.</p>
-        <p lang="en">Call and give the address from your message.</p>
-        <a class="go" href="tel:+523272741415">327 274 1415 <i class="ph ph-phone"></i></a>
+        <p lang="es">Llama y da la dirección de tu mensaje de llegada.</p>
+        <p lang="en">Call and give the address from your arrival message.</p>
+        <div class="contact"><a href="tel:+523272741415"><i class="ph ph-phone"></i>327 274 1415</a></div>
       </article>
       <article class="spot card">
-        <div class="meta"><span>La Peñita</span></div>
-        <h3><span lang="es">Farmacia</span><span lang="en">Pharmacy</span></h3>
-        <p lang="es">Farmacias Benavides en La Peñita.</p>
-        <p lang="en">Farmacias Benavides in La Peñita.</p>
-        <a class="go" href="https://www.google.com/maps/search/?api=1&query=Farmacia+Benavides+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><span lang="es">Abrir mapa</span><span lang="en">Open map</span> <i class="ph ph-arrow-up-right"></i></a>
+        <div class="meta"><span>Av. Emiliano Zapata 1</span></div>
+        <h3>Farmacias Benavides</h3>
+        <p lang="es">Farmacia de cadena sobre la avenida principal de La Peñita.</p>
+        <p lang="en">Chain pharmacy on La Peñita's main avenue.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">Diario de 7:00 a 23:00</span><span lang="en">Daily 7 a.m. to 11 p.m.</span></p>
+        <div class="contact"><a href="tel:+523272741278"><i class="ph ph-phone"></i>327 274 1278</a><a href="https://www.google.com/maps/search/?api=1&query=Farmacias+Benavides%2C+Emiliano+Zapata+1%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
+      </article>
+      <article class="spot card">
+        <div class="meta"><span>Av. Emiliano Zapata 14</span></div>
+        <h3>Farmacia PVR</h3>
+        <p lang="es">Farmacia local, también con WhatsApp.</p>
+        <p lang="en">Local pharmacy, also on WhatsApp.</p>
+        <p class="credit"><i class="ph ph-clock"></i> <span lang="es">9:00 a 21:00</span><span lang="en">9 a.m. to 9 p.m.</span></p>
+        <div class="contact"><a href="tel:+523222241672"><i class="ph ph-phone"></i>322 224 1672</a><a href="https://wa.me/523222241672" target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo"></i>WhatsApp</a><a href="https://www.google.com/maps/search/?api=1&query=Farmacia+PVR%2C+Emiliano+Zapata+14%2C+La+Pe%C3%B1ita+de+Jaltemba" target="_blank" rel="noopener"><i class="ph ph-map-pin"></i><span lang="es">Mapa</span><span lang="en">Map</span></a></div>
       </article>
     </div>
+
+    <p class="credit" style="margin-top:18px"><span lang="es">Teléfonos y horarios de fuentes públicas, revisados en octubre de 2026; pueden cambiar. Si un dato ya no es así, cuéntanos.</span><span lang="en">Phone numbers and hours from public sources, checked October 2026; they may change. If something's off, let us know.</span></p>
   </div>
 </section>
 
@@ -775,8 +828,8 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     <ul class="sos-list">
       <li><span><b lang="es">Emergencias</b><b lang="en">Emergencies</b><small lang="es">Policía, ambulancia y bomberos</small><small lang="en">Police, ambulance and fire</small></span><a class="call red" href="tel:911"><i class="ph ph-phone-call"></i>911</a></li>
       <li><span><b lang="es">Centro de Salud La Peñita</b><b lang="en">La Peñita Health Center</b><small>Nuño de Balboa 14, Miramar</small></span><a class="call" href="tel:+523272740150"><i class="ph ph-first-aid"></i>327 274 0150</a></li>
-      <li><span><b lang="es">Protección Civil y Bomberos</b><b lang="en">Civil Protection and Fire</b><small>La Peñita</small></span><a class="call" href="tel:+523272743578"><i class="ph ph-fire-extinguisher"></i>327 274 3578</a></li>
-      <li><span><b lang="es">Policía Estatal</b><b lang="en">State Police</b><small>La Peñita</small></span><a class="call" href="tel:+523272770488"><i class="ph ph-shield-check"></i>327 277 0488</a></li>
+      <li><span><b lang="es">Protección Civil, bomberos y ambulancia</b><b lang="en">Civil Protection, fire and ambulance</b><small>La Peñita</small></span><a class="call" href="tel:+523272743578"><i class="ph ph-fire-extinguisher"></i>327 274 3578</a></li>
+      <li><span><b lang="es">Policía</b><b lang="en">Police</b><small>La Peñita</small></span><a class="call" href="tel:+523272770488"><i class="ph ph-shield-check"></i>327 277 0488</a></li>
       <li><span><b lang="es">Ángeles Verdes</b><b lang="en">Ángeles Verdes (roadside help)</b><small lang="es">Asistencia en carretera, gratis</small><small lang="en">Free highway assistance</small></span><a class="call" href="tel:078"><i class="ph ph-car-profile"></i>078</a></li>
       <li><span><b lang="es">Tu anfitrión</b><b lang="en">Your host</b><small lang="es">Cualquier cosa de la casa</small><small lang="en">Anything about the house</small></span><a class="call" href="tel:+523111349845"><i class="ph ph-house"></i>311 134 9845</a></li>
     </ul>
@@ -878,8 +931,8 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     var p=Math.max(0,Math.min(1,(mins-rise)/(set-rise)));$("#sun-dot").style.setProperty("--a",(-180+180*p)+"deg");
     $$(".sun-walk").forEach(function(e){e.textContent=h24(go);});
     var items=[],dz=(4-wd+7)%7;
-    if(wd===4)items.push(["ph-storefront",EN?"Market day":"Hoy hay tianguis",EN?"La Peñita's Thursday street market: fruit, seafood, crafts. Go early.":"El tianguis de los jueves en La Peñita: fruta, mariscos y artesanía. Ve temprano."]);
-    else items.push(["ph-storefront",EN?"Street market: "+(dz===1?"tomorrow":"in "+dz+" days"):"Tianguis: "+(dz===1?"mañana":"en "+dz+" días"),EN?"Every Thursday in La Peñita.":"Cada jueves en La Peñita."]);
+    if(wd===4)items.push(["ph-storefront",EN?"Market day":"Hoy hay tianguis",EN?"La Peñita's Thursday street market: fruit, seafood, crafts. Go early.":"El tianguis de los jueves en La Peñita, de 8:00 a 13:00 aprox.: fruta, mariscos y artesanía."]);
+    else items.push(["ph-storefront",EN?"Street market: "+(dz===1?"tomorrow":"in "+dz+" days"):"Tianguis: "+(dz===1?"mañana":"en "+dz+" días"),EN?"Every Thursday in La Peñita, about 8 a.m. to 1 p.m.":"Cada jueves en La Peñita, de 8:00 a 13:00 aprox."]);
     if(mo===11||mo<=2)items.push(["ph-binoculars",EN?"Whale season":"Temporada de ballenas",EN?"Humpbacks are in the bay from December to March. Ask for a tour in Guayabitos.":"Las jorobadas están en la bahía de diciembre a marzo. Pregunta por el paseo en Guayabitos."]);
     else if(mo===10)items.push(["ph-binoculars",EN?"Whales are coming":"Ya vienen las ballenas",EN?"Humpback season starts in December.":"La temporada de jorobadas empieza en diciembre."]);
     if(mo>=5&&mo<=9)items.push(["ph-cloud-rain",EN?"Rainy season":"Temporada de lluvias",EN?"Afternoon showers are normal and short. Repellent at sunset.":"Las lluvias de la tarde son normales y cortas. Repelente al atardecer."]);
