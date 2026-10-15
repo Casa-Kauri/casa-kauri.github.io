@@ -93,7 +93,7 @@
   var stage=cv.parentNode,EN=document.documentElement.getAttribute("data-l")==="en";
   var marks=[
     {p:P(414,566),y:20,t:"Casa Kauri",cls:"home"},
-    {p:P(236,482),y:10,t:"Mi Canasta",cls:""},{k:"giro",p:P(205,585),y:2,t:EN?"Turn right":"Vuelta a la derecha",cls:"turn"},
+    {p:P(236,482),y:10,t:"Mi Canasta",cls:""},{k:"giro",p:P(255,612),y:2,t:EN?"Turn right":"Vuelta a la derecha",cls:"turn"},
     {k:"modulo",p:P(590,835),y:10,t:EN?"Security booth":"Módulo de seguridad",cls:""},
     {p:P(-100,125),y:8,t:"Playa El Naranjo",cls:"beach"},
     {k:"tepic",p:P(790,500),y:4,t:EN?"To Tepic and Guadalajara":"A Tepic y Guadalajara",cls:"road"},{k:"vallarta",p:P(450,1050),y:4,t:EN?"To Puerto Vallarta":"A Puerto Vallarta",cls:"road"},
@@ -107,7 +107,7 @@
     gdl:{tags:["Casa Kauri","Higueras","Chihuahua","tepic","modulo"],pts:[P(800,475),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:80},
     auto:{tags:["Casa Kauri","Higueras","Chihuahua","vallarta","modulo"],pts:[P(450,1052),P(576,845),P(458,779),P(340,712),P(430,565)],w:10,col:0xE09A2B,speed:70},
     playa:{tags:["Casa Kauri","Playa El Naranjo","Mi Canasta","Capomo"],pts:[P(430,565),P(379,650),P(195,543),P(60,465),P(-40,410),P(-80,290),P(-100,125)],w:9,col:0xD9603B,speed:110},
-    tienda:{tags:["Casa Kauri","Mi Canasta","Huanacaxtle","giro"],pts:[P(430,565),P(379,650),P(195,543),P(228,488)],w:9,turn:[P(195,543),P(228,488)],view:{c:P(250,560),d:250},col:0x2E4A8C,speed:70}
+    tienda:{tags:["Casa Kauri","Mi Canasta","Huanacaxtle","giro"],pts:[P(430,565),P(379,650),P(195,543),P(228,488)],w:9,turn:[P(195,543),P(228,488)],view:{c:P(318,560),d:330},col:0x2E4A8C,speed:70}
   };
   function sample(pts){var o=[pts[0]],L2=0;for(var i=0;i<pts.length-1;i++){var a=pts[i],b=pts[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.round(l/2));for(var k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);L2+=l;}o.len=L2;return o;}
   Object.keys(routes).forEach(function(k){var R=routes[k];R.s=sample(R.pts);R.mesh=ribbon(R.s,R.w,new T.MeshBasicMaterial({color:R.col,side:T.DoubleSide,toneMapped:false}),.6);R.mesh.visible=false;
