@@ -155,6 +155,8 @@
   }
   .cta a.wa{grid-column:1 / -1;}
   @media (max-width:440px){ .cta{grid-template-columns:1fr;} }
+  .cta a.mp{grid-column:1 / -1; background:#009EE3; color:#fff;}
+  .cta a.mp:hover{background:#0087c2;}
   .cta .wa{background:#25D366; color:#fff;}
   .cta .wa:hover{background:#1da851;}
   .cta .gh{background:#fff; color:var(--primary-color); border:1px solid var(--primary-color); cursor:pointer;}
@@ -234,7 +236,7 @@ const PROPS = {
   depto: {
     marca:'DEPARTAMENTO KAURI', firma:'Departamento Kauri',
     lugar:'Rincón de Guayabitos · Nayarit',
-    tel:'+52 311 134 9845', wa:'523111349845',
+    tel:'+52 56 2854 4253', wa:'525628544253',
     horaIn:'3:00 p.m.', horaOut:'12:00 p.m.',
     foto:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTI4MzQ5NTk2MjI1NzQ4NDA1Mw==/original/0f7d44be-e462-4fbe-bbcd-d4bbea2f5ce4.jpeg?im_w=1200',
     sitio:'departamento.html', sitioNombre:'Departamento Kauri',
@@ -374,7 +376,8 @@ function normalizar(r){
     fechaSaldo:r.fs || '',
     datosPago: r.pg === undefined ? PAGO_DEFAULT : r.pg,
     incluye: r.in || '', politica: r.po || '', notas: r.no || '',
-    tel: r.tl || p.tel, horaIn: r.hi || p.horaIn, horaOut: r.ho || p.horaOut
+    tel: r.tl || p.tel, horaIn: r.hi || p.horaIn, horaOut: r.ho || p.horaOut,
+    mp: /^[\w-]{10,80}$/.test(r.mp || '') ? r.mp : ''   // pref_id de Mercado Pago: el botón cobra ese anticipo
   };
 }
 
@@ -521,6 +524,7 @@ function cotizacion(d){
       <h3>Si algo cambia</h3><p>${esc(d.politica || POLITICA).replace(/\n/g,'<br />')}</p>
 
       <div class="cta">
+        ${d.mp && !esVencida && anticipo ? `<a class="mp" href="https://www.mercadopago.com.mx/checkout/v1/redirect?pref_id=${d.mp}" target="_blank" rel="noopener">Pagar anticipo de ${mx(anticipo)} con Mercado Pago</a>` : ""}
         <a class="wa" href="https://wa.me/${wa}?text=${msgWA}" target="_blank" rel="noopener">${esVencida ? 'Pedir cotización nueva' : 'Quiero apartar mi fecha'}</a>
         <a class="gh" href="#" onclick="window.print();return false;">Descargar en PDF</a>
       </div>
