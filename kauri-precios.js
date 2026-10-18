@@ -52,7 +52,7 @@ window.KAURI_TARIFAS = {
       { desde: "2027-03-20", hasta: "2027-03-28", noche: 2600, nombre: "Semana Santa" }
     ]
   },
-  /* Servidor de cobros (operacion/kauri-pagos, Cloudflare Worker). Vacío = la solicitud se manda por WhatsApp.
+  /* Servidor de cobros (casa-kauri/operacion/kauri-pagos, Cloudflare Worker). Vacío = la solicitud se manda por WhatsApp.
      Con valor: el botón cobra el anticipo con Mercado Pago y el calendario suma las reservas directas. */
   servidor: "https://kauri-pagos.casakauri.workers.dev"
 };
