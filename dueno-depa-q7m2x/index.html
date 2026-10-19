@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Departamento Kauri · Control de llegadas</title>
+<style>
+:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#14212E;--ink2:#526070;--line:#DFE6EC;--acc:#1F2F54;--ok:#1C7A46;--okw:#E3F2E9;--warn:#9A6410;--warnw:#FBF0DA;--big:#C8352B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F151B;--card:#17202A;--ink:#EAF0F4;--ink2:#A8B6C2;--line:#283441;--acc:#9FB4E8;--ok:#5CC48A;--okw:#132A1D;--warn:#E9B957;--warnw:#2A2110;--big:#F07A70;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 16px}
+main{max-width:34rem;margin:0 auto;padding-block:22px 48px;display:grid;gap:14px}
+h1{font-size:1.35rem;margin:0}.sub{color:var(--ink2);margin:2px 0 0;font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px}
+.folio{font:700 .75rem/1 ui-monospace,monospace;letter-spacing:.06em;color:var(--ink2)}
+.huesped{font-size:1.25rem;font-weight:800;margin:0}
+.fechas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fechas div{background:var(--bg);border-radius:12px;padding:10px}.fechas small{display:block;color:var(--ink2);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}.fechas b{font-size:1rem}
+.cobro{background:var(--warnw);border:2px solid var(--warn);border-radius:14px;padding:14px;text-align:center}
+.cobro small{display:block;font-weight:700;color:var(--warn);text-transform:uppercase;letter-spacing:.06em;font-size:.75rem}
+.cobro b{display:block;font-size:2.2rem;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}
+.cobro p{margin:6px 0 0;font-size:.9rem;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}td{padding:6px 0;border-bottom:1px solid var(--line)}td:last-child{text-align:right;font-weight:700}
+.alerta{background:var(--warnw);border-radius:12px;padding:10px 12px;font-size:.92rem}
+ul.check{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+ul.check label{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border-radius:12px;padding:10px 12px;cursor:pointer}
+ul.check input{width:20px;height:20px;margin-top:2px;flex:0 0 20px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:14px;background:var(--ok);color:#fff;font-weight:800;text-decoration:none}
+.nota{color:var(--ink2);font-size:.82rem;text-align:center}
+</style></head>
+<body><main>
+<header><h1>Departamento Kauri · Llegadas</h1><p class="sub">Para el dueño: quién llega, qué cobrar y qué revisar.</p></header>
+<div id="lista"></div>
+<p class="nota">Esta página no aparece en Google y solo la tiene quien recibe la liga. Cualquier duda: Dalí.</p>
+</main>
+<script>
+/* Una reserva por objeto. Para agregar otra: copia el bloque y cambia los datos. (Dalí, 18 oct 2026) */
+var R=[{folio:"DEPTO-261019-HE",huesped:"Agustín H.",llega:"Lunes 19 de octubre · 3:00 p.m.",sale:"Domingo 25 de octubre · 12:00 p.m.",noches:6,
+  personas:"Confirmar al llegar (el comprobante dice 9; el máximo es 6)",mascotas:"No (el depa no admite mascotas)",
+  total:10500,anticipo:5000,saldo:5500,canal:"Reserva directa",
+  aviso:"Si llegan más de 6 personas o traen mascota, avisa a Dalí antes de entregar la llave."}];
+var WA="523117408139";
+function m(n){return "$"+n.toLocaleString("es-MX")+" MXN";}
+document.getElementById("lista").innerHTML=R.map(function(r,i){
+  var k="dueno-"+r.folio+"-";
+  var items=["Recibí el saldo de "+m(r.saldo)+" en efectivo (o Dalí me confirmó la transferencia)","Son 6 personas o menos","No traen mascotas","El depa quedó limpio y en orden el día de salida"];
+  return '<section class="card"><span class="folio">'+r.folio+' · '+r.canal+'</span><p class="huesped">'+r.huesped+'</p>'+
+   '<div class="fechas"><div><small>Llega</small><b>'+r.llega+'</b></div><div><small>Sale</small><b>'+r.sale+'</b></div></div>'+
+   '<div class="cobro"><small>Cobrar en efectivo</small><b>'+m(r.saldo)+'</b><p>Solo si no lo transfirió antes. Dalí te avisa si ya pagó.</p></div>'+
+   '<table><tr><td>Noches</td><td>'+r.noches+'</td></tr><tr><td>Total de la reserva</td><td>'+m(r.total)+'</td></tr><tr><td>Anticipo (ya lo recibió Dalí)</td><td>'+m(r.anticipo)+'</td></tr><tr><td>Saldo</td><td>'+m(r.saldo)+'</td></tr><tr><td>Personas</td><td style="font-weight:600;text-align:right">'+r.personas+'</td></tr><tr><td>Mascotas</td><td style="font-weight:600">'+r.mascotas+'</td></tr></table>'+
+   '<div class="alerta">⚠️ '+r.aviso+'</div>'+
+   '<ul class="check">'+items.map(function(t,j){var on=false;try{on=localStorage.getItem(k+j)==="1"}catch(e){}return '<li><label><input type="checkbox" data-k="'+k+j+'"'+(on?" checked":"")+'><span>'+t+'</span></label></li>';}).join("")+'</ul>'+
+   '<a class="btn" target="_blank" rel="noopener" href="https://wa.me/'+WA+'?text='+encodeURIComponent("Dalí, ya cobré "+m(r.saldo)+" de la reserva "+r.folio+" ("+r.huesped+"). Llegaron ___ personas.")+'">Avisar a Dalí que ya cobré</a></section>';
+}).join("");
+document.addEventListener("change",function(e){var k=e.target.getAttribute&&e.target.getAttribute("data-k");if(k)try{localStorage.setItem(k,e.target.checked?"1":"0")}catch(x){}});
+</script>
+</body></html>
