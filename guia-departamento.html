@@ -149,6 +149,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   .cq-tag.home{background:#E8C87A;color:#1F2F54;font-size:13px}
   .cq-tag.beach{background:#D9714A}
   .cq-tag.turn{background:#2E4A8C;font-size:12.5px}
+  .cq-tag.park{background:#3E9B5B}
   .cq-tag.road{background:rgba(255,255,255,.85);color:#3a4250;box-shadow:none;font-weight:600;font-size:11px;padding:4px 7px}
   .cq-steps{counter-reset:c;margin-top:14px;display:grid;gap:8px}
   .cq-steps[hidden]{display:none}
@@ -471,6 +472,39 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
           <p lang="en"><b>On foot:</b> the beach, the boardwalk, shops and restaurants are minutes away. There's a grocery store on the ground floor of the building.</p>
           <p lang="es"><b>Taxi:</b> llama al <a href="tel:+523272741415">327 274 1415</a> y da la dirección que viene en tu mensaje.</p>
           <p lang="en"><b>Taxi:</b> call <a href="tel:+523272741415">327 274 1415</a> and give the address from your message.</p>
+        </div>
+      </div>
+      <div>
+        <div class="cq">
+          <div class="cq-routes" role="group" aria-label="Recorridos">
+            <button type="button" data-r="auto" aria-pressed="true"><i class="ph ph-car"></i><span lang="es">Desde Vallarta</span><span lang="en">From Vallarta</span></button>
+            <button type="button" data-r="gdl" aria-pressed="false"><i class="ph ph-car"></i><span lang="es">Desde Tepic o Guadalajara</span><span lang="en">From Tepic or Guadalajara</span></button>
+            <button type="button" data-r="estacionar" aria-pressed="false"><i class="ph ph-map-pin"></i><span lang="es">Dónde estacionarte</span><span lang="en">Where to park</span></button>
+            <button type="button" data-r="playa" aria-pressed="false"><i class="ph ph-waves"></i><span lang="es">A la playa</span><span lang="en">To the beach</span></button>
+          </div>
+          <div class="cq-stage"><canvas id="croquis-cv" role="img" aria-label="Croquis 3D del camino al Departamento Kauri"></canvas></div>
+          <ol class="cq-steps" data-r="auto">
+            <li lang="es">Por la carretera 200 rumbo a Tepic, al llegar a Guayabitos da vuelta a la <b>izquierda</b> en la entrada de la <b>calle Jacarandas</b>.</li><li lang="en">On highway 200 heading to Tepic, when you reach Guayabitos turn <b>left</b> at the <b>Jacarandas</b> street entrance.</li>
+            <li lang="es">En la primera avenida, la <b>Av. del Sol Nuevo</b>, da vuelta a la <b>izquierda</b> (es de un solo sentido) y avanza unos 200 m.</li><li lang="en">At the first avenue, <b>Av. del Sol Nuevo</b>, turn <b>left</b> (it's one-way) and drive about 200 m.</li>
+            <li lang="es">A la altura del <b>Andador Colorines</b> estaciónate sobre la avenida. El andador es peatonal: el depa está a unos pasos caminando.</li><li lang="en">At <b>Andador Colorines</b> park on the avenue. The walkway is pedestrian-only: the loft is a few steps away on foot.</li>
+          </ol>
+          <ol class="cq-steps" data-r="gdl" hidden>
+            <li lang="es">Bajando por la carretera 200 rumbo a Vallarta, al llegar a Guayabitos da vuelta a la <b>derecha</b> en la entrada de la <b>calle Jacarandas</b>.</li><li lang="en">Coming down highway 200 toward Vallarta, when you reach Guayabitos turn <b>right</b> at the <b>Jacarandas</b> street entrance.</li>
+            <li lang="es">En la primera avenida, la <b>Av. del Sol Nuevo</b>, da vuelta a la <b>izquierda</b> (es de un solo sentido) y avanza unos 200 m.</li><li lang="en">At the first avenue, <b>Av. del Sol Nuevo</b>, turn <b>left</b> (it's one-way) and drive about 200 m.</li>
+            <li lang="es">A la altura del <b>Andador Colorines</b> estaciónate sobre la avenida. El andador es peatonal: el depa está a unos pasos caminando.</li><li lang="en">At <b>Andador Colorines</b> park on the avenue. The walkway is pedestrian-only: the loft is a few steps away on foot.</li>
+          </ol>
+          <ol class="cq-steps" data-r="estacionar" hidden>
+            <li lang="es">El andador es peatonal: el auto no llega a la puerta. En verde están las calles donde puedes dejarlo, públicas y gratuitas.</li><li lang="en">The walkway is pedestrian-only: cars can't reach the door. The streets in green are where you can leave yours, public and free.</li>
+            <li lang="es"><b>Opción 1:</b> Av. del Sol Nuevo, a la altura del Andador Colorines. Es lo más cerca.</li><li lang="en"><b>Option 1:</b> Av. del Sol Nuevo, right by Andador Colorines. It's the closest.</li>
+            <li lang="es"><b>Opción 2:</b> si está lleno, sigue derecho por Jacarandas hasta el final, da vuelta a la izquierda en el <b>Retorno Jacarandas</b> y estaciónate antes de cruzar el andador. Es una calle más tranquila, del lado de la playa.</li><li lang="en"><b>Option 2:</b> if it's full, keep straight on Jacarandas to the end, turn left on <b>Retorno Jacarandas</b> and park before the walkway. It's a quieter street, on the beach side.</li>
+            <li lang="es">Respeta cocheras y señales. En temporada alta y fines de semana se llena: llega temprano o da una vuelta más.</li><li lang="en">Mind driveways and signs. In high season and on weekends it fills up: arrive early or circle once more.</li>
+          </ol>
+          <ol class="cq-steps" data-r="playa" hidden>
+            <li lang="es">Sal del depa y camina por el Andador Colorines hacia el mar.</li><li lang="en">Leave the loft and walk down Andador Colorines toward the sea.</li>
+            <li lang="es">Cruza el Retorno con cuidado: por ahí sí pasan autos.</li><li lang="en">Cross the Retorno carefully: cars do drive there.</li>
+            <li lang="es">El andador te deja en la arena de la Playa de Guayabitos: oleaje tranquilo y lanchas a Isla del Coral.</li><li lang="en">The walkway ends on the sand of Guayabitos beach: calm water and boats to Isla del Coral.</li>
+          </ol>
+          <p class="map-cap"><span lang="es">Croquis ilustrativo: las calles salen del mapa real, las casas no. Gíralo con el dedo.</span><span lang="en">Illustrative map: streets come from the real map, the houses don't. Spin it with your finger.</span></p>
         </div>
       </div></div>
     </div></section>
@@ -891,7 +925,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   (function(){var bs=$$(".cq-routes button"),st=$$(".cq-steps");if(!bs.length)return;
     bs.forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-r");bs.forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
       st.forEach(function(o){o.hidden=o.getAttribute("data-r")!==k;});if(window.__croquis)window.__croquis.pick(k);});});
-    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis.js?v=13";document.body.appendChild(s);}
+    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis-depa.js?v=1";document.body.appendChild(s);}
     function load(){if(load.d)return;load.d=1;if(window.THREE)return go();var t0=Date.now();(function wait(){if(window.THREE)return go();
       if(!document.querySelector('script[src*="three.min.js"]')){var t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";document.body.appendChild(t);}
       if(Date.now()-t0<15000)setTimeout(wait,200);})();}
