@@ -15,6 +15,9 @@ window.KAURI_TARIFAS = {
        $3,200 y fin de semana $3,500; si además la llegada está a 10 días o menos, el fin de semana baja a $3,250.
        Piso nuevo: $3,200. Puentes y fiestas no bajan. */
     dinamica: { ocupacionBaja: 0.4, diasCerca: 10, baja: { semana: 3200, finde: 3500 }, bajaCerca: { semana: 3200, finde: 3250 } },
+    /* reserva anticipada (Dalí, 19 oct 2026): si faltan más de 30 días, la página muestra el ancla ($4,000) y no baja sola;
+       el precio especial se da con el cupón ANTICIPADA ($3,500 la noche). Puentes y fiestas no cambian. */
+    anticipada: { dias: 30, noche: 4000 },
     limpieza: 600, mascota: 300, anticipo: 0.5,
     /* cupones: tarifa privada para un prospecto, solo en las noches [desde, hasta) y hasta el día "vence" (incluido).
        Se aplica con ?cupon=CODIGO en apartar.html o escribiéndolo ahí; el servidor de cobros lo recalcula igual. */
@@ -24,7 +27,10 @@ window.KAURI_TARIFAS = {
          no aplica si alguna noche cae en temporada (puentes, fiestas, Semana Santa). */
       NOVIEMBRE: { desde: "2026-11-20", hasta: "2026-11-22", noche: 3000, vence: "2026-10-16" },  // misma pareja: la casa estaba ocupada en el puente
       NAVIDAD: { desde: "2026-12-21", hasta: "2026-12-23", noche: 3750, vence: "2026-10-16" },   // prospecto con mascota, antes de Navidad (Dalí, 13 oct 2026)
-      MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" }   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
+      MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" },   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
+      /* tipo "tope": cualquier fecha; la noche queda en "noche" solo si estaba arriba (nunca sube un precio) y no toca
+         puentes, fiestas ni Semana Santa. Es el precio especial por reserva anticipada que se da en el chat (19 oct 2026). */
+      ANTICIPADA: { tipo: "tope", noche: 3500 }
     },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
@@ -84,6 +90,7 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
     if (cup && cup.tipo === "nocheGratis" && temp) cupTemporada = true;
     if (cup && !cup.tipo && key >= cup.desde && key < cup.hasta) { precio = cup.noche; etiqueta = "Cupón " + codigo + " · tarifa especial"; temp = cup; usoCupon = true; }
     else if (temp) { precio = temp.noche; etiqueta = temp.nombre; }
+    else if (T.anticipada && diasFaltan > T.anticipada.dias) { precio = T.anticipada.noche; }
     else if (T.dinamica) {
       var occ = ocupacion(d);
       if (occ !== null && occ < T.dinamica.ocupacionBaja) {
@@ -91,6 +98,11 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
         else { precio = T.dinamica.baja[tipo]; motivo = "Precio especial de temporada baja"; }
         etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · " + motivo.toLowerCase();
       }
+    }
+    if (cup && cup.tipo === "tope" && !temp) usoCupon = true;   // válido aunque la noche ya estuviera abajo: así no sale «cupón no válido»
+    if (cup && cup.tipo === "tope" && !temp && precio > cup.noche) {   // el cupón solo baja: nunca sube lo que ya estaba abajo
+      precio = cup.noche; motivo = "Precio especial de reserva anticipada"; usoCupon = true;
+      etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · cupón " + codigo + " · reserva anticipada";
     }
     if (!temp && !motivo && T.ancla && precio < T.ancla) { motivo = "Precio preferencial de reserva directa"; etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · precio preferencial de reserva directa"; }
     if (T.ancla && precio < T.ancla) { especial = true; ahorro += T.ancla - precio; }
