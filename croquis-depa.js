@@ -82,7 +82,10 @@
 
   /* zonas de estacionamiento en la calle: Av. del Sol Nuevo junto al andador y el Retorno del lado de la playa */
   var parkM=new T.MeshBasicMaterial({color:0x3E9B5B,transparent:true,opacity:.85,toneMapped:false,side:T.DoubleSide});
-  var zonas=[ribbon([[57.9,4.6],[20.6,28],[-40,61]],8.5,parkM,.5),ribbon([[60,-92],[-15.5,-40.8],[-70,-11]],8,parkM,.5)];
+  /* Corrección de Dalí (18 oct): el Retorno NO cruza el andador frente al depa (ese tramo es andador) y la opción 2 es del otro
+     lado, en el Retorno Tabachines; se llega por Sol Nuevo, pasando Colorines, a la derecha y otra vez a la derecha. */
+  ribbon([[-1,-48.5],[-30,-33]],9.5,MAT.footway,.11);
+  var zonas=[ribbon([[57.9,4.6],[20.6,28],[-40,61]],8.5,parkM,.5),ribbon([[-32,-31.9],[-128.2,21.9]],8,parkM,.5)];
   zonas.forEach(function(z){z.visible=false;});
 
   /* marcadores con etiqueta HTML */
@@ -90,7 +93,7 @@
   var marks=[
     {k:"home",p:HOME,y:18,t:EN?"Departamento Kauri":"Departamento Kauri",cls:"home"},
     {k:"p1",p:[28,21],y:7,t:EN?"P · Parking 1":"P · Estaciónate aquí",cls:"park"},
-    {k:"p2",p:[22,-64],y:7,t:EN?"P · Parking 2":"P · Opción 2",cls:"park"},
+    {k:"p2",p:[-62,-14],y:7,t:EN?"P · Parking 2":"P · Opción 2",cls:"park"},
     {k:"izq",p:[300,-6],y:2,t:EN?"Turn left":"Vuelta a la izquierda",cls:"turn"},
     {k:"der",p:[300,-6],y:2,t:EN?"Turn right":"Vuelta a la derecha",cls:"turn"},
     {k:"izq2",p:[196,-92],y:2,t:EN?"Left on Sol Nuevo":"Izquierda en Sol Nuevo",cls:"turn"},
@@ -100,7 +103,7 @@
     {k:"solnuevo",p:[-150,128],y:3,t:"Av. del Sol Nuevo",cls:"road"},
     {k:"jacarandas",p:[255,-40],y:3,t:"Calle Jacarandas",cls:"road"},
     {k:"colorines",p:[-40,-84],y:3,t:"Andador Colorines",cls:"road"},
-    {k:"retorno",p:[90,-112],y:3,t:"Retorno Jacarandas",cls:"road"}
+    {k:"retorno",p:[-150,25],y:3,t:"Retorno Tabachines",cls:"road"}
   ];
   marks.forEach(function(m){m.el=document.createElement("span");m.el.className="cq-tag "+m.cls;m.el.textContent=m.t;stage.appendChild(m.el);
     if(m.cls==="home"||m.cls==="beach"||m.cls==="park"){var pin=new T.Mesh(new T.CylinderGeometry(.6,.6,m.y,8),new T.MeshBasicMaterial({color:m.cls==="home"?0xE8C87A:m.cls==="park"?0x3E9B5B:0x1F2F54}));pin.position.set(m.p[0],m.y/2,m.p[1]);scene.add(pin);}});
@@ -110,8 +113,8 @@
   var routes={
     auto:{tags:["home","izq","izq2","vallarta","jacarandas"],pts:[[140,350],[183,268.8],[234.2,178.4],[320.2,23.6],[324.8,16.3]].concat(JAC,SOL),w:12,col:0xE09A2B,speed:90},
     gdl:{tags:["home","der","izq2","tepic","jacarandas"],pts:[[586.5,-199.7],[440.4,-93.4],[343.4,-17.5],[325.7,.4]].concat(JAC,SOL),w:12,col:0xE09A2B,speed:90},
-    estacionar:{tags:["home","p1","p2","solnuevo","jacarandas","colorines","retorno"],pts:[[196.2,-91.6],[135.1,-144.6],[128.3,-138.9],[22,-64],[-15.5,-40.8],[HOME[0],HOME[1]]],w:7,col:0x2E4A8C,speed:60,zonas:true,view:{c:[50,-40],d:300}},
-    playa:{tags:["home","playa","colorines","retorno"],pts:[[HOME[0],HOME[1]],[-15.5,-40.8],[-59.2,-123],[-83,-160]],w:7,col:0xD9603B,speed:45,view:{c:[-35,-75],d:240}}
+    estacionar:{tags:["home","p1","p2","solnuevo","jacarandas","colorines","retorno"],pts:[[142.5,-55.5],[57.9,4.6],[-96.4,89.8],[-128.2,21.9],[-62,-14]],w:7,col:0x2E4A8C,speed:60,zonas:true,view:{c:[-20,10],d:300}},
+    playa:{tags:["home","playa","colorines"],pts:[[HOME[0],HOME[1]],[-15.5,-40.8],[-59.2,-123],[-83,-160]],w:7,col:0xD9603B,speed:45,view:{c:[-35,-75],d:240}}
   };
   function sample(pts){var o=[pts[0]],L2=0;for(var i=0;i<pts.length-1;i++){var a=pts[i],b=pts[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.round(l/2));for(var k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);L2+=l;}o.len=L2;return o;}
   Object.keys(routes).forEach(function(k){var R=routes[k];R.s=sample(R.pts);R.mesh=ribbon(R.s,R.w,new T.MeshBasicMaterial({color:R.col,side:T.DoubleSide,toneMapped:false}),.7);R.mesh.visible=false;

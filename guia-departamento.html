@@ -496,12 +496,12 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
           <ol class="cq-steps" data-r="estacionar" hidden>
             <li lang="es">El andador es peatonal: el auto no llega a la puerta. En verde están las calles donde puedes dejarlo, públicas y gratuitas.</li><li lang="en">The walkway is pedestrian-only: cars can't reach the door. The streets in green are where you can leave yours, public and free.</li>
             <li lang="es"><b>Opción 1:</b> Av. del Sol Nuevo, a la altura del Andador Colorines. Es lo más cerca.</li><li lang="en"><b>Option 1:</b> Av. del Sol Nuevo, right by Andador Colorines. It's the closest.</li>
-            <li lang="es"><b>Opción 2:</b> si está lleno, sigue derecho por Jacarandas hasta el final, da vuelta a la izquierda en el <b>Retorno Jacarandas</b> y estaciónate antes de cruzar el andador. Es una calle más tranquila, del lado de la playa.</li><li lang="en"><b>Option 2:</b> if it's full, keep straight on Jacarandas to the end, turn left on <b>Retorno Jacarandas</b> and park before the walkway. It's a quieter street, on the beach side.</li>
+            <li lang="es"><b>Opción 2:</b> si está lleno, sigue por Sol Nuevo pasando el Andador Colorines, da vuelta a la <b>derecha</b> en la siguiente calle y otra vez a la <b>derecha</b> en el <b>Retorno Tabachines</b>. Estaciónate ahí: el Retorno termina en el andador, frente al depa. Es una calle más tranquila, del lado de la playa.</li><li lang="en"><b>Option 2:</b> if it's full, continue on Sol Nuevo past Andador Colorines, turn <b>right</b> at the next street and <b>right</b> again on <b>Retorno Tabachines</b>. Park there: the Retorno ends at the walkway, right by the loft. It's a quieter street, on the beach side.</li>
             <li lang="es">Respeta cocheras y señales. En temporada alta y fines de semana se llena: llega temprano o da una vuelta más.</li><li lang="en">Mind driveways and signs. In high season and on weekends it fills up: arrive early or circle once more.</li>
           </ol>
           <ol class="cq-steps" data-r="playa" hidden>
             <li lang="es">Sal del depa y camina por el Andador Colorines hacia el mar.</li><li lang="en">Leave the loft and walk down Andador Colorines toward the sea.</li>
-            <li lang="es">Cruza el Retorno con cuidado: por ahí sí pasan autos.</li><li lang="en">Cross the Retorno carefully: cars do drive there.</li>
+            <li lang="es">Sigue derecho: todo el camino es andador, sin autos.</li><li lang="en">Keep straight: it's walkway all the way, no cars.</li>
             <li lang="es">El andador te deja en la arena de la Playa de Guayabitos: oleaje tranquilo y lanchas a Isla del Coral.</li><li lang="en">The walkway ends on the sand of Guayabitos beach: calm water and boats to Isla del Coral.</li>
           </ol>
           <p class="map-cap"><span lang="es">Croquis ilustrativo: las calles salen del mapa real, las casas no. Gíralo con el dedo.</span><span lang="en">Illustrative map: streets come from the real map, the houses don't. Spin it with your finger.</span></p>
@@ -925,7 +925,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   (function(){var bs=$$(".cq-routes button"),st=$$(".cq-steps");if(!bs.length)return;
     bs.forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-r");bs.forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
       st.forEach(function(o){o.hidden=o.getAttribute("data-r")!==k;});if(window.__croquis)window.__croquis.pick(k);});});
-    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis-depa.js?v=1";document.body.appendChild(s);}
+    var cv=$("#croquis-cv");function go(){var s=document.createElement("script");s.src="croquis-depa.js?v=2";document.body.appendChild(s);}
     function load(){if(load.d)return;load.d=1;if(window.THREE)return go();var t0=Date.now();(function wait(){if(window.THREE)return go();
       if(!document.querySelector('script[src*="three.min.js"]')){var t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";document.body.appendChild(t);}
       if(Date.now()-t0<15000)setTimeout(wait,200);})();}
