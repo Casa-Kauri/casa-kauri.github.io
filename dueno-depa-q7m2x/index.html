@@ -46,7 +46,7 @@ ul.check input{width:22px;height:22px;margin-top:1px;flex:0 0 22px;accent-color:
 .nota{color:var(--ink2);font-size:.82rem;text-align:center;margin:4px 0 0}
 </style></head>
 <body>
-<header class="top"><div class="in"><div class="marca">Kauri</div><div class="lugar">Departamento · Rincón de Guayabitos</div><h1>Llegadas y cobros</h1><p>Quién llega, cuánto cobrar y qué revisar.</p></div></header>
+<header class="top"><div class="in"><div class="marca">Kauri</div><div class="lugar">Departamento · Rincón de Guayabitos</div><h1>Llegadas</h1><p>Quién llega, si ya pagó y qué revisar al recibirlos.</p></div></header>
 <main id="lista"><section class="card vacio">Cargando…</section></main>
 <p class="nota">Esta página no aparece en Google. Comparte esta liga solo con quien recibe a los huéspedes.</p>
 <script>
@@ -66,22 +66,23 @@ function pinta(L){
   el.innerHTML=L.map(function(r,i){
     var k=NS+r.folio+"-",ini=String(r.huesped).split(" ").map(function(x){return x.charAt(0)}).join("").slice(0,2).toUpperCase(),t=tel(r.telefono),hoy=hoyIso();
     var est=r.llega===hoy?'<span class="chip hoy">Llega hoy</span>':(r.llega>hoy?'<span class="chip">Próxima llegada</span>':'<span class="chip">Hospedado ahora</span>');
-    var cobrado=g(r.folio+"-0")==="1";
-    var items=["Recibí el saldo de "+m(r.saldo)+" (efectivo o transferencia confirmada por Dalí)","Son "+(r.maxP||6)+" personas o menos","No traen mascotas","El depa quedó limpio y en orden el día de salida"];
+    var pagado=!!r.pagado; // lo marca Dalí cuando le llega la transferencia (18 oct 2026)
+    var items=["Recibí a los huéspedes y les entregué / confirmé la llave","Son "+(r.maxP||6)+" personas o menos","No traen mascotas","El depa quedó limpio y en orden el día de salida"];
     var saludo=encodeURIComponent("¡Hola, "+String(r.huesped).split(" ")[0]+"! Te saludamos de Departamento Kauri. ");
     return '<section class="card" style="animation-delay:'+(i*80)+'ms">'+est+
      '<div class="huesped"><span class="av">'+ini+'</span><div><b>'+r.huesped+'</b><span>Folio '+r.folio+' · '+(r.canal||"Reserva directa")+'</span>'+(r.telefono?'<span style="display:block">📱 '+r.telefono+'</span>':'')+'</div></div>'+
      '<div class="acciones"><a class="btn wa" target="_blank" rel="noopener" href="'+(t?"https://wa.me/"+t+"?text="+saludo:"#")+'"'+(t?'':' aria-disabled="true"')+'>💬 Escribirle</a><a class="btn tel" href="'+(t?"tel:+"+t:"#")+'"'+(t?'':' aria-disabled="true"')+'>📞 Llamar</a></div>'+
      (t?'':'<p class="nota" style="margin:-6px 0 0">El teléfono aparece cuando Dalí lo agrega.</p>')+
      '<div class="fechas"><div><small>Llega</small><b>'+fe(r.llega)+'</b><br><small style="text-transform:none;letter-spacing:0">desde 3:00 p.m.</small></div><i>'+r.noches+' noches</i><div><small>Sale</small><b>'+fe(r.sale)+'</b><br><small style="text-transform:none;letter-spacing:0">antes de 12:00 p.m.</small></div></div>'+
-     '<div class="cobro'+(cobrado?' listo':'')+'"><small>'+(cobrado?'✓ Saldo cobrado':'Cobrar en efectivo')+'</small><b>'+m(r.saldo)+'</b><p>'+(cobrado?'Ya quedó registrado en este teléfono.':'Solo si no lo transfirió antes. Dalí te avisa si ya pagó.')+'</p></div>'+
-     '<dl><dt>Huéspedes</dt><dd>'+r.personas+'</dd><dt>Mascotas</dt><dd>No</dd><dt>Total</dt><dd>'+m(r.total)+'</dd><dt>Anticipo (lo tiene Dalí)</dt><dd>'+m(r.anticipo)+'</dd><dt>Saldo</dt><dd>'+m(r.saldo)+'</dd></dl>'+
+     '<div class="cobro'+(pagado?' listo':'')+'"><small>'+(pagado?'✓ Paso 1 · Saldo pagado a Dalí':'Paso 1 · Saldo pendiente')+'</small><b>'+m(r.saldo)+'</b><p>'+(pagado?'Ya puedes entregar la llave. No cobras nada.':'Lo transfiere el huésped directo a Dalí. <b>No cobres nada.</b> Espera a que esto se ponga en verde para entregar la llave.')+'</p></div>'+
+     '<p class="nota" style="margin:-4px 0 0;text-align:left;font-weight:700;color:var(--ink)">Paso 2 · Tu lista al recibirlos</p>'+
+     '<dl><dt>Huéspedes</dt><dd>'+r.personas+'</dd><dt>Mascotas</dt><dd>No</dd><dt>Total</dt><dd>'+m(r.total)+'</dd><dt>Anticipo (lo tiene Dalí)</dt><dd>'+m(r.anticipo)+'</dd><dt>Saldo (a Dalí)</dt><dd>'+m(r.saldo)+'</dd></dl>'+
      (r.aviso?'<div class="alerta">⚠️ '+r.aviso+'</div>':'')+
      '<ul class="check">'+items.map(function(x,j){return '<li><label><input type="checkbox" data-k="'+r.folio+'-'+j+'"'+(g(r.folio+"-"+j)==="1"?" checked":"")+'><span>'+x+'</span></label></li>'}).join("")+'</ul>'+
-     '<a class="btn ok" target="_blank" rel="noopener" href="https://wa.me/'+DALI+'?text='+encodeURIComponent("Dalí, ya cobré "+m(r.saldo)+" de la reserva "+r.folio+" ("+r.huesped+"). Llegaron ___ personas.")+'">✓ Avisar a Dalí que ya cobré</a></section>';
+     '<a class="btn ok" target="_blank" rel="noopener" href="https://wa.me/'+DALI+'?text='+encodeURIComponent("Dalí, ya llegaron los huéspedes de la reserva "+r.folio+" ("+r.huesped+"). Son ___ personas y ya tienen la llave.")+'">✓ Avisar a Dalí que ya llegaron</a></section>';
   }).join("");
 }
-document.addEventListener("change",function(e){var k=e.target.getAttribute&&e.target.getAttribute("data-k");if(!k)return;try{localStorage.setItem(NS+k,e.target.checked?"1":"0")}catch(x){}var c=e.target.closest(".card");if(c&&/-0$/.test(k)){var co=c.querySelector(".cobro");co.classList.toggle("listo",e.target.checked);co.querySelector("small").textContent=e.target.checked?"✓ Saldo cobrado":"Cobrar en efectivo"}});
+document.addEventListener("change",function(e){var k=e.target.getAttribute&&e.target.getAttribute("data-k");if(!k)return;try{localStorage.setItem(NS+k,e.target.checked?"1":"0")}catch(x){}});
 var cache=null;try{cache=JSON.parse(g("cache")||"null")}catch(e){}
 pinta(cache||PUB);
 var llave=g("llave")||"fQ58QGu46cVmi9Xv2esNETxz"; // 18 oct 2026: Dalí autorizó que la liga sin llave muestre todo (nombre y teléfono del huésped)
