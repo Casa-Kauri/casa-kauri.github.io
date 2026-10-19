@@ -48,7 +48,7 @@ ul.check input{width:22px;height:22px;margin-top:1px;flex:0 0 22px;accent-color:
 <body>
 <header class="top"><div class="in"><div class="marca">Kauri</div><div class="lugar">Departamento · Rincón de Guayabitos</div><h1>Llegadas y cobros</h1><p>Quién llega, cuánto cobrar y qué revisar.</p></div></header>
 <main id="lista"><section class="card vacio">Cargando…</section></main>
-<p class="nota">Esta página no aparece en Google. Los datos del huésped se cargan solo con tu liga personal.</p>
+<p class="nota">Esta página no aparece en Google. Comparte esta liga solo con quien recibe a los huéspedes.</p>
 <script>
 /* Panel del dueño (18 oct 2026). Los datos privados (nombre completo, teléfono) NO viven en esta página:
    se bajan de la hoja privada con la llave de la liga (#llave-…), que se guarda solo en este teléfono. */
@@ -84,7 +84,7 @@ function pinta(L){
 document.addEventListener("change",function(e){var k=e.target.getAttribute&&e.target.getAttribute("data-k");if(!k)return;try{localStorage.setItem(NS+k,e.target.checked?"1":"0")}catch(x){}var c=e.target.closest(".card");if(c&&/-0$/.test(k)){var co=c.querySelector(".cobro");co.classList.toggle("listo",e.target.checked);co.querySelector("small").textContent=e.target.checked?"✓ Saldo cobrado":"Cobrar en efectivo"}});
 var cache=null;try{cache=JSON.parse(g("cache")||"null")}catch(e){}
 pinta(cache||PUB);
-var llave=g("llave");
+var llave=g("llave")||"fQ58QGu46cVmi9Xv2esNETxz"; // 18 oct 2026: Dalí autorizó que la liga sin llave muestre todo (nombre y teléfono del huésped)
 if(llave)fetch(HOJA+"?perfil="+SLUG+"&llave="+encodeURIComponent(llave)).then(function(r){return r.text()}).then(function(t){if(t.charAt(0)!=="{")return;var o=JSON.parse(t);if(o.reservas){try{localStorage.setItem(NS+"cache",JSON.stringify(o.reservas))}catch(e){}pinta(o.reservas)}}).catch(function(){});
 </script>
 </body></html>
