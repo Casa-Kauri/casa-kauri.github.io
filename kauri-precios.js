@@ -1,6 +1,6 @@
-/* Tarifas y cálculo de precio de Casa Kauri y Departamento Kauri (11 oct 2026).
-   Fuente: política de precio de Dalí. Casa (11 oct 2026): ancla $4,000; normal $3,500 entre semana y $3,800 viernes y
-   sábado; mes bajo $3,200 / $3,500; mes bajo y llegada cercana $3,250 el fin de semana; piso $3,200. Depa: piso $1,500.
+/* Tarifas y cálculo de precio de Casa Kauri y Departamento Kauri (11 oct 2026; casa actualizada el 24 oct 2026).
+   Fuente: política de precio de Dalí. Casa (24 oct 2026): ancla $4,000; $3,800 entre semana y $4,000 viernes y sábado;
+   cierre con cupón DIRECTO a $3,500; piso $3,000, solo a criterio de Dalí. Depa: piso $1,500.
    Casa: el precio es para 8 personas; desde la 9.ª, $400 por persona por noche. Depa: no admite mascotas.
    Siempre: mínimo 2 noches, limpieza $600 por estancia (una sola vez), anticipo 50 %, cancelación sin costo hasta 31
    días antes, y todo precio menor al ancla se rotula como especial o preferencial. Para cambiar un precio se edita SOLO este archivo.
@@ -10,14 +10,10 @@ window.KAURI_TARIFAS = {
     nombre: "Casa Kauri", prefijo: "RES-CK", max: 10, incluidos: 8, extraPersona: 400, minNoches: 2,   // precio para 8; desde la 9.ª persona $400 por persona por noche (Dalí, 11 oct 2026)
     entrada: "3:00 p.m.", salida: "11:00 a.m.",
     ancla: 4000,                                   // precio base que se muestra tachado (11 oct 2026)
-    base: { semana: 3500, finde: 3800 },           // demanda normal
-    /* precio dinámico (decisión de Dalí, 11 oct 2026): si el mes va bajo (< 40 % de noches ocupadas) entre semana
-       $3,200 y fin de semana $3,500; si además la llegada está a 10 días o menos, el fin de semana baja a $3,250.
-       Piso nuevo: $3,200. Puentes y fiestas no bajan. */
-    dinamica: { ocupacionBaja: 0.4, diasCerca: 10, baja: { semana: 3200, finde: 3500 }, bajaCerca: { semana: 3200, finde: 3250 } },
-    /* reserva anticipada (Dalí, 19 oct 2026): si faltan más de 30 días, la página muestra el ancla ($4,000) y no baja sola;
-       el precio especial se da con el cupón ANTICIPADA ($3,500 la noche). Puentes y fiestas no cambian. */
-    anticipada: { dias: 30, noche: 4000 },
+    /* 24 oct 2026 (Dalí): la página ya no baja sola. Muestra $3,800 entre semana y $4,000 viernes y sábado, lo mismo que
+       anuncia la pauta, y el descuento lo da él en el chat con el cupón DIRECTO ($3,500). Se quitaron la baja por mes
+       flojo ($3,200) y la vista de reserva anticipada a $4,000: las dos dejaban la página abajo o arriba del anuncio. */
+    base: { semana: 3800, finde: 4000 },
     limpieza: 600, mascota: 300, anticipo: 0.5,
     /* cupones: tarifa privada para un prospecto, solo en las noches [desde, hasta) y hasta el día "vence" (incluido).
        Se aplica con ?cupon=CODIGO en apartar.html o escribiéndolo ahí; el servidor de cobros lo recalcula igual. */
@@ -30,7 +26,8 @@ window.KAURI_TARIFAS = {
       MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" },   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
       /* tipo "tope": cualquier fecha; la noche queda en "noche" solo si estaba arriba (nunca sube un precio) y no toca
          puentes, fiestas ni Semana Santa. Es el precio especial por reserva anticipada que se da en el chat (19 oct 2026). */
-      ANTICIPADA: { tipo: "tope", noche: 3500 }
+      ANTICIPADA: { tipo: "tope", noche: 3500 },
+      DIRECTO: { tipo: "tope", noche: 3500, motivo: "reserva directa" }   // el que da Dalí en el chat a quien llega de la pauta (24 oct 2026)
     },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
@@ -101,8 +98,9 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
     }
     if (cup && cup.tipo === "tope" && !temp) usoCupon = true;   // válido aunque la noche ya estuviera abajo: así no sale «cupón no válido»
     if (cup && cup.tipo === "tope" && !temp && precio > cup.noche) {   // el cupón solo baja: nunca sube lo que ya estaba abajo
-      precio = cup.noche; motivo = "Precio especial de reserva anticipada"; usoCupon = true;
-      etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · cupón " + codigo + " · reserva anticipada";
+      var porque = cup.motivo || "reserva anticipada";
+      precio = cup.noche; motivo = "Precio especial de " + porque; usoCupon = true;
+      etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · cupón " + codigo + " · " + porque;
     }
     if (!temp && !motivo && T.ancla && precio < T.ancla) { motivo = "Precio preferencial de reserva directa"; etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · precio preferencial de reserva directa"; }
     if (T.ancla && precio < T.ancla) { especial = true; ahorro += T.ancla - precio; }
