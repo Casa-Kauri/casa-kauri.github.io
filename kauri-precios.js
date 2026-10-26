@@ -45,7 +45,10 @@ window.KAURI_TARIFAS = {
     limpieza: 600, mascota: null, anticipo: 0.5,         // el depa NO admite mascotas (Dalí, 11 oct 2026)
     cupones: {   // mismo formato que los de la casa
       NAVIDAD: { desde: "2026-12-31", hasta: "2027-01-02", noche: 2200, vence: "2026-10-16" },   // Año Nuevo a $2,200 (Dalí, 13 oct 2026); en la casa el mismo código vale 21–23 dic
-      NOVIEMBRE: { desde: "2026-11-13", hasta: "2026-11-16", noche: 1750, vence: "2026-10-16" }   // puente nov, pareja (Dalí, 12 oct 2026); en la casa el mismo código vale 20–22 nov
+      NOVIEMBRE: { desde: "2026-11-13", hasta: "2026-11-16", noche: 1750, vence: "2026-10-16" },   // puente nov, pareja (Dalí, 12 oct 2026); en la casa el mismo código vale 20–22 nov
+      /* mismo código que en la casa (26 oct 2026): el fin de semana baja de $1,800 a $1,700; entre semana se queda en $1,500
+         porque el tope nunca sube. Promedio real del depa ~$1,500, ideal $1,600 o más: $1,700 sigue arriba del ideal. */
+      DIRECTO: { tipo: "tope", noche: 1700, motivo: "reserva directa" }
     },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 2200, nombre: "Puente de la Revolución" },
