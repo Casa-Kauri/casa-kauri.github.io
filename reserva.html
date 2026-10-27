@@ -601,7 +601,13 @@ function comprobante(d){
   // Los enlaces viejos traían la lista de la casa fija en esta página; los nuevos
   // la mandan en el payload, porque el departamento tiene otra.
   const incluye = (d.incluye || '').split('\n').map(x => x.trim()).filter(Boolean);
-  const listaIncluye = (incluye.length ? incluye : p.incluye).concat([lineaMascotas]);
+  /* Regalo de la reserva directa (27 oct 2026): la pulsera se paga con la comisión
+     de Airbnb que se ahorra, no es descuento ni cargo. Solo en la casa, donde está
+     la vitrina; se entrega en el check-in, que siempre es en persona. */
+  const lineaRegalo = p === PROPS.casa
+    ? ['De regalo por reservar directo: una pulsera wixárika hecha a mano. Te la entregamos al llegar.']
+    : [];
+  const listaIncluye = (incluye.length ? incluye : p.incluye).concat(lineaRegalo, [lineaMascotas]);
 
   const llegada = parrafos(d.llegada || p.llegada);
 
