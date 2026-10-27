@@ -104,6 +104,55 @@
   .card b{display:block;font:600 19px/1.35 'Source Sans 3',sans-serif;color:var(--head);margin-bottom:8px}
   @media (max-width:860px){.tres{grid-template-columns:1fr}}
 
+  /* el regalo: tarjetas que se voltean (kauri-motion.js las activa al tocar) */
+  .flips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;text-align:left}
+  .flip{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;perspective:1200px;display:grid;-webkit-tap-highlight-color:transparent}
+  .fl-in{display:grid;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+  .flip[aria-pressed="true"] .fl-in{transform:rotateY(180deg)}
+  .fl-face{grid-area:1/1;display:grid;gap:10px;align-content:start;padding:26px 22px;min-height:250px;border-radius:var(--r);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  .fl-front{background:var(--surface);border:1px solid var(--line)}
+  .fl-back{background:#1F2F54;color:#fff;transform:rotateY(180deg)}
+  .fl-n{font:400 44px/1 'EB Garamond',serif;color:var(--accent)}
+  .fl-back .fl-n{font:600 12px/1.3 'Source Sans 3';letter-spacing:.14em;text-transform:uppercase;color:#E8C87A}
+  .fl-front b{font:400 25px/1.25 'EB Garamond',serif;color:var(--head)}
+  .fl-b{font-size:16px;line-height:1.65;color:rgba(255,255,255,.92)}
+  .fl-cta{margin-top:auto;font:600 12px/1.2 'Source Sans 3';letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .fl-back .fl-cta{color:rgba(255,255,255,.65)}
+  html.mo-off .fl-in{transition:none}
+  @media (max-width:860px){.flips{grid-template-columns:1fr}}
+  @media (max-width:700px){
+    .flips.cf{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -24px;padding:10px 24px 26px;scrollbar-width:none;perspective:900px}
+    .flips.cf::-webkit-scrollbar{display:none}
+    .flips.cf .flip{flex:0 0 80%;scroll-snap-align:center;transform:rotateY(var(--ry,0deg)) scale(var(--sc,1));opacity:var(--op,1)}
+  }
+
+  /* la transformación: la flor de chaquira se arma con el scroll (fija en pantalla) */
+  .proceso{position:relative;height:340vh;background:#0C242C;color:#C9D3DC}
+  .pr-sticky{position:sticky;top:0;height:100svh;max-width:1240px;margin:0 auto;padding:80px 24px 40px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .pr-stage{position:relative;aspect-ratio:1;max-height:76svh;width:100%;justify-self:center}
+  #mosaico{width:100%;height:100%;display:block}
+  .pr-count{position:absolute;left:0;right:0;bottom:-6px;text-align:center;font-size:14px;color:#9FB0BC}
+  .pr-count b{font:500 22px/1 'EB Garamond',serif;color:#F4E3C1;font-variant-numeric:tabular-nums}
+  .pr-steps{list-style:none;position:relative;min-height:300px}
+  .pr-steps li{position:absolute;inset:0 0 auto 0;opacity:0;transform:translateY(18px);transition:opacity .2s,transform .2s}
+  .pr-steps li.on{opacity:1;transform:none;transition:opacity .45s .18s,transform .45s .18s}
+  .pr-k{display:block;font:600 13px/1.4 'Source Sans 3';letter-spacing:.16em;text-transform:uppercase;color:#E8C87A;margin-bottom:14px}
+  .pr-steps h3{color:#fff;font-size:clamp(32px,3.6vw,44px);margin-bottom:14px}
+  .pr-steps p{font-size:18px;max-width:40ch}
+  /* sin scroll ligado (modo suave, apagado o sin JS): todo en lista, sin fijar */
+  html:not(.mo-full) .proceso,.proceso.estatico{height:auto}
+  html:not(.mo-full) .pr-sticky,.proceso.estatico .pr-sticky{position:relative;height:auto;padding:90px 24px}
+  html:not(.mo-full) .pr-steps li,.proceso.estatico .pr-steps li{position:relative;opacity:1;transform:none;margin-bottom:30px}
+  @media (max-width:860px){
+    .pr-sticky{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:18px;padding:70px 20px 24px;align-items:start}
+    .pr-stage{max-height:none;width:min(100%,44svh,360px);aspect-ratio:1}
+    .pr-count{bottom:-30px;font-size:13px}
+    .pr-steps{margin-top:26px}
+    .pr-steps{min-height:230px}
+    .pr-steps h3{font-size:30px}
+    .pr-steps p{font-size:17px}
+  }
+
   /* las piezas */
   .pieza{padding:90px 0;border-top:1px solid var(--line)}
   .pieza-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:34px}
@@ -209,7 +258,7 @@
     <h1>Lo que ves en la casa está hecho <em>a mano</em>.</h1>
     <p class="sub">Chaquira por chaquira, por artesanos wixárika de Nayarit. Puedes llevarte una pieza o pedir la tuya con nombre.</p>
     <div class="cta-row">
-      <a class="btn btn-main" href="#saber">Conoce las piezas</a>
+      <a class="btn btn-main" href="#saber">Empieza por aquí</a>
       <a class="btn btn-line wa" data-tema="general" href="#">Pregúntanos</a>
     </div>
   </div>
@@ -218,20 +267,53 @@
   </div>
 </section>
 
-<section class="k-statement"><p>Cada pieza son <em>miles</em> de chaquiras de cristal, puestas una por una.</p></section>
-
 <section class="saber" id="saber">
   <div class="wrap">
     <span class="band divider" data-paleta="mar"></span>
-    <h2 style="margin-top:40px">Antes de comprar arte wixárika, revisa tres cosas.</h2>
-    <p class="lead">En la costa de Nayarit hay mucha artesanía de recuerdo. Esto es lo que distingue una pieza hecha a mano, la compres aquí o en otro lado.</p>
-    <div class="tres">
-      <div class="card"><span class="n">1</span><b>Chaquira de cristal, no de plástico</b>La de cristal brilla parejo, pesa y no se deforma con el sol. La de plástico se ve opaca y desigual de cerca.</div>
-      <div class="card"><span class="n">2</span><b>Los dibujos dicen algo</b>El venado, la flor de peyote, el maíz y el sol vienen de la cosmovisión wixárika. Si el diseño solo es «bonito», pregunta quién lo hizo.</div>
-      <div class="card"><span class="n">3</span><b>Quién la hizo y cuánto tardó</b>Una pieza auténtica tiene nombre detrás. Las nuestras salen con certificado: artesano, técnica y tiempo de elaboración.</div>
+    <h2 style="margin-top:40px">En la costa hay mucha «artesanía». No toda es hecha a mano.</h2>
+    <p class="lead">Quieres llevarte algo que signifique tu viaje, no un recuerdo de fábrica que termina en un cajón. Esto es lo que distingue una pieza wixárika auténtica, la compres aquí o en otro lado.</p>
+    <div class="flips">
+      <button class="flip" type="button" aria-pressed="false"><span class="fl-in"><span class="fl-face fl-front"><span class="fl-n">1</span><b>Chaquira de cristal, no de plástico</b><span class="fl-cta">Toca para ver cómo se nota ↻</span></span><span class="fl-face fl-back"><span class="fl-n">Cómo se nota</span><span class="fl-b">La de cristal brilla parejo, pesa y no se deforma con el sol. La de plástico se ve opaca y desigual de cerca, y las cuentas no tienen el mismo tamaño.</span><span class="fl-cta">Toca para regresar ↻</span></span></span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="fl-in"><span class="fl-face fl-front"><span class="fl-n">2</span><b>Los dibujos dicen algo</b><span class="fl-cta">Toca para ver qué dicen ↻</span></span><span class="fl-face fl-back"><span class="fl-n">Qué dicen</span><span class="fl-b">El venado, la flor de peyote, el maíz y el sol vienen de la cosmovisión wixárika. Si el diseño solo es «bonito» y nadie sabe explicarlo, pregunta quién lo hizo.</span><span class="fl-cta">Toca para regresar ↻</span></span></span></button>
+      <button class="flip" type="button" aria-pressed="false"><span class="fl-in"><span class="fl-face fl-front"><span class="fl-n">3</span><b>Tiene nombre detrás</b><span class="fl-cta">Toca para ver qué pedir ↻</span></span><span class="fl-face fl-back"><span class="fl-n">Qué pedir</span><span class="fl-b">Quién la hizo, con qué técnica y cuánto tardó. Las piezas de Casa Kauri salen con su certificado de autenticidad con esos tres datos.</span><span class="fl-cta">Toca para regresar ↻</span></span></span></button>
     </div>
   </div>
 </section>
+
+<section class="k-statement"><p>Un recuerdo se olvida en un cajón. Una pieza hecha a mano se <em>queda</em>.</p></section>
+
+<section class="proceso" id="proceso">
+  <div class="pr-sticky">
+    <div class="pr-stage">
+      <canvas id="mosaico" aria-label="Una flor de chaquira que se arma cuenta por cuenta" role="img"></canvas>
+      <div class="pr-count"><b id="cuentas">0</b> chaquiras en este dibujo. Un cráneo real lleva muchas más.</div>
+    </div>
+    <ol class="pr-steps">
+      <li><span class="pr-k">Chaquira por chaquira · 1 de 4</span><h3>Primero, una capa de cera</h3><p>La pieza se cubre con cera de Campeche, una mezcla de cera de abeja y resina que se suaviza con el calor. Ahí se van a quedar las cuentas.</p></li>
+      <li><span class="pr-k">Chaquira por chaquira · 2 de 4</span><h3>Después, una por una</h3><p>Con la punta de una aguja, cada chaquira de cristal se toma y se asienta en la cera. No hay molde ni máquina: es pulso y paciencia.</p></li>
+      <li><span class="pr-k">Chaquira por chaquira · 3 de 4</span><h3>El dibujo cuenta algo</h3><p>Flores de peyote, venados, maíz, el sol. No hay plantilla: el diseño sale de la mano del artesano mientras avanza.</p></li>
+      <li><span class="pr-k">Chaquira por chaquira · 4 de 4</span><h3>Al final, su nombre</h3><p>Cuando la última cuenta está en su lugar, la pieza recibe su certificado: quién la hizo, la técnica y el tiempo que le tomó.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="prueba">
+  <div class="wrap grid">
+    <img src="arte/certificado.jpg" alt="Certificado de autenticidad de Kauri Nayarit para artesanía wixárika" loading="lazy" />
+    <div>
+      <h2>Cada pieza sale con su certificado.</h2>
+      <p style="margin-top:14px">Con el nombre del artesano, la técnica y el tiempo que le tomó. Comprar así es apoyar directamente a quien hace el trabajo, y es la diferencia entre un recuerdo y una pieza de arte.</p>
+      <p style="margin-top:12px">En Casa Kauri elegimos a los artesanos y respondemos por cada pieza: si algo no está como lo esperabas, nos escribes y lo resolvemos.</p>
+      <div class="sellos">
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.3 6c-2.3 4.6-9.3 9-9.3 9Z"/></svg>Hecho a mano</span>
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-4 12.7V22l4-2 4 2v-7.3A7 7 0 0 0 12 2Zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg>Certificado incluido</span>
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.6L21 9l-5 4.4L17.5 21 12 17.3 6.5 21 8 13.4 3 9l6.6-.4Z"/></svg>Arte wixárika</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="k-statement"><p>Ya sabes reconocerla. Ahora, elige <em>la tuya</em>.</p></section>
 
 <section class="pieza" id="pulseras">
   <div class="wrap">
@@ -310,20 +392,6 @@
   </div>
 </section>
 
-<section class="prueba">
-  <div class="wrap grid">
-    <img src="arte/certificado.jpg" alt="Certificado de autenticidad de Kauri Nayarit para artesanía wixárika" loading="lazy" />
-    <div>
-      <h2>Cada pieza sale con su certificado.</h2>
-      <p style="margin-top:14px">Con el nombre del artesano, la técnica y el tiempo que le tomó. Comprar así es apoyar directamente a quien hace el trabajo, y es la diferencia entre un recuerdo y una pieza de arte.</p>
-      <div class="sellos">
-        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.3 6c-2.3 4.6-9.3 9-9.3 9Z"/></svg>Hecho a mano</span>
-        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-4 12.7V22l4-2 4 2v-7.3A7 7 0 0 0 12 2Zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/></svg>Certificado incluido</span>
-        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.6L21 9l-5 4.4L17.5 21 12 17.3 6.5 21 8 13.4 3 9l6.6-.4Z"/></svg>Arte wixárika</span>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section class="plan">
   <div class="wrap">
@@ -409,6 +477,63 @@ var WA = '525628544253';
   }
   [].forEach.call(document.querySelectorAll('.band'), franja);
 })();
+
+/* Chaquira por chaquira: una flor de peyote hecha de cuentas que se arma desde el
+   centro conforme bajas. El número que se ve es el de cuentas de ESTE dibujo, no
+   de una pieza real: así la cifra es verdad. Solo se redibuja cuando cambia el avance.
+   Corre en DOMContentLoaded porque GSAP se carga después de este bloque. */
+addEventListener('DOMContentLoaded', function(){
+  var cv = document.getElementById('mosaico'); if (!cv || !cv.getContext) return;
+  var sec = document.getElementById('proceso'), ctx = cv.getContext('2d');
+  var steps = [].slice.call(sec.querySelectorAll('.pr-steps li')), cnt = document.getElementById('cuentas');
+  var M = window.__motion || 'full', G = window.gsap, ST = window.ScrollTrigger;
+  var RINGS = 24, beads = [], TAU = Math.PI * 2;
+  function color(k, a){
+    if (k < 3) return '#F59F00';
+    if (k < 5) return '#FFFFFF';
+    if (k < 12) return Math.cos(6*a) > (k - 5) / 7 * 1.5 - .55 ? '#D6336C' : '#1F2F54';
+    if (k === 12) return '#FFFFFF';
+    if (k < 18) { var s = Math.cos(12*a + (k - 15) * .9); return s > .82 ? '#F59F00' : (k % 2 ? '#1C7ED6' : '#15AABF'); }
+    if (k < 20) return '#FFFFFF';
+    var f = Math.cos(18*a);
+    return f > .7 ? (k === 22 ? '#F59F00' : '#D6336C') : '#2B8A3E';
+  }
+  for (var k = 0; k <= RINGS; k++){
+    var n = k === 0 ? 1 : Math.round(TAU * k);
+    for (var j = 0; j < n; j++){ var a = j / n * TAU + (k % 2 ? Math.PI / n : 0); beads.push({k:k, a:a, c:color(k, a)}); }
+  }
+  var N = beads.length, W = 0, cur = -1, shown = 0;
+  function draw(p){
+    var v = Math.round(Math.max(0, Math.min(1, p)) * N);
+    if (v === shown && cur >= 0) return; shown = v; cur = p;
+    var c = W / 2, st = (W / 2 - 4) / (RINGS + .6), r = st * .44;
+    ctx.clearRect(0, 0, W, W);
+    for (var i = 0; i < v; i++){
+      var b = beads[i], x = c + Math.cos(b.a) * b.k * st, y = c + Math.sin(b.a) * b.k * st;
+      ctx.beginPath(); ctx.arc(x, y, i > v - 40 ? r * 1.18 : r, 0, TAU); ctx.fillStyle = b.c; ctx.fill();
+      ctx.beginPath(); ctx.arc(x - r * .3, y - r * .3, r * .3, 0, TAU); ctx.fillStyle = 'rgba(255,255,255,.38)'; ctx.fill();
+    }
+    if (cnt) cnt.textContent = v.toLocaleString('es-MX');
+    var idx = Math.min(3, Math.floor(Math.max(0, p) * 4 * .999));
+    steps.forEach(function(li, n){ li.classList.toggle('on', n === idx); });
+  }
+  function size(){
+    var b = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, window.__lowfx ? 1 : 1.5);
+    W = Math.min(b.width, b.height) || 300; cv.width = W * d; cv.height = W * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+    shown = -1; draw(Math.max(cur, 0));
+  }
+  function porTiempo(){
+    var go = function(){ var t0 = performance.now(); (function f(now){ var p = (now - t0) / 5200; draw(p); if (p < 1) requestAnimationFrame(f); })(t0); };
+    if ('IntersectionObserver' in window){ var o = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ go(); o.disconnect(); } }, {threshold:.35}); o.observe(cv); } else draw(1);
+  }
+  size(); addEventListener('resize', size);
+  window.__mosaico = {draw:draw, N:N};
+  if (M === 'off') draw(1);
+  else if (M === 'full' && G && ST){
+    ST.create({trigger:sec, start:'top top', end:'bottom bottom', onUpdate:function(s){ draw(s.progress / .88); }});
+    draw(0);
+  } else { sec.classList.add('estatico'); porTiempo(); }
+});
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
