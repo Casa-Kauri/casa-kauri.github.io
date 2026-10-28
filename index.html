@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="favicon.png" />
 <title>Casa con alberca privada en La Peñita, cerca de Guayabitos | Casa Kauri</title>
-<meta name="description" content="Casa Kauri: casa completa con alberca climatizada privada en La Peñita de Jaltemba, a 10 min de Rincón de Guayabitos. Hasta 8 huéspedes, 4 recámaras, mascotas bienvenidas y 750 m caminando a la playa." />
+<meta name="description" content="Casa completa con alberca climatizada privada en La Peñita de Jaltemba, a 10 min de Guayabitos: hasta 8 huéspedes, mascotas bienvenidas y 750 m a la playa." />
 <link rel="canonical" href="https://casa-kauri.github.io/" />
 <!-- Datos estructurados (27 oct 2026): le dicen a Google que es un alojamiento, dónde está y qué tiene.
      Sin dirección exacta ni calificaciones: la dirección se da solo al confirmar, y Google ignora
@@ -779,6 +779,22 @@
   .trust .ph{font-size:20px;color:#3B528A}
   @media (prefers-color-scheme: dark){html:not([data-theme="light"]) .trust li{color:var(--d-head)}html:not([data-theme="light"]) .trust .ph{color:var(--d-accent)}html:not([data-theme="light"]) .am-more{background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}}
   @media (max-width:700px){.trust{flex-direction:column;align-items:flex-start;max-width:340px;margin:16px auto 0}}
+  /* Barra de 7 enlaces (27 oct 2026: se sumaron La zona y Arte): entre 1081 y 1240 px ya no cabe
+     y los textos se partían en renglones. Ahí el menú pasa a desplegable, como en celular. */
+  nav.main-nav a { white-space: nowrap; }
+  @media (max-width: 1240px) {
+    .hamburger { display: block; }
+    nav.main-nav {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(31,47,84,.98); display: none;
+      box-shadow: 0 16px 30px rgba(20,32,64,.35);
+    }
+    nav.main-nav.open { display: block; }
+    nav.main-nav ul { flex-direction: column; gap: 0; padding: 6px 0; }
+    nav.main-nav a { display: block; padding: 15px 24px; border-bottom: 0; border-left: 3px solid transparent; }
+    nav.main-nav li.switch { display: block; }
+    nav.main-nav li.switch::before { content: ""; display: block; width: auto; height: 1px; margin: 6px 24px 6px; background: rgba(255,255,255,.28); }
+  }
 </style>
 </head>
 <body>
@@ -792,6 +808,8 @@
         <li><a href="#casa3d">La casa en 3D</a></li>
         <li><a href="#ubicacion">Ubicación</a></li>
         <li><a href="#opiniones">Opiniones</a></li>
+        <li><a href="la-penita-de-jaltemba.html">La zona</a></li>
+        <li><a href="arte.html">Arte</a></li>
         <li class="switch"><a class="prop-switch" href="departamento.html">Departamento ↗</a></li>
         <li class="solo-movil"><a href="reserva.html">Mi reserva</a></li>
       </ul>
@@ -1331,7 +1349,7 @@
     });
   }
 </script>
-<script src="kauri-i18n.js?v=2"></script>
+<script src="kauri-i18n.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="kauri-motion.js?v=5"></script>

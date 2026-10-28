@@ -8,8 +8,8 @@
 <script>(function(){var d=document.documentElement,R=false,p=null;try{R=matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}try{p=localStorage.getItem("anim")}catch(e){}var lo=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4;window.__lowfx=lo;if(lo)d.classList.add("lowfx");window.__dpr=function(){var c=false;try{c=matchMedia("(pointer: coarse)").matches}catch(e){}return Math.min(window.devicePixelRatio||1,c?1.5:(lo?1:1.5))};window.__adapt=function(r,resize,onSlow){var n=0,t=0,l=0,done=0;return function(now){if(done)return;var dt=now-l;if(l&&dt<200){t+=dt;n++}l=now;if(n>=45){done=1;if(t/n>24){if(r.getPixelRatio()>1){r.setPixelRatio(1);if(resize)resize()}if(onSlow)onSlow()}}}};window.__osReduce=R;window.__motion=p==="full"?"full":p==="off"?"off":(R?"soft":"full");d.classList.add("mo-"+window.__motion);window.__errs=[];addEventListener("error",function(e){window.__errs.push((e.message||("no cargó: "+((e.target&&(e.target.src||e.target.href))||"?")))+(e.filename?" @"+e.filename.split("/").pop()+":"+e.lineno:""))},true);try{if(sessionStorage.getItem("pt")&&window.__motion==="full")d.classList.add("pt-in")}catch(e){}})();</script>
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="favicon.png" />
-<title>Departamento Kauri | Loft privado de 3 niveles a 100 m del mar en Rincón de Guayabitos, Nayarit</title>
-<meta name="description" content="Departamento Kauri: loft privado de tres niveles con rooftop, sobre el andador principal de Rincón de Guayabitos y a 100 m de la playa. Hasta 6 huéspedes · 4 camas · 2 baños completos y medio baño. Parte de Casa Kauri." />
+<title>Departamento en Guayabitos a 100 m del mar, con rooftop | Kauri</title>
+<meta name="description" content="Loft privado de 3 niveles con rooftop sobre el andador de Rincón de Guayabitos, a 100 m de la playa. Hasta 6 huéspedes, cocina equipada y aire acondicionado." />
 <link rel="canonical" href="https://casa-kauri.github.io/departamento.html" />
 <!-- Datos estructurados (27 oct 2026): ver la nota en index.html. -->
 <script type="application/ld+json">
@@ -858,6 +858,22 @@
     html:not([data-theme="light"]) :is(.qb-f span,.qb-clear,.qb-cal,.qb-close){color:var(--d-ink2)}
     html:not([data-theme="light"]) :is(.qb-g button,.qb-nav button){background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
   }
+  /* Barra de 7 enlaces (27 oct 2026: se sumaron La zona y Arte): entre 1081 y 1240 px ya no cabe
+     y los textos se partían en renglones. Ahí el menú pasa a desplegable, como en celular. */
+  nav.main-nav a { white-space: nowrap; }
+  @media (max-width: 1240px) {
+    .hamburger { display: block; }
+    nav.main-nav {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(31,47,84,.98); display: none;
+      box-shadow: 0 16px 30px rgba(20,32,64,.35);
+    }
+    nav.main-nav.open { display: block; }
+    nav.main-nav ul { flex-direction: column; gap: 0; padding: 6px 0; }
+    nav.main-nav a { display: block; padding: 15px 24px; border-bottom: 0; border-left: 3px solid transparent; }
+    nav.main-nav li.switch { display: block; }
+    nav.main-nav li.switch::before { content: ""; display: block; width: auto; height: 1px; margin: 6px 24px 6px; background: rgba(255,255,255,.28); }
+  }
 </style>
 </head>
 <body>
@@ -873,6 +889,8 @@
         <li><a href="#casa3d">El loft en 3D</a></li>
         <li><a href="#ubicacion">Ubicación</a></li>
         <li><a href="#opiniones">Opiniones</a></li>
+        <li><a href="la-penita-de-jaltemba.html">La zona</a></li>
+        <li><a href="arte.html">Arte</a></li>
         <li class="switch"><a class="prop-switch" href="index.html">Casa Kauri ↗</a></li>
         <li class="solo-movil"><a href="reserva.html">Mi reserva</a></li>
       </ul>
@@ -1338,6 +1356,8 @@
           <li><a href="#ubicacion">Ubicación</a></li>
           <li><a href="#opiniones">Opiniones</a></li>
           <li><a href="index.html">Casa Kauri</a></li>
+          <li><a href="la-penita-de-jaltemba.html">Guía de la zona</a></li>
+          <li><a href="arte.html">Arte wixárika</a></li>
         </ul>
       </div>
       <div>
