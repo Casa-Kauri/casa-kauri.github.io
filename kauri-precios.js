@@ -24,6 +24,7 @@ window.KAURI_TARIFAS = {
       NOVIEMBRE: { desde: "2026-11-20", hasta: "2026-11-22", noche: 3000, vence: "2026-10-16" },  // misma pareja: la casa estaba ocupada en el puente
       NAVIDAD: { desde: "2026-12-21", hasta: "2026-12-23", noche: 3750, vence: "2026-10-16" },   // prospecto con mascota, antes de Navidad (Dalí, 13 oct 2026)
       MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" },   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
+      FLORECITA3X2: { tipo: "nocheGratis", vence: "2027-10-29" },   // regalo a rockera_florecita10, huésped que dejó reseña en IG (29 oct 2026)
       /* tipo "tope": cualquier fecha; la noche queda en "noche" solo si estaba arriba (nunca sube un precio) y no toca
          puentes, fiestas ni Semana Santa. Es el precio especial por reserva anticipada que se da en el chat (19 oct 2026). */
       ANTICIPADA: { tipo: "tope", noche: 3500 },
