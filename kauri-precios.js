@@ -34,6 +34,7 @@ window.KAURI_TARIFAS = {
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
       { desde: "2026-12-20", hasta: "2027-01-03", noche: 4500, nombre: "Fiestas de fin de año" },   // desde el 20: política del 19 sep 2026 (antes decía 23)
+      { desde: "2026-12-30", hasta: "2027-01-03", noche: 5000, nombre: "Año Nuevo" },   // va después de fiestas para pisarla: Año Nuevo se vendió en Airbnb a ~$5,100 (Dalí, 11 nov 2026)
       { desde: "2027-01-03", hasta: "2027-02-01", noche: 4000, nombre: "Temporada de enero" },   // todo enero a $4,000, sin baja dinámica (Dalí, 13 oct 2026); el puente de febrero va después y lo pisa
       { desde: "2027-01-29", hasta: "2027-02-01", noche: 4200, nombre: "Puente de la Constitución" },
       { desde: "2027-03-12", hasta: "2027-03-15", noche: 4200, nombre: "Puente de Benito Juárez" },
