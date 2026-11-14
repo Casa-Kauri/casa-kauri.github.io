@@ -13,9 +13,9 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --primary-color:#1F2F54;
-    --highlight-color:#3B528A;
-    --secondary-color:#DFE8EE;
+    --primary-color:#3A3128;
+    --highlight-color: #8A6A45;
+    --secondary-color: #E8DFCC;
     --ink:#2b3444;
     --muted:#6b7484;
   }
@@ -39,7 +39,7 @@
   .head .ph{position:absolute; inset:0; background-size:cover; background-position:center;}
   .head .ph::after{
     content:""; position:absolute; inset:0;
-    background:linear-gradient(100deg, rgba(20,32,64,.95) 0%, rgba(20,32,64,.84) 38%, rgba(20,32,64,.46) 78%, rgba(20,32,64,.30) 100%);
+    background:linear-gradient(100deg, rgba(40,33,25,.95) 0%, rgba(40,33,25,.84) 38%, rgba(40,33,25,.46) 78%, rgba(40,33,25,.30) 100%);
   }
   .head .inner{
     position:relative; z-index:2; padding:34px 30px;
@@ -73,7 +73,7 @@
   /* ---------- Franja de estado ---------- */
   .status{
     display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
-    padding:18px 24px; background:#F4F8FB; border-bottom:1px solid var(--secondary-color);
+    padding:18px 24px; background:#F3ECDD; border-bottom:1px solid var(--secondary-color);
   }
   .status .badge{
     background:#EAF5EE; color:#1a7f4b;
@@ -83,7 +83,7 @@
   .status .count{font:600 14px/1.4 'Source Sans 3'; color:var(--primary-color);}
   .status .count small{display:block; font-weight:400; font-size:12.5px; color:var(--muted); letter-spacing:0;}
 
-  .card{background:#fff; border-radius:0 0 10px 10px; box-shadow:0 10px 34px rgba(31,47,84,.10);}
+  .card{background:#fff; border-radius:0 0 10px 10px; box-shadow:0 10px 34px rgba(58,49,40,.10);}
   .pad{padding:0 30px;}
   @media (max-width:520px){ .head{padding:26px 20px;} .pad{padding:0 20px;} }
 
@@ -212,13 +212,13 @@
     font:600 12.5px/1 'Source Sans 3'; letter-spacing:.06em; color:var(--highlight-color);
     padding:12px 10px; border-radius:6px; transition:background .2s ease;
   }
-  .volver:hover{background:#F4F8FB;}
+  .volver:hover{background:#F3ECDD;}
 
   footer{text-align:center; padding:30px 20px 34px; color:var(--muted); font-size:14px;}
   footer .folio{font-size:12px; margin-top:12px; letter-spacing:.06em;}
 
   /* ---------- Enlace inválido ---------- */
-  .empty{background:#fff; border-radius:10px; padding:46px 30px 40px; text-align:center; box-shadow:0 10px 34px rgba(31,47,84,.10);}
+  .empty{background:#fff; border-radius:10px; padding:46px 30px 40px; text-align:center; box-shadow:0 10px 34px rgba(58,49,40,.10);}
   .empty .sello{width:56px; height:56px; margin:0 auto 18px; display:block; border-radius:12px;}
   .empty h2{font:400 27px/1.3 'EB Garamond', serif; color:var(--primary-color); margin:0 0 12px;}
   .empty p{max-width:420px; margin:0 auto;}
@@ -268,7 +268,7 @@
   @media print{
     /* Sin esto Safari y Chrome imprimen la cabecera en blanco */
     *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
-    body{background:#fff;}
+    body{background:#FAF5EB;}
     .cta, .volver, footer .noprint{display:none;}
     .card{box-shadow:none;}
     .doc{padding:0; max-width:none;}

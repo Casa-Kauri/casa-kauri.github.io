@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <script>(function(){var d=document.documentElement,R=false,p=null;try{R=matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}try{p=localStorage.getItem("anim")}catch(e){}var lo=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4;window.__lowfx=lo;if(lo)d.classList.add("lowfx");window.__dpr=function(){var c=false;try{c=matchMedia("(pointer: coarse)").matches}catch(e){}return Math.min(window.devicePixelRatio||1,c?1.5:(lo?1:1.5))};window.__adapt=function(r,resize,onSlow){var n=0,t=0,l=0,done=0;return function(now){if(done)return;var dt=now-l;if(l&&dt<200){t+=dt;n++}l=now;if(n>=45){done=1;if(t/n>24){if(r.getPixelRatio()>1){r.setPixelRatio(1);if(resize)resize()}if(onSlow)onSlow()}}}};window.__osReduce=R;window.__motion=p==="full"?"full":p==="off"?"off":(R?"soft":"full");d.classList.add("mo-"+window.__motion);window.__errs=[];addEventListener("error",function(e){window.__errs.push((e.message||("no cargó: "+((e.target&&(e.target.src||e.target.href))||"?")))+(e.filename?" @"+e.filename.split("/").pop()+":"+e.lineno:""))},true);try{if(sessionStorage.getItem("pt")&&window.__motion==="full")d.classList.add("pt-in")}catch(e){}})();</script>
 <meta name="color-scheme" content="light dark" />
-<meta name="theme-color" content="#1F2F54" />
+<meta name="theme-color" content="#2F2A23" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="favicon.png" />
 <title>Casa con alberca privada en La Peñita, cerca de Guayabitos | Casa Kauri</title>
@@ -68,7 +68,7 @@
   :root {
     --body-text-fonts: 400 16px/180% 'Source Sans 3', sans-serif;
     --title-fonts: 'EB Garamond', serif;
-    --text-color: #394049;
+    --text-color: #484036;
 
     --xl-title-fonts: 400 64px/118% 'EB Garamond', serif;
     --mob-xl-title-fonts: 400 42px/120% 'EB Garamond', serif;
@@ -77,16 +77,16 @@
     --h3-title-fonts: 400 38px/122% 'EB Garamond', serif;
     --h4-title-fonts: 400 30px/130% 'EB Garamond', serif;
 
-    --primary-cta-color: #3B528A;
-    --primary-cta-hover-color: #1F2F54;
+    --primary-cta-color: #1F2F54;
+    --primary-cta-hover-color: #142039;
 
-    --primary-color: #1F2F54;
-    --secondary-color: #DFE8EE;
-    --highlight-color: #3B528A;
-    --bg-alt-1: #1F2F54;
-    --border-color: #C4C6C8;
-    --top-gradient-color: #E3EBF000;
-    --bottom-gradient-color: #F4FBFF;
+    --primary-color: #3A3128;
+    --secondary-color: #E8DFCC;
+    --highlight-color: #8A6A45;
+    --bg-alt-1: #2F2A23;
+    --border-color: #D6CCB8;
+    --top-gradient-color: #F3ECDD00;
+    --bottom-gradient-color: #F6F0E3;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -97,7 +97,7 @@
   body {
     font: var(--body-text-fonts);
     color: var(--text-color);
-    background: #fff;
+    background: #FAF5EB;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
@@ -128,16 +128,16 @@
   .link-arrow {
     display: inline-flex; align-items: center; gap: 10px;
     font: 600 15px/140% 'Source Sans 3', sans-serif;
-    text-transform: uppercase; letter-spacing: 0.06em; color: #1F2F54;
+    text-transform: uppercase; letter-spacing: 0.06em; color: #3A3128;
   }
   .link-arrow::after { content: "→"; font-size: 18px; transition: transform .3s ease; }
   .link-arrow:hover::after { transform: translateX(6px); }
   .section-label {
     font: 600 13px/16px 'Source Sans 3', sans-serif;
-    text-transform: uppercase; letter-spacing: 0.16em; color: #1F2F54;
+    text-transform: uppercase; letter-spacing: 0.16em; color: #3A3128;
     display: block; margin-bottom: 18px;
   }
-  .section-label.on-dark { color: #C7D2E4; }
+  .section-label.on-dark { color: #E6DCC6; }
 
   /* ---------- Header ---------- */
   header {
@@ -164,7 +164,7 @@
     font: 600 14px/140% 'Source Sans 3', sans-serif; letter-spacing: 0.06em; display: flex; align-items: center; gap: 8px;
   }
   .reserve-btn {
-    background: var(--highlight-color); padding: 13px 24px;
+    background: var(--primary-cta-color); padding: 13px 24px;
     font: 600 14px/140% 'Source Sans 3', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; color: #fff;
     transition: background .25s ease;
   }
@@ -196,9 +196,9 @@
     position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;
     text-align: center; color: #fff;
     background:
-      linear-gradient(180deg, rgba(14,23,46,.66) 0%, rgba(14,23,46,.5) 45%, rgba(14,23,46,.8) 100%),
+      linear-gradient(180deg, rgba(30,24,18,.66) 0%, rgba(30,24,18,.5) 45%, rgba(30,24,18,.8) 100%),
       url("https://a0.muscache.com/im/pictures/miso/Hosting-36241619/original/7cc83af8-483b-4087-a9f6-ae2608182f35.jpeg?im_w=1920") center/cover no-repeat,
-      #24406b;
+      #3A3128;
   }
   .hero-inner { max-width: 820px; padding: 130px 24px 210px; }
   .best-badge { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 22px; font: 600 13px/1 'Source Sans 3'; letter-spacing: 0.18em; text-transform: uppercase; }
@@ -209,7 +209,7 @@
   .hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
   /* facts strip */
-  .facts-strip { position: absolute; left: 0; right: 0; bottom: 0; display: flex; z-index: 5; background: rgba(20,32,64,.55); backdrop-filter: blur(3px); border-top: 1px solid rgba(255,255,255,.15); }
+  .facts-strip { position: absolute; left: 0; right: 0; bottom: 0; display: flex; z-index: 5; background: rgba(40,33,25,.55); backdrop-filter: blur(3px); border-top: 1px solid rgba(255,255,255,.15); }
   .facts-strip .fact { flex: 1; text-align: center; padding: 22px 10px; color: #fff; border-left: 1px solid rgba(255,255,255,.14); }
   .facts-strip .fact:first-child { border-left: none; }
   .facts-strip .fact .num { font-family: var(--title-fonts); font-size: 30px; line-height: 1; }
@@ -217,7 +217,7 @@
 
   /* ---------- Intro ---------- */
   .intro { text-align: center; padding: 96px 24px 74px; background: linear-gradient(180deg, var(--top-gradient-color) 0%, var(--bottom-gradient-color) 100%); }
-  .intro .lead { font: var(--h3-title-fonts); color: #1F2F54; max-width: 800px; margin: 0 auto 24px; }
+  .intro .lead { font: var(--h3-title-fonts); color: #3A3128; max-width: 800px; margin: 0 auto 24px; }
   .intro .lead em { font-style: italic; }
   .intro p.body { max-width: 680px; margin: 0 auto 20px; }
   .intro .btn-primary { margin-top: 18px; }
@@ -232,15 +232,15 @@
   .gallery-track::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 4px; }
   .gallery-slide {
     flex: 0 0 min(560px, 84vw); max-width: 84vw; aspect-ratio: 3/2; object-fit: cover;
-    scroll-snap-align: center; box-shadow: 0 18px 44px rgba(31,47,84,.16); cursor: grab;
+    scroll-snap-align: center; box-shadow: 0 18px 44px rgba(58,49,40,.16); cursor: grab;
   }
 
   /* ---------- Feature cards ---------- */
   .cards { padding: 20px 0 96px; }
   .cards .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
   .card { position: relative; min-height: 360px; display: flex; align-items: flex-end; padding: 32px; color: #fff; background-size: cover; background-position: center; overflow: hidden; }
-  .card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,32,64,0) 28%, rgba(20,32,64,.85) 100%); transition: background .3s ease; }
-  .card:hover::before { background: linear-gradient(180deg, rgba(20,32,64,.2) 8%, rgba(20,32,64,.92) 100%); }
+  .card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(40,33,25,0) 28%, rgba(40,33,25,.85) 100%); transition: background .3s ease; }
+  .card:hover::before { background: linear-gradient(180deg, rgba(40,33,25,.2) 8%, rgba(40,33,25,.92) 100%); }
   .card .card-body { position: relative; z-index: 2; }
   .card h4 { font: var(--h4-title-fonts); color: #fff; margin-bottom: 10px; }
   .card p { color: rgba(255,255,255,.9); font-size: 15px; line-height: 168%; margin-bottom: 16px; max-width: 94%; }
@@ -262,7 +262,7 @@
 
   /* ---------- Bedrooms ---------- */
   .rooms { padding: 96px 0; text-align: center; }
-  .rooms h2 { font: var(--h2-title-fonts); color: #1F2F54; margin-bottom: 12px; }
+  .rooms h2 { font: var(--h2-title-fonts); color: #3A3128; margin-bottom: 12px; }
   .rooms .subtitle { max-width: 620px; margin: 0 auto 46px; }
   .rooms .grid {
     display: flex; gap: 22px; text-align: left; overflow-x: auto;
@@ -271,36 +271,36 @@
   }
   .rooms .grid::-webkit-scrollbar { height: 8px; }
   .rooms .grid::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 4px; }
-  .room-card { flex: 0 0 262px; max-width: 78vw; scroll-snap-align: start; background: #fff; box-shadow: 0 14px 34px rgba(31,47,84,.1); }
+  .room-card { flex: 0 0 262px; max-width: 78vw; scroll-snap-align: start; background: #fff; box-shadow: 0 14px 34px rgba(58,49,40,.1); }
   .room-card img { aspect-ratio: 4/3; object-fit: cover; width: 100%; }
   .room-card .rc-body { padding: 20px 20px 24px; }
-  .room-card h4 { font: 400 24px/1.2 'EB Garamond', serif; color: #1F2F54; margin-bottom: 6px; }
-  .room-card p { font-size: 14px; line-height: 165%; color: #5a6472; }
+  .room-card h4 { font: 400 24px/1.2 'EB Garamond', serif; color: #3A3128; margin-bottom: 6px; }
+  .room-card p { font-size: 14px; line-height: 165%; color: #6F6352; }
 
   /* ---------- Amenities ---------- */
-  .amenities { padding: 96px 0; background: #F4F8FB; }
-  .amenities h2 { font: var(--h2-title-fonts); color: #1F2F54; text-align: center; margin-bottom: 12px; }
+  .amenities { padding: 96px 0; background: #F3ECDD; }
+  .amenities h2 { font: var(--h2-title-fonts); color: #3A3128; text-align: center; margin-bottom: 12px; }
   .amenities .subtitle { text-align: center; max-width: 620px; margin: 0 auto 50px; }
   .am-groups { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px 34px; }
   .am-group h5 { font: 600 13px/1 'Source Sans 3'; letter-spacing: 0.14em; text-transform: uppercase; color: var(--highlight-color); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--secondary-color); }
-  .am-group li { font-size: 15px; line-height: 150%; padding: 8px 0 8px 26px; position: relative; color: #394049; }
+  .am-group li { font-size: 15px; line-height: 150%; padding: 8px 0 8px 26px; position: relative; color: #484036; }
   .am-group li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--highlight-color); font-weight: 700; }
 
   /* ---------- Map ---------- */
   .map-section { padding: 92px 0; text-align: center; background: radial-gradient(circle at 55% 40%, #eef3f8 0%, #ffffff 72%); }
-  .map-section h2 { font: var(--h2-title-fonts); color: #1F2F54; margin-bottom: 12px; }
+  .map-section h2 { font: var(--h2-title-fonts); color: #3A3128; margin-bottom: 12px; }
   .map-section .subtitle { max-width: 620px; margin: 0 auto 40px; }
-  .map-canvas { position: relative; max-width: 780px; margin: 0 auto; aspect-ratio: 16/10; border: 1px solid var(--secondary-color); overflow: hidden; box-shadow: 0 20px 44px rgba(31,47,84,.14); }
+  .map-canvas { position: relative; max-width: 780px; margin: 0 auto; aspect-ratio: 16/10; border: 1px solid var(--secondary-color); overflow: hidden; box-shadow: 0 20px 44px rgba(58,49,40,.14); }
   .map-canvas iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
   .dist-row { display: flex; justify-content: center; gap: 46px; flex-wrap: wrap; margin-top: 44px; }
   .dist-row .d { text-align: center; }
-  .dist-row .d .n { font-family: var(--title-fonts); font-size: 34px; color: #1F2F54; line-height: 1; }
-  .dist-row .d .t { font: 600 12px/1.4 'Source Sans 3'; letter-spacing: 0.08em; text-transform: uppercase; color: #5a6472; margin-top: 8px; }
+  .dist-row .d .n { font-family: var(--title-fonts); font-size: 34px; color: #3A3128; line-height: 1; }
+  .dist-row .d .t { font: 600 12px/1.4 'Source Sans 3'; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6352; margin-top: 8px; }
 
   /* ---------- Gather (full-bleed) ---------- */
   .gather { position: relative; color: #fff; text-align: center; padding: 130px 24px 140px;
-    background: linear-gradient(180deg, rgba(14,23,46,.55), rgba(14,23,46,.72)),
-      url("https://a0.muscache.com/im/pictures/hosting/Hosting-36241619/original/ea42af41-a6a3-46bc-8a79-6f497bd61e31.jpeg?im_w=1440") center/cover no-repeat, #24406b; }
+    background: linear-gradient(180deg, rgba(30,24,18,.55), rgba(30,24,18,.72)),
+      url("https://a0.muscache.com/im/pictures/hosting/Hosting-36241619/original/ea42af41-a6a3-46bc-8a79-6f497bd61e31.jpeg?im_w=1440") center/cover no-repeat, #3A3128; }
   .gather h2 { font: var(--h2-title-fonts); color: #fff; margin-bottom: 18px; }
   .gather p { max-width: 580px; margin: 0 auto 30px; color: rgba(255,255,255,.92); }
 
@@ -308,22 +308,22 @@
   .reviews { padding: 96px 0; }
   .reviews .grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 60px; align-items: start; }
   .reviews .rating-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
-  .reviews .rating-head .score { font-family: var(--title-fonts); font-size: 52px; color: #1F2F54; line-height: 1; }
+  .reviews .rating-head .score { font-family: var(--title-fonts); font-size: 52px; color: #3A3128; line-height: 1; }
   .reviews .rating-head .stars { color: #E8C87A; font-size: 20px; letter-spacing: 2px; }
-  .reviews .rating-head .count { font-size: 15px; color: #5a6472; }
-  .reviews h2 { font: 400 26px/1.3 'EB Garamond', serif; color: #1F2F54; margin: 6px 0 30px; }
+  .reviews .rating-head .count { font-size: 15px; color: #6F6352; }
+  .reviews h2 { font: 400 26px/1.3 'EB Garamond', serif; color: #3A3128; margin: 6px 0 30px; }
   .faq-item { border-bottom: 1px solid var(--border-color); }
   .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 22px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; font: 500 20px/1.4 'EB Garamond', serif; color: var(--primary-color); }
   .faq-q .chev { transition: transform .3s ease; font-size: 15px; color: var(--highlight-color); }
   .faq-item.open .chev { transform: rotate(180deg); }
-  .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; color: #394049; font-size: 15px; line-height: 178%; }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; color: #484036; font-size: 15px; line-height: 178%; }
   .faq-item.open .faq-a { max-height: 320px; padding: 0 0 22px; }
-  .reviews .side-img { aspect-ratio: 3/4; object-fit: cover; box-shadow: 0 20px 44px rgba(31,47,84,.2); }
+  .reviews .side-img { aspect-ratio: 3/4; object-fit: cover; box-shadow: 0 20px 44px rgba(58,49,40,.2); }
 
   /* Testimonios */
   .reviews-head { text-align: center; margin-bottom: 44px; }
   .reviews-head .rating-head { justify-content: center; margin-bottom: 6px; }
-  .reviews-head h2 { font: var(--h2-title-fonts); color: #1F2F54; margin: 6px 0 0; }
+  .reviews-head h2 { font: var(--h2-title-fonts); color: #3A3128; margin: 6px 0 0; }
   .carousel-wrap, .reviews-carousel { position: relative; padding: 0 64px; }
   .reviews-grid {
     display: flex; gap: 20px; overflow-x: auto; margin-bottom: 18px;
@@ -332,35 +332,35 @@
   }
   .reviews-grid::-webkit-scrollbar { height: 8px; }
   .reviews-grid::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 4px; }
-  .review-card { flex: 0 0 340px; max-width: 82vw; scroll-snap-align: start; background: #fff; border: 1px solid var(--secondary-color); padding: 26px 24px; display: flex; flex-direction: column; box-shadow: 0 10px 26px rgba(31,47,84,.07); }
+  .review-card { flex: 0 0 340px; max-width: 82vw; scroll-snap-align: start; background: #fff; border: 1px solid var(--secondary-color); padding: 26px 24px; display: flex; flex-direction: column; box-shadow: 0 10px 26px rgba(58,49,40,.07); }
   .rev-arrow {
     position: absolute; top: 44%; transform: translateY(-50%); z-index: 3;
     width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--border-color);
     background: #fff; color: var(--primary-color); font: 400 30px/1 'Source Sans 3', sans-serif;
-    cursor: pointer; box-shadow: 0 8px 22px rgba(31,47,84,.22); display: grid; place-items: center;
+    cursor: pointer; box-shadow: 0 8px 22px rgba(58,49,40,.22); display: grid; place-items: center;
     transition: background .2s ease, transform .2s ease;
   }
   .rev-arrow:hover { background: var(--primary-color); color: #fff; transform: translateY(-50%) scale(1.06); }
   .rev-arrow.prev { left: 6px; }
   .rev-arrow.next { right: 6px; }
-  .swipe-hint { display: none; text-align: center; font-size: 13px; color: #5a6472; margin-bottom: 26px; }
+  .swipe-hint { display: none; text-align: center; font-size: 13px; color: #6F6352; margin-bottom: 26px; }
   .review-card .rc-stars { color: #E8C87A; font-size: 15px; letter-spacing: 2px; margin-bottom: 12px; }
-  .review-card .rc-text { font-size: 15px; line-height: 172%; color: #394049; margin-bottom: 18px; flex: 1; }
+  .review-card .rc-text { font-size: 15px; line-height: 172%; color: #484036; margin-bottom: 18px; flex: 1; }
   .review-card .rc-meta { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--secondary-color); padding-top: 16px; }
   .review-card .rc-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-color); color: #fff; display: grid; place-items: center; font: 600 16px/1 'Source Sans 3'; flex-shrink: 0; }
-  .review-card .rc-who strong { display: block; font: 600 14px/1.3 'Source Sans 3'; color: #1F2F54; }
-  .review-card .rc-who span { font-size: 12.5px; color: #5a6472; }
+  .review-card .rc-who strong { display: block; font: 600 14px/1.3 'Source Sans 3'; color: #3A3128; }
+  .review-card .rc-who span { font-size: 12.5px; color: #6F6352; }
   .faqsec { padding-top: 0; }
 
   /* ---------- Social ---------- */
   .social { text-align: center; padding: 70px 0 0; }
-  .social h3 { font: var(--h3-title-fonts); color: #1F2F54; margin-bottom: 6px; }
+  .social h3 { font: var(--h3-title-fonts); color: #3A3128; margin-bottom: 6px; }
   .social .handle { font: 600 15px/1 'Source Sans 3'; letter-spacing: 0.1em; color: var(--highlight-color); text-transform: uppercase; margin-bottom: 20px; display: inline-block; }
   .social .handle:hover { text-decoration: underline; }
   .social-btns { display: flex; gap: 14px; justify-content: center; margin-bottom: 34px; }
   .social-btns a {
     font: 600 13px/1 'Source Sans 3', sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
-    color: #fff; background: var(--highlight-color); padding: 12px 22px; transition: background .25s ease;
+    color: #fff; background: var(--primary-cta-color); padding: 12px 22px; transition: background .25s ease;
   }
   .social-btns a:hover { background: var(--primary-cta-hover-color); }
   .insta-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
@@ -387,7 +387,7 @@
   .newsletter { display: flex; margin: 14px 0 22px; max-width: 340px; }
   .newsletter input { flex: 1; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; padding: 12px 14px; font: 400 14px 'Source Sans 3'; }
   .newsletter input::placeholder { color: rgba(255,255,255,.55); }
-  .newsletter button { background: var(--highlight-color); color: #fff; border: none; padding: 0 22px; font: 600 13px/1 'Source Sans 3'; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+  .newsletter button { background: var(--primary-cta-color); color: #fff; border: none; padding: 0 22px; font: 600 13px/1 'Source Sans 3'; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
   .footer-social { display: flex; gap: 12px; margin-top: 12px; }
   .footer-social a { width: 42px; height: 42px; border: 1px solid rgba(255,255,255,.4); display: grid; place-items: center; border-radius: 50%; color: #fff; transition: background .25s ease, border-color .25s ease; }
   .footer-social a:hover { background: rgba(255,255,255,.15); border-color: #fff; }
@@ -428,8 +428,8 @@
     /* Menú móvil: la nav se oculta y se despliega al tocar el botón ☰ */
     nav.main-nav {
       position: absolute; top: 100%; left: 0; right: 0;
-      background: rgba(31,47,84,.98); display: none;
-      box-shadow: 0 16px 30px rgba(20,32,64,.35);
+      background: rgba(58,49,40,.98); display: none;
+      box-shadow: 0 16px 30px rgba(40,33,25,.35);
     }
     nav.main-nav.open { display: block; }
     nav.main-nav ul { flex-direction: column; gap: 0; padding: 6px 0; }
@@ -508,11 +508,11 @@
   .sister .box {
     display: grid; grid-template-columns: 1fr 1fr; align-items: stretch;
     border: 1px solid var(--secondary-color); background: #fff; overflow: hidden;
-    box-shadow: 0 18px 40px rgba(31,47,84,.1);
+    box-shadow: 0 18px 40px rgba(58,49,40,.1);
   }
   .sister .ph { min-height: 300px; background-size: cover; background-position: center; }
   .sister .tx { padding: 52px 48px; display: flex; flex-direction: column; justify-content: center; }
-  .sister h3 { font: 400 34px/1.2 'EB Garamond', serif; color: #1F2F54; margin: 8px 0 14px; }
+  .sister h3 { font: 400 34px/1.2 'EB Garamond', serif; color: #3A3128; margin: 8px 0 14px; }
   .sister p { font-size: 15px; line-height: 172%; margin-bottom: 24px; }
   .sister .btn-primary { align-self: flex-start; }
   @media (max-width: 860px) {
@@ -523,15 +523,15 @@
 
   /* ===== v2 · diseno-web (11 oct 2026): historia que da antes de pedir, maqueta 3D y movimiento ===== */
   /* encabezado sólido al bajar (lo pone kauri-motion.js) */
-  header.solid{position:fixed;background:rgba(31,47,84,.96)}
+  header.solid{position:fixed;background:rgba(58,49,40,.96)}
   /* hero: texto a la izquierda, 4 elementos, foto con velo del lado del texto */
   .hero{min-height:100vh;min-height:100svh;justify-content:flex-start;text-align:left;
-    background:linear-gradient(90deg,rgba(14,23,46,.82) 0%,rgba(14,23,46,.55) 48%,rgba(14,23,46,.15) 100%),
-      url("https://a0.muscache.com/im/pictures/miso/Hosting-36241619/original/7cc83af8-483b-4087-a9f6-ae2608182f35.jpeg?im_w=1920") center/cover no-repeat,#24406b}
+    background:linear-gradient(90deg,rgba(30,24,18,.82) 0%,rgba(30,24,18,.55) 48%,rgba(30,24,18,.15) 100%),
+      url("https://a0.muscache.com/im/pictures/miso/Hosting-36241619/original/7cc83af8-483b-4087-a9f6-ae2608182f35.jpeg?im_w=1920") center/cover no-repeat,#3A3128}
   .hero-inner{max-width:640px;padding:150px 24px 110px;margin-left:max(0px,calc((100vw - 1200px)/2))}
   .hero .sub{margin:0 0 34px;max-width:52ch}
   .hero .cta-row{justify-content:flex-start}
-  @media (max-width:760px){.hero{background:linear-gradient(180deg,rgba(14,23,46,.35) 0%,rgba(14,23,46,.6) 45%,rgba(14,23,46,.88) 100%),url("https://a0.muscache.com/im/pictures/miso/Hosting-36241619/original/7cc83af8-483b-4087-a9f6-ae2608182f35.jpeg?im_w=1200") center/cover no-repeat,#24406b;align-items:flex-end}
+  @media (max-width:760px){.hero{background:linear-gradient(180deg,rgba(30,24,18,.35) 0%,rgba(30,24,18,.6) 45%,rgba(30,24,18,.88) 100%),url("https://a0.muscache.com/im/pictures/miso/Hosting-36241619/original/7cc83af8-483b-4087-a9f6-ae2608182f35.jpeg?im_w=1200") center/cover no-repeat,#3A3128;align-items:flex-end}
     .hero-inner{padding:120px 20px 56px}.hero .cta-row .btn-primary,.hero .cta-row .btn-outline{flex:1 1 auto;text-align:center}}
   /* franja de datos, debajo del hero */
   .facts-band{display:grid;grid-template-columns:repeat(5,1fr);background:var(--primary-color);color:#fff}
@@ -546,7 +546,7 @@
   .k-statement em{font-style:italic;color:var(--highlight-color)}
   .k-statement .sw{display:inline-block}
   /* maqueta 3D */
-  .casa3d{padding:40px 0 96px;background:linear-gradient(180deg,#F4FBFF 0%,#fff 100%)}
+  .casa3d{padding:40px 0 96px;background:linear-gradient(180deg,#F6F0E3 0%,#fff 100%)}
   .c3-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
   .c3-copy h2{font:var(--h2-title-fonts);color:var(--primary-color);margin-bottom:12px}
   .c3-copy > p{margin-bottom:22px}
@@ -558,14 +558,14 @@
   .c3-info{border-left:3px solid #E8C87A;padding:6px 0 6px 16px;margin-bottom:16px;min-height:96px}
   .c3-info b{display:block;font:400 24px/1.25 'EB Garamond',serif;color:var(--primary-color);margin-bottom:4px}
   .c3-info p{font-size:15px;line-height:170%}
-  .c3-note{display:block;font-size:12.5px;color:#5a6472}
+  .c3-note{display:block;font-size:12.5px;color:#6F6352}
   .c3-stage{position:relative;aspect-ratio:1/.9;background:radial-gradient(60% 55% at 50% 55%,#fff7e8 0%,rgba(244,251,255,0) 70%)}
   .c3-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:pan-y}
   .c3-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:url("alberca.jpg") center/cover;opacity:0;transition:opacity .4s}
   html:not(.c3-live) .c3-stage::after{opacity:1}   /* sin WebGL: la foto real de la alberca */
   @media (max-width:860px){.c3-grid{grid-template-columns:1fr;gap:22px}.c3-stage{order:-1;aspect-ratio:1/.85;margin:0 -24px}}
   /* lo que conviene saber: tarjetas que se voltean (esquinas rectas, como el resto del sitio) */
-  .saber{padding:96px 0;background:#F4F8FB;text-align:center}
+  .saber{padding:96px 0;background:#F3ECDD;text-align:center}
   .saber h2{font:var(--h2-title-fonts);color:var(--primary-color);margin-bottom:12px}
   .saber .subtitle{max-width:620px;margin:0 auto 44px}
   .flips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;text-align:left}
@@ -573,13 +573,13 @@
   .fl-in{display:grid;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
   .flip[aria-pressed="true"] .fl-in{transform:rotateY(180deg)}
   .fl-face{grid-area:1/1;display:grid;gap:10px;align-content:start;padding:26px 22px;min-height:250px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-  .fl-front{background:#fff;border:1px solid var(--secondary-color);box-shadow:0 14px 34px rgba(31,47,84,.08)}
+  .fl-front{background:#fff;border:1px solid var(--secondary-color);box-shadow:0 14px 34px rgba(58,49,40,.08)}
   .fl-back{background:var(--primary-color);color:#fff;transform:rotateY(180deg)}
   .fl-n{font:400 40px/1 'EB Garamond',serif;color:var(--highlight-color)}
   .fl-back .fl-n{font:600 12px/1.3 'Source Sans 3';letter-spacing:.14em;text-transform:uppercase;color:#E8C87A}
   .fl-front b{font:400 22px/1.25 'EB Garamond',serif;color:var(--primary-color)}
   .fl-b{font-size:15px;line-height:168%;color:rgba(255,255,255,.92)}
-  .fl-cta{margin-top:auto;font:600 11.5px/1 'Source Sans 3';letter-spacing:.1em;text-transform:uppercase;color:#5a6472}
+  .fl-cta{margin-top:auto;font:600 11.5px/1 'Source Sans 3';letter-spacing:.1em;text-transform:uppercase;color:#6F6352}
   .fl-back .fl-cta{color:rgba(255,255,255,.65)}
   @media (max-width:1080px){.flips{grid-template-columns:repeat(2,minmax(0,1fr))}}
   /* plan de 3 pasos */
@@ -605,16 +605,16 @@
   html.mo-off *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
   html.mo-off .fl-in{transition:none}
   .motion-toggle{position:fixed;left:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:70;font:600 13px/1 'Source Sans 3',sans-serif;cursor:pointer;border:1px solid rgba(232,200,122,.6);background:var(--primary-color);color:#fff;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
-  .diag{position:fixed;inset:auto 10px 10px 10px;z-index:1000;background:#1F2F54;color:#fff;border:1px solid #E8C87A;padding:16px;font:13px/1.5 ui-monospace,monospace;max-height:70vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
-  .diag b{color:#E8C87A}.diag button{float:right;font:inherit;background:#E8C87A;color:#1F2F54;border:0;padding:4px 12px;cursor:pointer}
+  .diag{position:fixed;inset:auto 10px 10px 10px;z-index:1000;background:#3A3128;color:#fff;border:1px solid #E8C87A;padding:16px;font:13px/1.5 ui-monospace,monospace;max-height:70vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
+  .diag b{color:#E8C87A}.diag button{float:right;font:inherit;background:#E8C87A;color:#3A3128;border:0;padding:4px 12px;cursor:pointer}
   html.lowfx .facts-strip{backdrop-filter:none}
   /* ===== Modo oscuro (11 oct 2026): sigue al sistema del huésped; un solo tema por página ===== */
   @media (prefers-color-scheme: dark){
-    html:not([data-theme="light"]){color-scheme:dark;--d-bg:#0F1A2E;--d-surface:#16233B;--d-line:#2A3B5A;--d-ink:#C9D3E1;--d-ink2:#9DABBF;--d-head:#EEF2F8;--d-accent:#9DB4E8;--d-gold:#E8C87A}
+    html:not([data-theme="light"]){color-scheme:dark;--d-bg:#1A1612;--d-surface:#241F19;--d-line:#3A3229;--d-ink:#D8CFC0;--d-ink2:#A99E8C;--d-head:#F3ECDF;--d-accent:#9DB4E8;--d-gold:#E8C87A}
     html:not([data-theme="light"]) body{background:var(--d-bg);color:var(--d-ink)}
     html:not([data-theme="light"]) .intro{background:linear-gradient(180deg,var(--d-bg),var(--d-surface))}
     html:not([data-theme="light"]) :is(.intro .lead,.rooms h2,.amenities h2,.map-section h2,.reviews h2,.reviews-head h2,.social h3,.sister h3,.c3-copy h2,.saber h2,.plan3 h2,.k-statement p,.room-card h4,.faq-q,.rating-head .score,.dist-row .d .n,.step3 b,.c3-info b,.fl-front b,.rc-who strong,.link-arrow,.depa-h){color:var(--d-head)}
-    html:not([data-theme="light"]) .section-label{color:#C7D2E4}
+    html:not([data-theme="light"]) .section-label{color:#E6DCC6}
     html:not([data-theme="light"]) :is(.room-card,.review-card,.sister .box,.fl-front){background:var(--d-surface);border-color:var(--d-line);box-shadow:none}
     html:not([data-theme="light"]) :is(.room-card p,.rc-text,.am-group li,.faq-a,.step3 p,.c3-info p,.sister p){color:var(--d-ink)}
     html:not([data-theme="light"]) :is(.rc-who span,.rating-head .count,.dist-row .d .t,.c3-note,.fl-cta,.swipe-hint){color:var(--d-ink2)}
@@ -628,7 +628,7 @@
     html:not([data-theme="light"]) .c3-spots button{background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
     html:not([data-theme="light"]) .c3-spots button[aria-pressed="true"]{background:#3B528A;border-color:#3B528A;color:#fff}
     html:not([data-theme="light"]) .k-statement em{color:var(--d-gold)}
-    html:not([data-theme="light"]) .fl-back{background:#24406b}
+    html:not([data-theme="light"]) .fl-back{background:#3A3128}
     html:not([data-theme="light"]) .fl-n{color:var(--d-accent)}
     html:not([data-theme="light"]) .step3{border-color:var(--d-accent)}
     html:not([data-theme="light"]) .rev-arrow{background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
@@ -638,11 +638,11 @@
   }
 
   /* ===== Calendario de disponibilidad (11 oct 2026) ===== */
-  .cal{padding:90px 0;background:#F4F8FB}
+  .cal{padding:90px 0;background:#F3ECDD}
   .cal-head{text-align:center;margin-bottom:34px}
   .cal-head h2{font:var(--h2-title-fonts);color:var(--primary-color);margin-bottom:10px}
   .cal-head p{max-width:600px;margin:0 auto}
-  .cal-box{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0;background:#fff;border:1px solid var(--secondary-color);box-shadow:0 18px 40px rgba(31,47,84,.08)}
+  .cal-box{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0;background:#fff;border:1px solid var(--secondary-color);box-shadow:0 18px 40px rgba(58,49,40,.08)}
   .cal-cal{padding:26px 28px;position:relative}
   .cal-nav{position:absolute;top:22px;left:20px;right:20px;display:flex;justify-content:space-between;pointer-events:none}
   .cal-nav button{pointer-events:auto;width:38px;height:38px;border:1px solid var(--border-color);background:#fff;color:var(--primary-color);font:400 22px/1 'Source Sans 3';cursor:pointer}
@@ -650,18 +650,18 @@
   .cal-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px}
   .cal-title{text-align:center;font:400 22px/38px 'EB Garamond',serif;color:var(--primary-color);margin-bottom:12px;text-transform:capitalize}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-  .cal-dow{text-align:center;font:600 11px/28px 'Source Sans 3';letter-spacing:.1em;color:#5a6472}
+  .cal-dow{text-align:center;font:600 11px/28px 'Source Sans 3';letter-spacing:.1em;color:#6F6352}
   .cal-d{aspect-ratio:1;border:0;background:transparent;font:600 14px/1 'Source Sans 3';color:var(--primary-color);cursor:pointer;position:relative;transition:background .15s,color .15s}
   .cal-d:hover:not(:disabled){background:var(--secondary-color)}
   .cal-d.today{box-shadow:inset 0 0 0 1px #E8C87A}
   .cal-d.past{color:#C4C6C8;cursor:default}
-  .cal-d.busy{color:#8C96A3;text-decoration:line-through;text-decoration-thickness:2px;cursor:not-allowed;background:#E3E8EE}
-  .cal-d.busy:not(:disabled){cursor:pointer;background:#E3E8EE}   /* el primer día ocupado sí sirve como día de salida */
-  .cal-d.in{background:#DFE8EE}
-  .cal-d.sel{background:var(--primary-color);color:#fff;text-decoration:none}
+  .cal-d.busy{color:#A09684;text-decoration:line-through;text-decoration-thickness:2px;cursor:not-allowed;background:#EAE2D2}
+  .cal-d.busy:not(:disabled){cursor:pointer;background:#EAE2D2}   /* el primer día ocupado sí sirve como día de salida */
+  .cal-d.in{background:#E8DFCC}
+  .cal-d.sel{background:var(--primary-cta-color);color:#fff;text-decoration:none}
   .cal-side{border-left:1px solid var(--secondary-color);padding:28px 24px;display:grid;gap:18px;align-content:start}
   .cal-g{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .cal-g span{font:600 13px/1.3 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;color:#5a6472}
+  .cal-g span{font:600 13px/1.3 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;color:#6F6352}
   .cal-g div{display:flex;align-items:center;gap:12px}
   .cal-g button{width:36px;height:36px;border:1px solid var(--border-color);background:#fff;color:var(--primary-color);font:400 20px/1 'Source Sans 3';cursor:pointer}
   .cal-g b{font:400 26px/1 'EB Garamond',serif;color:var(--primary-color);min-width:1.4ch;text-align:center}
@@ -669,13 +669,13 @@
   .cal-sum b{color:var(--primary-color);font-weight:600}
   .cal-go{display:block;text-align:center}
   .cal-go.off{background:#9AA6BC;pointer-events:none}
-  .cal-clear{background:none;border:0;color:#5a6472;font:600 12px/1 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;cursor:pointer;justify-self:start;padding:0;text-decoration:underline}
-  .cal-status{font-size:12.5px;color:#5a6472;line-height:1.5;border-top:1px solid var(--secondary-color);padding-top:14px}
+  .cal-clear{background:none;border:0;color:#6F6352;font:600 12px/1 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;cursor:pointer;justify-self:start;padding:0;text-decoration:underline}
+  .cal-status{font-size:12.5px;color:#6F6352;line-height:1.5;border-top:1px solid var(--secondary-color);padding-top:14px}
   .cal-status.ok::before{content:"● ";color:#2E8B57}
-  .cal-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#5a6472;margin-top:14px}
+  .cal-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#6F6352;margin-top:14px}
   .cal-legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid var(--border-color)}
-  .cal-legend .lb{background:#E3E8EE;border-color:#C9D1DB}
-  .cal-legend .ls{background:var(--primary-color);border-color:var(--primary-color)}
+  .cal-legend .lb{background:#EAE2D2;border-color:#D6CCB8}
+  .cal-legend .ls{background:var(--primary-cta-color);border-color:var(--primary-cta-color)}
   @media (max-width:860px){.cal-box{grid-template-columns:1fr}.cal-side{border-left:0;border-top:1px solid var(--secondary-color)}.cal-months{grid-template-columns:1fr}.cal-cal{padding:20px 14px}.cal-nav{top:18px;left:10px;right:10px}}
   @media (prefers-color-scheme: dark){
     html:not([data-theme="light"]) .cal{background:var(--d-bg)}
@@ -684,22 +684,22 @@
     html:not([data-theme="light"]) :is(.cal-side,.cal-status){border-color:var(--d-line)}
     html:not([data-theme="light"]) :is(.cal-nav button,.cal-g button){background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}
     html:not([data-theme="light"]) .cal-d:hover:not(:disabled){background:#22324A}
-    html:not([data-theme="light"]) .cal-d.in{background:#24406b}
+    html:not([data-theme="light"]) .cal-d.in{background:#3A3128}
     html:not([data-theme="light"]) .cal-d.sel{background:#3B528A;color:#fff}
     html:not([data-theme="light"]) .cal-d.past{color:#56657C}
-    html:not([data-theme="light"]) .cal-d.busy{color:#6F7D92;background:#0B1424}
-    html:not([data-theme="light"]) .cal-legend .lb{background:#0B1424;border-color:#2A3B5A}
+    html:not([data-theme="light"]) .cal-d.busy{color:#857A69;background:#120F0C}
+    html:not([data-theme="light"]) .cal-legend .lb{background:#120F0C;border-color:#3A3229}
     html:not([data-theme="light"]) :is(.cal-dow,.cal-g span,.cal-status,.cal-legend,.cal-clear){color:var(--d-ink2)}
   }
 
   /* el calendario al centro: franja de próximo fin de semana libre y salida a Airbnb */
-  .next-free{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:14px 20px;background:#E8C87A;color:#1F2F54;text-decoration:none;font:600 14px/1.3 'Source Sans 3',sans-serif;letter-spacing:.02em;transition:background .2s}
+  .next-free{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:14px 20px;background:#E8C87A;color:#3A3128;text-decoration:none;font:600 14px/1.3 'Source Sans 3',sans-serif;letter-spacing:.02em;transition:background .2s}
   .next-free[hidden]{display:none}
   .next-free:hover{background:#F0D693}
   .next-free .nf-k{text-transform:uppercase;letter-spacing:.12em;font-size:12px}
   .next-free b{font:400 20px/1.2 'EB Garamond',serif}
   .next-free .nf-go{border-bottom:1px solid currentColor}
-  .cal-airbnb{font-size:13px;color:#5a6472;text-decoration:underline;justify-self:start}
+  .cal-airbnb{font-size:13px;color:#6F6352;text-decoration:underline;justify-self:start}
   @media (prefers-color-scheme: dark){html:not([data-theme="light"]) .cal-airbnb{color:var(--d-ink2)}}
 
   /* el inicio deja asomar la franja de datos y la de fechas libres desde la primera pantalla */
@@ -710,10 +710,10 @@
   /* ===== Barra de búsqueda del inicio, estilo Airbnb (11 oct 2026) ===== */
   .hero-inner{max-width:820px}
   .hero .sub{max-width:52ch}
-  .qb{position:relative;display:grid;grid-template-columns:1fr 1fr 1.15fr auto;align-items:stretch;background:#fff;color:var(--primary-color);max-width:760px;box-shadow:0 24px 60px -18px rgba(8,14,30,.55);text-align:left}
+  .qb{position:relative;display:grid;grid-template-columns:1fr 1fr 1.15fr auto;align-items:stretch;background:#fff;color:var(--primary-color);max-width:760px;box-shadow:0 24px 60px -18px rgba(25,20,15,.55);text-align:left}
   .qb-f{font:inherit;background:none;border:0;border-right:1px solid var(--secondary-color);padding:14px 20px;display:grid;gap:3px;align-content:center;cursor:pointer;text-align:left;color:inherit;transition:background .2s}
-  .qb-f:hover,.qb.open .qb-f:focus{background:#F4F8FB}
-  .qb-f span{font:600 11px/1.2 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#5a6472}
+  .qb-f:hover,.qb.open .qb-f:focus{background:#F3ECDD}
+  .qb-f span{font:600 11px/1.2 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6F6352}
   .qb-f b{font:400 19px/1.2 'EB Garamond',serif;color:#9aa3ae;white-space:nowrap}
   .qb-f.set b{color:var(--primary-color)}
   .qb-g{cursor:default}
@@ -724,17 +724,17 @@
   .qb-go:hover{background:var(--primary-cta-hover-color)}
   .qb-go:active{transform:translateY(1px)}
   .qb-go i{font-size:20px}
-  .qb-pop{position:absolute;left:0;top:calc(100% + 10px);z-index:45;width:min(720px,92vw);background:#fff;color:var(--primary-color);box-shadow:0 30px 70px -20px rgba(8,14,30,.6);padding:20px 22px 16px}
+  .qb-pop{position:absolute;left:0;top:calc(100% + 10px);z-index:45;width:min(720px,92vw);background:#fff;color:var(--primary-color);box-shadow:0 30px 70px -20px rgba(25,20,15,.6);padding:20px 22px 16px}
   .qb-pop[hidden]{display:none}
   .qb-pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
   .qb-pop-t{font:400 20px/1.3 'EB Garamond',serif}
-  .qb-close{background:none;border:0;font:400 28px/1 'Source Sans 3';color:#5a6472;cursor:pointer;padding:0 4px}
+  .qb-close{background:none;border:0;font:400 28px/1 'Source Sans 3';color:#6F6352;cursor:pointer;padding:0 4px}
   .qb-nav{display:flex;justify-content:space-between;position:relative;top:34px;height:0;pointer-events:none}
   .qb-nav button{pointer-events:auto;width:34px;height:34px;border:1px solid var(--border-color);background:#fff;color:var(--primary-color);font:400 20px/1 'Source Sans 3';cursor:pointer}
   .qb-nav button:disabled{opacity:.3}
   .qb-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin-top:6px}
   .qb-pop-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;border-top:1px solid var(--secondary-color);padding-top:12px}
-  .qb-clear{background:none;border:0;font:600 12px/1 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;color:#5a6472;text-decoration:underline;cursor:pointer}
+  .qb-clear{background:none;border:0;font:600 12px/1 'Source Sans 3';letter-spacing:.06em;text-transform:uppercase;color:#6F6352;text-decoration:underline;cursor:pointer}
   .qb-msg{font-size:13px;color:#B4542E;font-weight:600}
   .qb-done{padding:11px 22px}
   .cal-d.short{color:#B9C0C8}
@@ -747,9 +747,9 @@
   .qb-no{font:600 12px/1 'Source Sans 3';letter-spacing:.1em;text-transform:uppercase;color:#B4542E}
   .qb-acts{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-left:auto}
   .qb-acts .btn-primary{padding:12px 20px}
-  .qb-cal{font-size:13px;text-decoration:underline;color:#5a6472}
-  .qb-esp,.cal-sum .qb-esp{display:inline-block;font:600 11px/1 'Source Sans 3';letter-spacing:.08em;text-transform:uppercase;background:#E8C87A;color:#1F2F54;padding:4px 7px;margin-left:4px;vertical-align:2px}
-  .cal-wa{font-size:13px;color:#5a6472;text-decoration:underline;justify-self:center}
+  .qb-cal{font-size:13px;text-decoration:underline;color:#6F6352}
+  .qb-esp,.cal-sum .qb-esp{display:inline-block;font:600 11px/1 'Source Sans 3';letter-spacing:.08em;text-transform:uppercase;background:#E8C87A;color:#3A3128;padding:4px 7px;margin-left:4px;vertical-align:2px}
+  .cal-wa{font-size:13px;color:#6F6352;text-decoration:underline;justify-self:center}
   @media (max-width:760px){
     .qb{grid-template-columns:1fr 1fr}
     .qb-f{padding:12px 14px}
@@ -758,7 +758,7 @@
     .qb-go{grid-column:1/-1;justify-content:center;padding:16px}
     .qb-pop{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;max-height:86vh;overflow:auto;padding:18px 16px calc(16px + env(safe-area-inset-bottom,0px))}
     .qb-months{grid-template-columns:1fr}
-    .qb.open::before{content:"";position:fixed;inset:0;background:rgba(8,14,30,.45);z-index:44}
+    .qb.open::before{content:"";position:fixed;inset:0;background:rgba(25,20,15,.45);z-index:44}
     .qb-acts{margin-left:0}
   }
   @media (prefers-color-scheme: dark){
@@ -772,12 +772,12 @@
   }
   /* reestructura de conversión (15 oct 2026) */
   .amenities:not(.all) .am-group li:nth-child(n+5){display:none}
-  .am-more{display:block;margin:34px auto 0;font:600 14px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#1F2F54;background:#fff;border:1px solid #1F2F54;padding:14px 22px;cursor:pointer}
-  .am-more:hover{background:#1F2F54;color:#fff}
+  .am-more{display:block;margin:34px auto 0;font:600 14px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#3A3128;background:#fff;border:1px solid #3A3128;padding:14px 22px;cursor:pointer}
+  .am-more:hover{background:#3A3128;color:#fff}
   .amenities.all .am-more{display:none}
   .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-top:18px}
-  .trust li{display:flex;align-items:center;gap:8px;text-align:left;font:600 14px/1.35 'Source Sans 3',sans-serif;color:#1F2F54}
-  .trust .ph{font-size:20px;color:#3B528A}
+  .trust li{display:flex;align-items:center;gap:8px;text-align:left;font:600 14px/1.35 'Source Sans 3',sans-serif;color:#3A3128}
+  .trust .ph{font-size:20px;color:#8A6A45}
   @media (prefers-color-scheme: dark){html:not([data-theme="light"]) .trust li{color:var(--d-head)}html:not([data-theme="light"]) .trust .ph{color:var(--d-accent)}html:not([data-theme="light"]) .am-more{background:var(--d-surface);color:var(--d-head);border-color:var(--d-line)}}
   @media (max-width:700px){.trust{flex-direction:column;align-items:flex-start;max-width:340px;margin:16px auto 0}}
   /* Barra de 7 enlaces (27 oct 2026: se sumaron La zona y Arte): entre 1081 y 1240 px ya no cabe
@@ -787,8 +787,8 @@
     .hamburger { display: block; }
     nav.main-nav {
       position: absolute; top: 100%; left: 0; right: 0;
-      background: rgba(31,47,84,.98); display: none;
-      box-shadow: 0 16px 30px rgba(20,32,64,.35);
+      background: rgba(58,49,40,.98); display: none;
+      box-shadow: 0 16px 30px rgba(40,33,25,.35);
     }
     nav.main-nav.open { display: block; }
     nav.main-nav ul { flex-direction: column; gap: 0; padding: 6px 0; }
@@ -858,30 +858,7 @@
 <!-- ===== Intro ===== -->
 <section class="intro" id="intro">
   <div class="wrap">
-    <p class="lead">Escondida en La Peñita de Jaltemba, Casa Kauri es una <em>casa exclusiva de dos plantas</em> con alberca climatizada privada, a 750 m de una playa semivirgen del Pacífico.</p>
-  </div>
-</section>
-
-<!-- ===== Maqueta 3D ===== -->
-<section class="casa3d" id="casa3d">
-  <div class="wrap c3-grid">
-    <div class="c3-copy">
-      <span class="section-label">Maqueta interactiva</span>
-      <h2>Conoce la casa antes de llegar</h2>
-      <p>Toca cada parte para ver qué hay. Gírala con el dedo o con el mouse.</p>
-      <div class="c3-spots" role="group" aria-label="Partes de la casa">
-        <button type="button" aria-pressed="true">Alberca climatizada</button>
-        <button type="button" aria-pressed="false">Terraza y asador</button>
-        <button type="button" aria-pressed="false">Planta alta: 4 recámaras</button>
-        <button type="button" aria-pressed="false">Terraza con vista</button>
-        <button type="button" aria-pressed="false">Jardín cercado</button>
-        <button type="button" aria-pressed="false">Entrada y estacionamiento</button>
-      </div>
-      <div class="c3-info" aria-live="polite"><b>Alberca climatizada</b><p>Privada, climatizada todo el año y con chapoteadero para los niños. No tiene reja: si vienen pequeños, siempre con un adulto cerca.</p></div>
-      <small class="c3-note">Maqueta ilustrativa: la distribución es la real; la escala, los colores y los detalles no. Las fotos de abajo son las de verdad.</small>
-    </div>
-    <script type="application/json" id="c3-data">[["Alberca climatizada", "Privada, climatizada todo el año y con chapoteadero para los niños. No tiene reja: si vienen pequeños, siempre con un adulto cerca."], ["Terraza y asador", "En la planta baja: terraza, sala, comedor amplio, cocina semi equipada y asador de ladrillo. Aquí pasa casi todo el día."], ["Planta alta: 4 recámaras", "Seis camas para hasta 8 personas. Tres recámaras tienen minisplit y todas tienen cortinas blackout."], ["Terraza con vista", "En la planta alta, una terraza con vista a la montaña para el café de la mañana."], ["Jardín cercado", "Cercado en todo su perímetro. Tus mascotas son bienvenidas: $300 por mascota, por estancia."], ["Entrada y estacionamiento", "Entras por el portón de la fachada a un jardín frente a la alberca: ahí se estaciona una camioneta grande o un auto. Afuera, en la calle, caben más. Llegada autónoma con candado de clave, desde las 3 p.m."]]</script>
-    <div class="c3-stage"><canvas id="casa3d-cv" data-model="casa3d.js" role="img" aria-label="Maqueta 3D de Casa Kauri: casa de patio de dos plantas con alberca larga al centro, pórtico con columnas, pasillo con barandal y jardín tropical"></canvas></div>
+    <p class="lead">Aquí el día se arma solo: el café en la terraza de arriba, la <em>alberca climatizada</em> toda la tarde, el asador al caer el sol y, si quieren, 750 m caminando para ver el atardecer en la playa.</p>
   </div>
 </section>
 
@@ -994,6 +971,29 @@
     <div style="text-align:center;">
       <a class="btn-primary" href="https://www.airbnb.mx/rooms/36241619/reviews" target="_blank" rel="noopener">Ver las 150 evaluaciones en Airbnb</a>
     </div>
+  </div>
+</section>
+
+<!-- ===== Maqueta 3D ===== -->
+<section class="casa3d" id="casa3d">
+  <div class="wrap c3-grid">
+    <div class="c3-copy">
+      <span class="section-label">Maqueta interactiva</span>
+      <h2>Conoce la casa antes de llegar</h2>
+      <p>Toca cada parte para ver qué hay. Gírala con el dedo o con el mouse.</p>
+      <div class="c3-spots" role="group" aria-label="Partes de la casa">
+        <button type="button" aria-pressed="true">Alberca climatizada</button>
+        <button type="button" aria-pressed="false">Terraza y asador</button>
+        <button type="button" aria-pressed="false">Planta alta: 4 recámaras</button>
+        <button type="button" aria-pressed="false">Terraza con vista</button>
+        <button type="button" aria-pressed="false">Jardín cercado</button>
+        <button type="button" aria-pressed="false">Entrada y estacionamiento</button>
+      </div>
+      <div class="c3-info" aria-live="polite"><b>Alberca climatizada</b><p>Privada, climatizada todo el año y con chapoteadero para los niños. No tiene reja: si vienen pequeños, siempre con un adulto cerca.</p></div>
+      <small class="c3-note">Maqueta ilustrativa: la distribución es la real; la escala, los colores y los detalles no. Las fotos de arriba son las de verdad.</small>
+    </div>
+    <script type="application/json" id="c3-data">[["Alberca climatizada", "Privada, climatizada todo el año y con chapoteadero para los niños. No tiene reja: si vienen pequeños, siempre con un adulto cerca."], ["Terraza y asador", "En la planta baja: terraza, sala, comedor amplio, cocina semi equipada y asador de ladrillo. Aquí pasa casi todo el día."], ["Planta alta: 4 recámaras", "Seis camas para hasta 8 personas. Tres recámaras tienen minisplit y todas tienen cortinas blackout."], ["Terraza con vista", "En la planta alta, una terraza con vista a la montaña para el café de la mañana."], ["Jardín cercado", "Cercado en todo su perímetro. Tus mascotas son bienvenidas: $300 por mascota, por estancia."], ["Entrada y estacionamiento", "Entras por el portón de la fachada a un jardín frente a la alberca: ahí se estaciona una camioneta grande o un auto. Afuera, en la calle, caben más. Llegada autónoma con candado de clave, desde las 3 p.m."]]</script>
+    <div class="c3-stage"><canvas id="casa3d-cv" data-model="casa3d.js" role="img" aria-label="Maqueta 3D de Casa Kauri: casa de patio de dos plantas con alberca larga al centro, pórtico con columnas, pasillo con barandal y jardín tropical"></canvas></div>
   </div>
 </section>
 
@@ -1139,14 +1139,6 @@
           <div class="faq-item">
             <button class="faq-q">¿Cuáles son los horarios de llegada y salida? <span class="chev">▾</span></button>
             <div class="faq-a"><p>La llegada es a partir de las 3:00 p.m. y la salida antes de las 11:00 a.m. El acceso es autónomo mediante un candado con clave, así que puedes llegar a tu propio ritmo.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q">¿Qué tan lejos está la playa? <span class="chev">▾</span></button>
-            <div class="faq-a"><p>A 750 m caminando está Playa El Naranjo, semivirgen, ideal para caminar y ver el atardecer; por la inclinación de la orilla no la recomendamos para nadar. Para nadar, Rincón de Guayabitos está a 10 minutos y tiene agua tranquila. La Peñita de Jaltemba está a 5 minutos.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-q">¿Se admiten mascotas? <span class="chev">▾</span></button>
-            <div class="faq-a"><p>Sí, son bienvenidas, con un cargo de $300 por mascota por estancia que se suma a tu reserva desde el principio. El jardín está cercado en todo su perímetro.</p></div>
           </div>
           <div class="faq-item">
             <button class="faq-q">¿Cuántos huéspedes pueden hospedarse? <span class="chev">▾</span></button>
@@ -1350,7 +1342,7 @@
     });
   }
 </script>
-<script src="kauri-i18n.js?v=3"></script>
+<script src="kauri-i18n.js?v=4"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="kauri-motion.js?v=5"></script>
