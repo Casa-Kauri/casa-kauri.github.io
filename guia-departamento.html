@@ -377,7 +377,10 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   .priv-form[hidden],.priv-data[hidden]{display:none}
   .priv-row b.pw{font:600 22px/1.3 'Source Sans 3',ui-monospace,monospace;letter-spacing:.06em}
 @media (max-width:760px){.priv-card{grid-template-columns:1fr;gap:18px;padding:22px 18px}}
+  html:not(.auto) .solo-auto{display:none!important}
+  html.auto .solo-recibe{display:none!important}
 </style>
+<script>/* llegada sola = liga con ?k= o código guardado: muestra video y acceso privado */(function(){var a=/[?&](k|a)=/.test(location.search);try{a=a||!!localStorage.getItem("kauri-guia-k-depa")}catch(e){}if(a)document.documentElement.classList.add("auto")})();</script>
 </head>
 <body>
 
@@ -410,7 +413,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     <li><a href="#hoy"><i class="ph ph-sun-horizon"></i><span lang="es">Hoy</span><span lang="en">Today</span></a></li>
     <li><a href="#esencial"><i class="ph ph-star"></i><span lang="es">Lo esencial</span><span lang="en">Essentials</span></a></li>
     <li><a href="#llegar"><i class="ph ph-car"></i><span lang="es">Cómo llegar</span><span lang="en">Getting here</span></a></li>
-    <li><a href="#llaves"><i class="ph ph-key"></i><span lang="es">Llaves</span><span lang="en">Keys</span></a></li>
+    <li class="solo-auto"><a href="#llaves"><i class="ph ph-key"></i><span lang="es">Llaves</span><span lang="en">Keys</span></a></li>
     <li><a href="#casa"><i class="ph ph-house-line"></i><span lang="es">La casa</span><span lang="en">The house</span></a></li>
     <li><a href="#alrededor"><i class="ph ph-compass"></i><span lang="es">Alrededor</span><span lang="en">Nearby</span></a></li>
     <li><a href="#ayuda"><i class="ph ph-first-aid"></i><span lang="es">Emergencias</span><span lang="en">Emergencies</span></a></li>
@@ -455,14 +458,14 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
         <div class="tile t-in card"><span class="k"><i class="ph ph-sign-in"></i>Check-in</span><div class="v">3:00&nbsp;p.m.</div><p class="n"><span lang="es">¿Llegas antes? Escríbenos y revisamos si el depa ya está listo.</span><span lang="en">Arriving early? Message us and we'll check if the loft is ready.</span></p></div>
         <div class="tile t-out card"><span class="k"><i class="ph ph-sign-out"></i>Check-out</span><div class="v">12:00&nbsp;p.m.</div><p class="n"><span lang="es">Los pasos de salida están al final de esta guía.</span><span lang="en">Check-out steps are at the end of this guide.</span></p></div>
         <div class="tile t-host card"><span class="k"><i class="ph ph-user-circle"></i><span lang="es">Tu anfitrión</span><span lang="en">Your host</span></span><div class="v">311 134 9845</div><div class="actions"><a class="chip-a" href="https://wa.me/523111349845" target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo"></i>WhatsApp</a><a class="chip-a" href="tel:+523111349845"><i class="ph ph-phone"></i><span lang="es">Llamar</span><span lang="en">Call</span></a></div></div>
-        <div class="tile t-wifi card"><span class="k"><i class="ph ph-lock-key"></i><span lang="es">Llega en tu mensaje</span><span lang="en">In your message</span></span><div class="net"><span lang="es">Ubicación exacta, clave de la caja de seguridad y contraseña del wifi</span><span lang="en">Exact location, lockbox code and wifi password</span></div><p class="n"><span lang="es">La clave de la caja te llega por el chat de tu reserva el día antes. La ubicación exacta se abre <a href="#privado" style="text-decoration:underline">aquí abajo</a> con tu código.</span><span lang="en">Your lockbox code arrives in your booking chat the day before. The exact location unlocks <a href="#privado" style="text-decoration:underline">below</a> with your code.</span></p></div>
+        <div class="tile t-wifi card"><span class="k"><i class="ph ph-lock-key"></i><span lang="es">Llega en tu mensaje</span><span lang="en">In your message</span></span><div class="net"><span lang="es">Ubicación exacta, clave de la caja de seguridad y contraseña del wifi</span><span lang="en">Exact location, lockbox code and wifi password</span></div><p class="n solo-auto"><span lang="es">La clave de la caja te llega por el chat de tu reserva el día antes. La ubicación exacta se abre <a href="#privado" style="text-decoration:underline">aquí abajo</a> con tu código.</span><span lang="en">Your lockbox code arrives in your booking chat the day before. The exact location unlocks <a href="#privado" style="text-decoration:underline">below</a> with your code.</span></p><p class="n solo-recibe"><span lang="es">La ubicación exacta te llega por el chat de tu reserva. Al llegar te recibimos y ahí te damos las llaves y el wifi.</span><span lang="en">The exact location arrives in your booking chat. When you arrive we welcome you and hand you the keys and wifi.</span></p></div>
         <div class="tile t-addr card"><span class="k"><i class="ph ph-map-pin"></i><span lang="es">Zona</span><span lang="en">Area</span></span><div class="v" style="font-size:26px">Rincón de Guayabitos</div><p class="n"><span lang="es">Sobre el andador principal, a 100 m de la playa (1 minuto caminando). Hasta 6 huéspedes.</span><span lang="en">On the main walkway, 100 m from the beach (a one-minute walk). Up to 6 guests.</span></p><div class="actions"><a class="chip-a" href="#llegar"><i class="ph ph-navigation-arrow"></i><span lang="es">Cómo llegar</span><span lang="en">Directions</span></a></div></div>
       </div>
     </div></section>
 
 <!-- ===== Cómo llegar ===== -->
 <!-- ===== Acceso privado: dirección exacta y wifi (14 nov 2026) ===== -->
-<section class="priv" id="privado" data-prop="depa">
+<section class="priv solo-auto" id="privado" data-prop="depa">
   <div class="wrap">
     <div class="priv-card">
       <div>
@@ -551,7 +554,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
     </div></section>
 
 <!-- ===== Llaves ===== -->
-<section class="keys" id="llaves">
+<section class="keys solo-auto" id="llaves">
     <div class="wrap keys-grid">
       <div class="keys-copy">
         <h2><span lang="es">Tus llaves, en cuatro pasos</span><span lang="en">Your keys, in four steps</span></h2>

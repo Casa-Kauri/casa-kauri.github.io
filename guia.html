@@ -366,7 +366,8 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 .tour-player .play{position:absolute;left:50%;top:50%;z-index:2;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:34px;box-shadow:0 12px 30px rgba(0,0,0,.35);transition:transform .2s}
 .tour-player:hover .play,.tour-player:focus-visible .play{transform:translate(-50%,-50%) scale(1.08)}
 .tour-player .cap{position:absolute;left:18px;bottom:14px;z-index:2;color:#fff;font:600 13px/1.3 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;text-align:left}
-.tour-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.tour-player.playing{cursor:default}.tour-player.playing::after{display:none}
+  .tour-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 @media (max-width:760px){.tour-grid{grid-template-columns:1fr;gap:22px}.tour{padding:44px 0 52px}}
 /* Acceso privado (14 nov 2026): dirección exacta y wifi solo con el código de la reserva; los datos vienen del servidor */
 .priv{padding:20px 0 8px}
@@ -389,7 +390,10 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   .priv-form[hidden],.priv-data[hidden]{display:none}
   .priv-row b.pw{font:600 22px/1.3 'Source Sans 3',ui-monospace,monospace;letter-spacing:.06em}
 @media (max-width:760px){.priv-card{grid-template-columns:1fr;gap:18px;padding:22px 18px}}
+  html:not(.auto) .solo-auto{display:none!important}
+  html.auto .solo-recibe{display:none!important}
 </style>
+<script>/* llegada sola = liga con ?k= o código guardado: muestra video y acceso privado */(function(){var a=/[?&](k|a)=/.test(location.search);try{a=a||!!localStorage.getItem("kauri-guia-k-casa")}catch(e){}if(a)document.documentElement.classList.add("auto")})();</script>
 </head>
 <body>
 
@@ -421,10 +425,10 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 <nav class="rail" aria-label="Secciones">
   <ul>
     <li><a href="#hoy"><i class="ph ph-sun-horizon"></i><span lang="es">Hoy</span><span lang="en">Today</span></a></li>
-    <li><a href="#video"><i class="ph ph-play-circle"></i><span lang="es">Video</span><span lang="en">Video</span></a></li>
+    <li class="solo-auto"><a href="#video"><i class="ph ph-play-circle"></i><span lang="es">Video</span><span lang="en">Video</span></a></li>
     <li><a href="#esencial"><i class="ph ph-star"></i><span lang="es">Lo esencial</span><span lang="en">Essentials</span></a></li>
     <li><a href="#llegar"><i class="ph ph-car"></i><span lang="es">Cómo llegar</span><span lang="en">Getting here</span></a></li>
-    <li><a href="#llaves"><i class="ph ph-key"></i><span lang="es">Llaves</span><span lang="en">Keys</span></a></li>
+    <li class="solo-auto"><a href="#llaves"><i class="ph ph-key"></i><span lang="es">Llaves</span><span lang="en">Keys</span></a></li>
     <li><a href="#casa"><i class="ph ph-house-line"></i><span lang="es">La casa</span><span lang="en">The house</span></a></li>
     <li><a href="#alrededor"><i class="ph ph-compass"></i><span lang="es">Alrededor</span><span lang="en">Nearby</span></a></li>
     <li><a href="#ayuda"><i class="ph ph-first-aid"></i><span lang="es">Emergencias</span><span lang="en">Emergencies</span></a></li>
@@ -448,7 +452,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 </section>
 
 <!-- ===== Recorrido en video (14 nov 2026): como si te recibiéramos en persona ===== -->
-<section class="tour" id="video">
+<section class="tour solo-auto" id="video">
   <div class="wrap tour-grid">
     <div>
       <h2><span lang="es">Antes de llegar, deja que te la enseñe</span><span lang="en">Before you arrive, let me show you around</span></h2>
@@ -503,7 +507,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
       <div class="tile t-wifi card">
         <span class="k"><i class="ph ph-lock-key"></i><span lang="es">Llega en tu mensaje</span><span lang="en">In your message</span></span>
         <div class="net"><span lang="es">Dirección exacta, clave del locker y contraseña del wifi</span><span lang="en">Exact address, lockbox code and wifi password</span></div>
-        <p class="n"><span lang="es">La clave del locker te llega por el chat de tu reserva el día antes. La dirección exacta y el wifi se abren <a href="#privado" style="text-decoration:underline">aquí abajo</a> con tu código. En la planta alta, conéctate a la red EXT.</span><span lang="en">Your lockbox code arrives in your booking chat the day before. The exact address and wifi unlock <a href="#privado" style="text-decoration:underline">below</a> with your code. Upstairs, use the EXT network.</span></p>
+        <p class="n solo-auto"><span lang="es">La clave del locker te llega por el chat de tu reserva el día antes. La dirección exacta y el wifi se abren <a href="#privado" style="text-decoration:underline">aquí abajo</a> con tu código. En la planta alta, conéctate a la red EXT.</span><span lang="en">Your lockbox code arrives in your booking chat the day before. The exact address and wifi unlock <a href="#privado" style="text-decoration:underline">below</a> with your code. Upstairs, use the EXT network.</span></p><p class="n solo-recibe"><span lang="es">La dirección exacta te llega por el chat de tu reserva. Al llegar te recibimos en la casa y ahí te damos las llaves y el wifi.</span><span lang="en">The exact address arrives in your booking chat. When you arrive we welcome you at the house and hand you the keys and wifi.</span></p>
       </div>
       <div class="tile t-addr card">
         <span class="k"><i class="ph ph-map-pin"></i><span lang="es">Zona</span><span lang="en">Area</span></span>
@@ -519,7 +523,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 
 <!-- ===== Cómo llegar ===== -->
 <!-- ===== Acceso privado: dirección exacta y wifi (14 nov 2026) ===== -->
-<section class="priv" id="privado" data-prop="casa">
+<section class="priv solo-auto" id="privado" data-prop="casa">
   <div class="wrap">
     <div class="priv-card">
       <div>
@@ -612,12 +616,12 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 </section>
 
 <!-- ===== Llaves ===== -->
-<section class="keys" id="llaves">
+<section class="keys solo-auto" id="llaves">
   <div class="wrap keys-grid">
     <div class="keys-copy">
       <h2><span lang="es">Tus llaves, en cinco pasos</span><span lang="en">Your keys, in five steps</span></h2>
       <p class="lede"><span lang="es">La llegada es autónoma desde las 3 p.m. La clave del locker te la mandamos por mensaje antes de tu llegada; por seguridad no aparece en esta página.</span><span lang="en">Self check-in from 3 p.m. We'll message you the lockbox code before you arrive; for security it isn't on this page.</span></p>
-      <a class="video-link" href="https://youtu.be/2ffrB34NQaQ" target="_blank" rel="noopener"><i class="ph ph-youtube-logo"></i><span><span lang="es">Recorrido en video por la casa</span><span lang="en">Video tour of the house</span><small lang="es">Te muestro cada espacio y cómo usar todo</small><small lang="en">Every room and how everything works (in Spanish)</small></span></a>
+      <a class="video-link solo-auto" href="https://youtu.be/2ffrB34NQaQ" target="_blank" rel="noopener"><i class="ph ph-youtube-logo"></i><span><span lang="es">Recorrido en video por la casa</span><span lang="en">Video tour of the house</span><small lang="es">Te muestro cada espacio y cómo usar todo</small><small lang="en">Every room and how everything works (in Spanish)</small></span></a>
     </div>
     <ol class="steps">
       <i class="fill" aria-hidden="true"></i>
@@ -1111,7 +1115,7 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 (function(){var b=document.querySelector(".tour-player");if(!b)return;b.addEventListener("click",function(){
   var f=document.createElement("iframe");f.src="https://www.youtube-nocookie.com/embed/"+b.getAttribute("data-yt")+"?autoplay=1&rel=0&playsinline=1";
   f.title=b.getAttribute("aria-label");f.allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen";f.allowFullscreen=true;
-  b.innerHTML="";b.appendChild(f);b.style.cursor="default";},{once:true});})();
+  var w=document.createElement("div");w.className="tour-player playing";w.appendChild(f);b.replaceWith(w);},{once:true});})();
 </script>
 <script>
 /* Acceso privado: pide los datos al servidor con el código (?k= en la liga, o tecleado). El código se recuerda en este teléfono hasta que vence. */
