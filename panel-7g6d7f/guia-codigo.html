@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Código de la guía · Kauri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+<!-- Código de la guía privada (14 nov 2026). El código lo calcula el servidor (kauri-pagos /guia/codigo) con tu PIN;
+     aquí no hay ningún secreto. El PIN se recuerda solo en este teléfono. -->
+<style>
+  :root{--bg:#FAF5EB;--card:#fff;--ink:#484036;--head:#3A3128;--muted:#6F6352;--line:#E3D9C6;--cta:#1F2F54;--ok:#2E7D4F;--err:#B4542E}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1A1612;--card:#241F19;--ink:#D8CFC0;--head:#F3ECDF;--muted:#A99E8C;--line:#3A3229;--cta:#3B528A}}
+  :root[data-theme="dark"]{--bg:#1A1612;--card:#241F19;--ink:#D8CFC0;--head:#F3ECDF;--muted:#A99E8C;--line:#3A3229;--cta:#3B528A}
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font:400 17px/1.5 'Source Sans 3',sans-serif;padding:20px 16px 60px}
+  .w{max-width:520px;margin:0 auto;display:grid;gap:16px}
+  a.back{color:var(--muted);font-size:14px}
+  h1{font:400 34px/1.15 'EB Garamond',serif;color:var(--head)}
+  .card{background:var(--card);border:1px solid var(--line);padding:18px;display:grid;gap:14px}
+  label{display:grid;gap:6px;font:600 12px/1.2 'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  input,select{font:400 18px/1.2 'Source Sans 3',sans-serif;padding:12px;border:1px solid var(--line);background:var(--bg);color:var(--head);width:100%}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  button{font:600 15px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:var(--cta);color:#fff;border:0;padding:16px;cursor:pointer}
+  button.sec{background:transparent;color:var(--head);border:1px solid var(--line)}
+  .code{font:600 40px/1 'Source Sans 3',sans-serif;letter-spacing:.12em;color:var(--head);text-align:center}
+  .msg{font-size:15px;color:var(--err);min-height:1.2em}
+  pre{white-space:pre-wrap;font:400 15px/1.5 'Source Sans 3',sans-serif;background:var(--bg);border:1px solid var(--line);padding:12px}
+  small{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="w">
+  <a class="back" href="./">‹ Trastienda</a>
+  <h1>Código de la guía</h1>
+  <form class="card" id="f">
+    <label>Alojamiento<select name="p"><option value="casa">Casa Kauri</option><option value="depa">Departamento Kauri</option></select></label>
+    <div class="two">
+      <label>Llegada<input type="date" name="llegada" required /></label>
+      <label>Salida<input type="date" name="salida" required /></label>
+    </div>
+    <label>Nombre (opcional, para el saludo)<input type="text" name="n" autocomplete="off" /></label>
+    <label>PIN<input type="password" name="pin" inputmode="numeric" autocomplete="off" required /></label>
+    <button type="submit">Sacar código</button>
+    <p class="msg" aria-live="polite"></p>
+  </form>
+  <div class="card" id="res" hidden>
+    <div class="code" id="code"></div>
+    <small id="vig"></small>
+    <pre id="txt"></pre>
+    <button type="button" id="cp">Copiar mensaje</button>
+    <button type="button" class="sec" id="cpc">Copiar solo el código</button>
+  </div>
+  <small>La clave del locker o de la caja NO va aquí: se manda aparte por el chat, el día antes de la llegada.</small>
+</div>
+<script>
+(function(){
+  var W="https://kauri-pagos.casakauri.workers.dev",f=document.getElementById("f"),msg=f.querySelector(".msg"),K="kauri-guia-pin";
+  try{var sp=localStorage.getItem(K);if(sp)f.pin.value=sp}catch(e){}
+  var M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  function fe(iso){var p=iso.split("-");return +p[2]+" "+M[p[1]-1]}
+  function menos2(iso){var d=new Date(iso+"T12:00:00Z");d.setUTCDate(d.getUTCDate()-2);return d.toISOString().slice(0,10)}
+  function copia(t,b){navigator.clipboard.writeText(t).then(function(){var o=b.textContent;b.textContent="Copiado ✓";setTimeout(function(){b.textContent=o},1500)})}
+  f.addEventListener("submit",function(e){
+    e.preventDefault();msg.textContent="Calculando…";
+    var b={p:f.p.value,llegada:f.llegada.value,salida:f.salida.value,pin:f.pin.value};
+    fetch(W+"/guia/codigo",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
+      if(!x.ok){msg.textContent=x.j.error||"No se pudo.";return}
+      try{localStorage.setItem(K,b.pin)}catch(e){}
+      msg.textContent="";var c=x.j.codigo,pg=b.p==="depa"?"guia-departamento.html":"guia.html",n=f.n.value.trim();
+      var url="https://casa-kauri.github.io/"+pg+"?k="+c+(n?"&n="+encodeURIComponent(n):"");
+      document.getElementById("code").textContent=c;
+      document.getElementById("vig").textContent="Sirve del "+fe(menos2(b.llegada))+" al "+fe(b.salida)+" y luego caduca solo.";
+      var t="📖 Tu guía de bienvenida, con la dirección exacta y el wifi:\n"+url+"\n\n🔐 Si te lo pide, tu código es: "+c+"\nFunciona desde 2 días antes de tu llegada hasta tu salida.";
+      document.getElementById("txt").textContent=t;document.getElementById("res").hidden=false;
+      document.getElementById("cp").onclick=function(){copia(t,this)};document.getElementById("cpc").onclick=function(){copia(c,this)};
+    }).catch(function(){msg.textContent="Sin conexión."});
+  });
+})();
+</script>
+</body>
+</html>

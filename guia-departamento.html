@@ -356,6 +356,27 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
   .diag b{color:#E8C87A}.diag button{float:right;font:inherit;background:#E8C87A;color:#3A3128;border:0;padding:4px 12px;cursor:pointer}
   @media (max-width:420px){.t-in .v,.t-out .v{font-size:26px}}
   @media (max-width:600px){.topbar{padding:14px 16px}.logo span{display:none}.wrap{padding:0 20px}.help-top span{display:none}}
+/* Acceso privado (14 nov 2026): dirección exacta y wifi solo con el código de la reserva; los datos vienen del servidor */
+.priv{padding:20px 0 8px}
+.priv-card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);padding:26px 24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:28px;align-items:center}
+.priv h2{font:400 clamp(26px,3.4vw,36px)/1.2 'EB Garamond',serif;color:var(--head);margin:0 0 8px}
+.priv .lede{color:var(--muted);margin:0}
+.priv-form{display:flex;gap:10px;flex-wrap:wrap}
+.priv-form input{flex:1 1 180px;min-width:0;font:600 20px/1 'Source Sans 3',sans-serif;letter-spacing:.18em;text-transform:uppercase;padding:14px 16px;border:1px solid var(--line);background:var(--bg);color:var(--head)}
+.priv-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.priv-form button,.priv-act{font:600 14px/1 'Source Sans 3',sans-serif;letter-spacing:.06em;text-transform:uppercase;border:0;background:var(--accent);color:#fff;padding:15px 20px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.priv-msg{flex-basis:100%;font-size:14px;color:#B4542E;min-height:1.2em;margin:2px 0 0}
+.priv-data{display:grid;gap:14px}
+.priv-row{border-top:1px solid var(--line);padding-top:12px}
+.priv-row small{display:block;font:600 11.5px/1.2 'Source Sans 3',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.priv-row b{font:400 22px/1.3 'EB Garamond',serif;color:var(--head);word-break:break-word}
+.priv-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.priv-copy{font:600 13px/1 'Source Sans 3',sans-serif;border:1px solid var(--line);background:transparent;color:var(--head);padding:10px 14px;cursor:pointer}
+.priv-note{font-size:14px;color:var(--ink);background:var(--soft);padding:10px 12px;margin:0}
+.priv-vence{font-size:12.5px;color:var(--muted);margin:0}
+  .priv-form[hidden],.priv-data[hidden]{display:none}
+  .priv-row b.pw{font:600 22px/1.3 'Source Sans 3',ui-monospace,monospace;letter-spacing:.06em}
+@media (max-width:760px){.priv-card{grid-template-columns:1fr;gap:18px;padding:22px 18px}}
 </style>
 </head>
 <body>
@@ -434,12 +455,32 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
         <div class="tile t-in card"><span class="k"><i class="ph ph-sign-in"></i>Check-in</span><div class="v">3:00&nbsp;p.m.</div><p class="n"><span lang="es">¿Llegas antes? Escríbenos y revisamos si el depa ya está listo.</span><span lang="en">Arriving early? Message us and we'll check if the loft is ready.</span></p></div>
         <div class="tile t-out card"><span class="k"><i class="ph ph-sign-out"></i>Check-out</span><div class="v">12:00&nbsp;p.m.</div><p class="n"><span lang="es">Los pasos de salida están al final de esta guía.</span><span lang="en">Check-out steps are at the end of this guide.</span></p></div>
         <div class="tile t-host card"><span class="k"><i class="ph ph-user-circle"></i><span lang="es">Tu anfitrión</span><span lang="en">Your host</span></span><div class="v">311 134 9845</div><div class="actions"><a class="chip-a" href="https://wa.me/523111349845" target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo"></i>WhatsApp</a><a class="chip-a" href="tel:+523111349845"><i class="ph ph-phone"></i><span lang="es">Llamar</span><span lang="en">Call</span></a></div></div>
-        <div class="tile t-wifi card"><span class="k"><i class="ph ph-lock-key"></i><span lang="es">Llega en tu mensaje</span><span lang="en">In your message</span></span><div class="net"><span lang="es">Ubicación exacta, clave de la caja de seguridad y contraseña del wifi</span><span lang="en">Exact location, lockbox code and wifi password</span></div><p class="n"><span lang="es">Te las mandamos en el mensaje del día antes de tu llegada. Por tu seguridad no aparecen en esta página.</span><span lang="en">We send them in the message the day before you arrive. For your safety they're not on this page.</span></p></div>
+        <div class="tile t-wifi card"><span class="k"><i class="ph ph-lock-key"></i><span lang="es">Llega en tu mensaje</span><span lang="en">In your message</span></span><div class="net"><span lang="es">Ubicación exacta, clave de la caja de seguridad y contraseña del wifi</span><span lang="en">Exact location, lockbox code and wifi password</span></div><p class="n"><span lang="es">La clave de la caja te llega por el chat de tu reserva el día antes. La ubicación exacta se abre <a href="#privado" style="text-decoration:underline">aquí abajo</a> con tu código.</span><span lang="en">Your lockbox code arrives in your booking chat the day before. The exact location unlocks <a href="#privado" style="text-decoration:underline">below</a> with your code.</span></p></div>
         <div class="tile t-addr card"><span class="k"><i class="ph ph-map-pin"></i><span lang="es">Zona</span><span lang="en">Area</span></span><div class="v" style="font-size:26px">Rincón de Guayabitos</div><p class="n"><span lang="es">Sobre el andador principal, a 100 m de la playa (1 minuto caminando). Hasta 6 huéspedes.</span><span lang="en">On the main walkway, 100 m from the beach (a one-minute walk). Up to 6 guests.</span></p><div class="actions"><a class="chip-a" href="#llegar"><i class="ph ph-navigation-arrow"></i><span lang="es">Cómo llegar</span><span lang="en">Directions</span></a></div></div>
       </div>
     </div></section>
 
 <!-- ===== Cómo llegar ===== -->
+<!-- ===== Acceso privado: dirección exacta y wifi (14 nov 2026) ===== -->
+<section class="priv" id="privado" data-prop="depa">
+  <div class="wrap">
+    <div class="priv-card">
+      <div>
+        <h2><span lang="es">Dirección exacta y wifi</span><span lang="en">Exact address and wifi</span></h2>
+        <p class="lede"><span lang="es">Por tu seguridad y la de la casa, se abren solo con el código que te mandamos por el chat de tu reserva. Funciona desde 2 días antes de tu llegada hasta tu salida.</span><span lang="en">For your safety and the home's, they unlock only with the code we sent you in your booking chat. It works from 2 days before arrival until check-out.</span></p>
+      </div>
+      <div class="priv-box">
+        <form class="priv-form" autocomplete="off">
+          <input type="text" name="k" maxlength="9" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX" aria-label="Código de tu reserva" />
+          <button type="submit"><i class="ph ph-lock-key-open" aria-hidden="true"></i><span lang="es">Abrir</span><span lang="en">Unlock</span></button>
+          <p class="priv-msg" aria-live="polite"></p>
+        </form>
+        <div class="priv-data" hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="arrive" id="llegar">
     <div class="wrap">
       <h2><span lang="es">Cómo llegar sin perderte</span><span lang="en">Getting here without getting lost</span></h2>
@@ -973,5 +1014,39 @@ var l=q||s||((navigator.language||"es").toLowerCase().indexOf("es")===0?"es":"en
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="kauri-motion.js?v=5"></script>
+<script>
+/* Acceso privado: pide los datos al servidor con el código (?k= en la liga, o tecleado). El código se recuerda en este teléfono hasta que vence. */
+(function(){
+  var sec=document.getElementById("privado");if(!sec)return;
+  var P=sec.getAttribute("data-prop"),W="https://kauri-pagos.casakauri.workers.dev",K="kauri-guia-k-"+P;
+  var en=document.documentElement.getAttribute("data-l")==="en",f=sec.querySelector("form"),inp=f.querySelector("input"),msg=sec.querySelector(".priv-msg"),box=sec.querySelector(".priv-data");
+  function t(es,e){return en?e:es}
+  function esc(x){return String(x||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function fecha(iso){var p=iso.split("-"),M=en?["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]:["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];return +p[2]+" "+M[p[1]-1]}
+  function copia(btn,txt){try{navigator.clipboard.writeText(txt).then(function(){btn.textContent=t("Copiado ✓","Copied ✓")})}catch(e){}}
+  function pinta(d){
+    var h='<div class="priv-row"><small>'+t("Dirección","Address")+'</small><b>'+esc(d.direccion)+'</b><div class="priv-btns">'+
+      (d.maps?'<a class="priv-act" href="'+esc(d.maps)+'" target="_blank" rel="noopener"><i class="ph ph-map-pin" aria-hidden="true"></i>'+t("Abrir en Google Maps","Open in Google Maps")+'</a>':"")+
+      '<button type="button" class="priv-copy" data-c="dir">'+t("Copiar","Copy")+'</button></div></div>';
+    var nota=en?d.nota_en:d.nota_es;if(nota)h+='<p class="priv-note"><i class="ph ph-signpost" aria-hidden="true"></i> '+esc(nota)+'</p>';
+    if(d.wifi_red){h+='<div class="priv-row"><small>Wifi</small><b>'+esc(d.wifi_red)+'</b><div class="priv-row" style="border:0;padding-top:6px"><small>'+t("Contraseña","Password")+'</small><b class="pw">'+esc(d.wifi_clave)+'</b></div><div class="priv-btns"><button type="button" class="priv-copy" data-c="wifi">'+t("Copiar contraseña","Copy password")+'</button></div></div>';}
+    else h+='<div class="priv-row"><small>Wifi</small><p class="priv-vence" style="font-size:15px">'+t("Te lo mandamos por el chat de tu reserva.","We'll send it in your booking chat.")+'</p></div>';
+    h+='<p class="priv-vence">'+t("Disponible hasta tu salida, el ","Available until your check-out on ")+fecha(d.salida)+'.</p>';
+    box.innerHTML=h;box.hidden=false;f.hidden=true;
+    box.querySelectorAll(".priv-copy").forEach(function(b){b.addEventListener("click",function(){copia(b,b.getAttribute("data-c")==="wifi"?d.wifi_clave:d.direccion)})});
+  }
+  function abre(k,callado){
+    k=String(k||"").toUpperCase().replace(/[^0-9A-Z]/g,"");if(k.length!==8){if(!callado)msg.textContent=t("El código tiene 8 caracteres.","The code has 8 characters.");return}
+    msg.textContent=callado?"":t("Revisando…","Checking…");
+    fetch(W+"/guia?p="+P+"&c="+k).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
+      if(x.ok&&x.j.ok){try{localStorage.setItem(K,k)}catch(e){}msg.textContent="";pinta(x.j)}
+      else{try{localStorage.removeItem(K)}catch(e){}if(!callado)msg.textContent=en?"That code is not valid or has expired. Check your booking chat.":(x.j.error||"Ese código no funcionó.")}
+    }).catch(function(){if(!callado)msg.textContent=t("Sin conexión. Intenta de nuevo.","No connection. Try again.")});
+  }
+  f.addEventListener("submit",function(e){e.preventDefault();abre(inp.value,false)});
+  var q=(location.search.match(/[?&]k=([^&]+)/)||[])[1],s=null;try{s=localStorage.getItem(K)}catch(e){}
+  if(q){inp.value=decodeURIComponent(q);abre(inp.value,false)}else if(s)abre(s,true);
+})();
+</script>
 </body>
 </html>
