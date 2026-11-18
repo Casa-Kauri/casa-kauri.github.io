@@ -24,6 +24,8 @@ window.KAURI_TARIFAS = {
       NOVIEMBRE: { desde: "2026-11-20", hasta: "2026-11-22", noche: 3000, vence: "2026-10-16" },  // misma pareja: la casa estaba ocupada en el puente
       NAVIDAD: { desde: "2026-12-21", hasta: "2026-12-23", noche: 3750, vence: "2026-10-16" },   // prospecto con mascota, antes de Navidad (Dalí, 13 oct 2026)
       ADAMARI: { desde: "2027-01-03", hasta: "2027-01-29", noche: 3750, vence: "2026-11-18" },   // Adamari (TikTok, 8 personas): Año Nuevo ocupado → enero a $3,750; no toca el puente de feb (Dalí, 11 nov 2026)
+      ANTONIO: { desde: "2027-01-03", hasta: "2027-01-29", noche: 3700, vence: "2026-11-25" },      // Antonio (IG, 7 personas): Navidad ocupada → enero a $3,700; 21–23 dic sin descuento (Dalí, 18 nov 2026)
+      MONTSERRAT: { desde: "2027-01-03", hasta: "2027-01-29", noche: 3700, vence: "2026-11-25" },   // Montserrat (IG): pedía 2–5 ene, el 2 ocupado → 3–5 ene a $3,700 (Dalí, 18 nov 2026)
       MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" },   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
       FLORECITA3X2: { tipo: "nocheGratis", vence: "2027-10-29" },   // regalo a rockera_florecita10, huésped que dejó reseña en IG (29 oct 2026)
       /* tipo "tope": cualquier fecha; la noche queda en "noche" solo si estaba arriba (nunca sube un precio) y no toca
@@ -48,6 +50,7 @@ window.KAURI_TARIFAS = {
     limpieza: 600, mascota: null, anticipo: 0.5,         // el depa NO admite mascotas (Dalí, 11 oct 2026)
     cupones: {   // mismo formato que los de la casa
       NAVIDAD: { desde: "2026-12-31", hasta: "2027-01-02", noche: 2200, vence: "2026-10-16" },   // Año Nuevo a $2,200 (Dalí, 13 oct 2026); en la casa el mismo código vale 21–23 dic
+      YEFERSON: { desde: "2027-01-03", hasta: "2027-01-29", noche: 1500, vence: "2026-11-25" },   // Yeferson (IG, 4 personas): 31 dic ocupado → enero a $1,500 todas las noches; 27–31 dic sin descuento (Dalí, 18 nov 2026)
       NOVIEMBRE: { desde: "2026-11-13", hasta: "2026-11-16", noche: 1750, vence: "2026-10-16" },   // puente nov, pareja (Dalí, 12 oct 2026); en la casa el mismo código vale 20–22 nov
       /* mismo código que en la casa (26 oct 2026): el fin de semana baja de $1,800 a $1,700; entre semana se queda en $1,500
          porque el tope nunca sube. Promedio real del depa ~$1,500, ideal $1,600 o más: $1,700 sigue arriba del ideal. */
