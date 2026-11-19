@@ -572,7 +572,8 @@ function comprobante(d){
       (esp ? `<tr class="lista"><td>Tarifa normal (${esp.n} × ${mx(esp.base)})</td><td>${mx(esp.hospedajeBase)}</td></tr>` : '')
     + filas.map(f => `<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`).join('')
     + (d.total ? `<tr class="tot"><td>Total</td><td>${mx(d.total)}</td></tr>` : '')
-    + (d.anticipo ? `<tr><td>Anticipo recibido</td><td>− ${mx(d.anticipo)}</td></tr>` : '');
+    /* 19 nov 2026: si ya se cobró todo, el renglón dice «Pagado», no «Anticipo» (comprobante de liquidación). */
+    + (d.anticipo ? `<tr><td>${d.total && d.anticipo >= d.total ? 'Pagado (anticipo y saldo)' : 'Anticipo recibido'}</td><td>− ${mx(d.anticipo)}</td></tr>` : '');
 
   const bloqueEspecial = esp ? `
     <div class="especial">
