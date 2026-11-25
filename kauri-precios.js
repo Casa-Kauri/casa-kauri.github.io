@@ -27,6 +27,7 @@ window.KAURI_TARIFAS = {
       ANTONIO: { desde: "2027-01-03", hasta: "2027-01-29", noche: 3700, vence: "2026-11-25" },      // Antonio (IG, 7 personas): Navidad ocupada → enero a $3,700; 21–23 dic sin descuento (Dalí, 18 nov 2026)
       MONTSERRAT: { desde: "2027-01-03", hasta: "2027-01-29", noche: 3700, vence: "2026-11-25" },   // Montserrat (IG): pedía 2–5 ene, el 2 ocupado → 3–5 ene a $3,700 (Dalí, 18 nov 2026)
       JP: { desde: "2027-01-06", hasta: "2027-01-11", noche: 3700, vence: "2026-11-30" },   // Jp (WhatsApp, 8 personas, 5 noches): enero a $3,700 (Dalí, 24 nov 2026)
+      DIAN: { desde: "2027-01-03", hasta: "2027-01-05", noche: 3700, vence: "2026-11-30" },   // Dian (WhatsApp, 5 personas): Año Nuevo ocupado → 3–5 ene a $3,700 (Dalí, 24 nov 2026)
       MARY3X2: { tipo: "nocheGratis", vence: "2027-10-12" },   // regalo a Mary, huésped que comentó el anuncio (12 oct 2026)
       FLORECITA3X2: { tipo: "nocheGratis", vence: "2027-10-29" },   // regalo a rockera_florecita10, huésped que dejó reseña en IG (29 oct 2026)
       /* tipo "tope": cualquier fecha; la noche queda en "noche" solo si estaba arriba (nunca sube un precio) y no toca
