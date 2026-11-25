@@ -31,7 +31,8 @@ window.KAURI_TARIFAS = {
       /* tipo "tope": cualquier fecha; la noche queda en "noche" solo si estaba arriba (nunca sube un precio) y no toca
          puentes, fiestas ni Semana Santa. Es el precio especial por reserva anticipada que se da en el chat (19 oct 2026). */
       ANTICIPADA: { tipo: "tope", noche: 3500 },
-      DIRECTO: { tipo: "tope", noche: 3500, motivo: "reserva directa" }   // el que da Dalí en el chat a quien llega de la pauta (24 oct 2026)
+      DIRECTO: { tipo: "tope", noche: 3500, motivo: "reserva directa" },   // el que da Dalí en el chat a quien llega de la pauta (24 oct 2026)
+      CONDALI: { tipo: "tope", noche: 3750, semana: 3500, motivo: "reserva directa" }   // solo lo da Dalí en el chat: $3,750 vie–sáb y $3,500 dom–jue (24 nov 2026)
     },
     temporadas: [
       { desde: "2026-11-13", hasta: "2026-11-16", noche: 4200, nombre: "Puente de la Revolución" },
@@ -106,9 +107,10 @@ window.kauriPrecio = function (prop, llegada, salida, mascotas, ctx, personas) {
       }
     }
     if (cup && cup.tipo === "tope" && !temp) usoCupon = true;   // válido aunque la noche ya estuviera abajo: así no sale «cupón no válido»
-    if (cup && cup.tipo === "tope" && !temp && precio > cup.noche) {   // el cupón solo baja: nunca sube lo que ya estaba abajo
+    var tope = cup && cup.tipo === "tope" ? (!finde && cup.semana || cup.noche) : 0;   // "semana" opcional: otro tope de domingo a jueves (24 nov 2026)
+    if (tope && !temp && precio > tope) {   // el cupón solo baja: nunca sube lo que ya estaba abajo
       var porque = cup.motivo || "reserva anticipada";
-      precio = cup.noche; motivo = "Precio especial de " + porque; usoCupon = true;
+      precio = tope; motivo = "Precio especial de " + porque; usoCupon = true;
       etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · cupón " + codigo + " · " + porque;
     }
     if (!temp && !motivo && T.ancla && precio < T.ancla) { motivo = "Precio preferencial de reserva directa"; etiqueta = (finde ? "Viernes y sábado" : "Domingo a jueves") + " · precio preferencial de reserva directa"; }
